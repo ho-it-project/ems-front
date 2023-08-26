@@ -1,0 +1,16 @@
+FROM node:20-alpine as test
+
+WORKDIR /usr/src/app
+
+COPY package*.json tsconfig.json tsconfig.spec.json ./
+
+RUN npm install
+
+COPY ./ ./
+COPY .env.local ./.env
+
+RUN npm run build
+CMD [ "npm", "run","start" ]
+
+
+
