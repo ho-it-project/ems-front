@@ -7,6 +7,10 @@ export default function Home() {
       <h1 className="bg-slate-100 text-4xl font-bold">Hellow</h1>
       <h1 className="bg-slate-100 text-4xl font-bold">EMS FRONT!!</h1>
       <h1 className="bg-slate-100 text-4xl font-bold">EMS FRONT!!</h1>
+      <h1 className="bg-slate-100 text-4xl font-bold">EMS FRONT!!</h1>
+      <h1 className="bg-slate-100 text-4xl font-bold">EMS FRONT!!</h1>
+      <h1 className="bg-slate-100 text-4xl font-bold">EMS FRONT!!</h1>
+      <h1 className="bg-slate-100 text-4xl font-bold">EMS FRONT!!</h1>
       <ERtest />
       <br />
       <br />
