@@ -32,7 +32,7 @@ pipeline {
         }
         stage('Deploy - Production docker image') {
             steps {
-                sh "docker tag er-front:latest ${params.AWS_ECR_URL}:latest"
+                sh "docker tag ems-front:latest ${params.AWS_ECR_URL}:latest"
                 sh "docker push ${params.AWS_ECR_URL}:latest"
             }
         }
@@ -40,8 +40,8 @@ pipeline {
         stage('Update ECS Cluster') {
             steps {
                 script {
-                    def clusterName = 'er-front-cluster' // ECS 클러스터의 이름
-                    def serviceName = 'er-front' // 업데이트할 ECS 서비스의 이름
+                    def clusterName = 'ems-front-cluster' // ECS 클러스터의 이름
+                    def serviceName = 'ems-front' // 업데이트할 ECS 서비스의 이름
                     def region = "ap-northeast-2"
 
                     sh "aws ecs update-service --cluster ${clusterName} --service ${serviceName} --region ${region} --force-new-deployment"
