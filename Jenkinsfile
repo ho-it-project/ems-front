@@ -54,8 +54,8 @@ pipeline {
         always {
             script {
                 // 모든 컨테이너 중지 및 삭제
-                sh "docker stop \$(docker ps -a -q)"
-                sh "docker rm \$(docker ps -a -q) -f"
+                sh "docker stop \$(docker ps -a -q) || true" // 에러 발생시 스킵
+                sh "docker rm \$(docker ps -a -q) -f || true" // 에러 발생시 스킵
 
                 // 모든 네트워크 삭제
                 sh "docker network prune -f"
@@ -68,7 +68,9 @@ pipeline {
                 def imagesToDelete = sh(returnStdout: true, script: "docker images -q | grep -vE '${excludeImages}'").trim()
                 
                 if (imagesToDelete) {
-                    sh "docker rmi -f ${imagesToDelete}"
+                    imagesToDelete.tokenize().each { imageId ->
+                        sh "docker rmi -f ${imageId} || true" // 이미지가 없으면 에러 발생시 스킵
+                    }
                 }
             }
         }
