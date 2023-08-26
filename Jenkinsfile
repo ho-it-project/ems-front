@@ -51,18 +51,22 @@ pipeline {
 
         stage('Clean up - Docker image') {
             steps {
-                // 모든 컨테이너 중지 및 삭제
-                sh "docker stop \$(docker ps -a -q)"
-                sh "docker rm \$(docker ps -a -q)"
+                script {
+                    // 모든 컨테이너 중지 및 삭제
+                    sh "docker stop \$(docker ps -a -q)"
+                    sh "docker rm \$(docker ps -a -q)"
 
-                // 모든 이미지 삭제
-                sh "docker rmi  -f \$(docker images -q)"
+                    // 모든 네트워크 삭제
+                    sh "docker network prune -f"
 
-                // 모든 네트워크 삭제
-                sh "docker network prune -f"
+                    // 모든 볼륨 삭제
+                    sh "docker volume prune -f"
 
-                // 모든 볼륨 삭제
-                sh "docker volume prune -f"            
+                    // 모든 이미지 삭제 (이미지를 사용하는 컨테이너를 먼저 중지하고 삭제해야 함)
+                    sh "docker stop \$(docker ps -a -q)"
+                    sh "docker rm \$(docker ps -a -q)"
+                    sh "docker rmi \$(docker images -q)"
+                }
             }
         }
     }
