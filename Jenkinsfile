@@ -48,13 +48,19 @@ pipeline {
                 }
             }
         }
-
+    }
+    finally {
         stage('Clean up - Docker image') {
             steps {
                 script {
-                    // 모든 컨테이너 중지 및 삭제
-                    sh "docker stop \$(docker ps -a -q)"
-                    sh "docker rm \$(docker ps -a -q)"
+                    // 컨테이너 목록 가져오기
+                    def containerList = sh(returnStdout: true, script: "docker ps -a -q").trim()
+                    
+                    // 컨테이너 중지 및 삭제 (컨테이너 목록이 비어있지 않을 때만 실행)
+                    if (containerList) {
+                        sh "docker stop ${containerList}"
+                        sh "docker rm ${containerList}"
+                }
 
                     // 모든 네트워크 삭제
                     sh "docker network prune -f"
@@ -63,11 +69,9 @@ pipeline {
                     sh "docker volume prune -f"
 
                     // 모든 이미지 삭제 (이미지를 사용하는 컨테이너를 먼저 중지하고 삭제해야 함)
-                    sh "docker stop \$(docker ps -a -q)"
-                    sh "docker rm \$(docker ps -a -q)"
                     sh "docker rmi \$(docker images -q)"
                 }
             }
-        }
+        }        
     }
 }
