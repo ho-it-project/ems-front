@@ -49,6 +49,7 @@ pipeline {
             }
         }
     }
+
     post {
         always {
             script {
@@ -67,7 +68,7 @@ pipeline {
                 def imagesToDelete = sh(returnStdout: true, script: "docker images -q | grep -vE '${excludeImages}'").trim()
                 
                 if (imagesToDelete) {
-                    sh "docker rmi ${imagesToDelete} -f"
+                    sh "docker rmi -f ${imagesToDelete}"
                 }
             }
         }
