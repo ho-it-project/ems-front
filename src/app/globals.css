@@ -5,12 +5,53 @@
 @layer base {
   html,
   body {
-    font-size: 14px;
+    font-size: 62.5%;
+    font-family: "inter", sans-serif;
   }
 }
 
 @layer components {
-  h2.title {
+  /**
+  * Custom font class
+  */
+  .font-xlarge {
+    @apply text-[2.4rem] font-bold;
+  }
+  .font-xlarge-l {
+    @apply text-[2.4rem] font-semibold;
+  }
+
+  .font-large {
+    @apply text-[2rem] font-bold;
+  }
+  .font-large-l {
+    @apply text-[2rem] font-semibold;
+  }
+
+  .font-medium {
+    @apply text-[1.8rem] font-bold;
+  }
+  .font-medium-l {
+    @apply text-[1.8rem] font-semibold;
+  }
+
+  .font-regular {
+    @apply text-[1.5rem] font-semibold;
+  }
+  .font-regular-l {
+    @apply text-[1.5rem] font-medium;
+  }
+  .font-small {
+    @apply text-[1.2rem] font-semibold;
+  }
+  .font-small-l {
+    @apply text-[1.2rem] font-medium;
+  }
+
+  /**
+  * lagacy class
+  */
+  /* h2.title {
     @apply my-5 text-xl;
   }
 
@@ -52,7 +93,7 @@
 
   .ellipsis-text {
     @apply overflow-hidden overflow-ellipsis whitespace-nowrap;
-  }
+  } */
 }
 
 @import "./_spinner.css";
