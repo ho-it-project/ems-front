@@ -12,9 +12,12 @@ export default function UiComponents() {
         <Input
           value=""
           rounded="large"
-          placeholder="ID를 입력하세요"
-          fontSize="large"
+          placeholder="검색하기"
+          fontSize="medium"
           width="w-[30rem]"
+          placeholderColor="main"
+          textLocation="left"
+          // img="/icon/icon-search.png"
         />
       </div>
     </div>

@@ -4,6 +4,7 @@ interface InputProps {
   value: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
+  placeholderColor?: "gray" | "main";
   rounded?: "normal" | "large";
   fontSize?: FontSize;
   name?: string;
@@ -22,6 +23,7 @@ export const Input = ({
   value,
   onChange,
   placeholder,
+  placeholderColor = "gray",
   rounded = "normal",
   fontSize = "medium",
   name,
@@ -38,6 +40,7 @@ export const Input = ({
   // Input Size
   const heightClass = height === "normal" ? "h-[4rem]" : "h-[6rem]";
   const widthClass = width ? width : "w-full";
+
   // Style
   const roundedClass =
     rounded === "normal" ? "rounded-[0.8rem]" : "rounded-[3rem]";
@@ -74,6 +77,10 @@ export const Input = ({
       ? "text-center"
       : "text-right";
 
+  // Input placeholder
+  const placeholderColorClass =
+    placeholderColor === "main" ? "placeholder-main" : "placeholder-gray";
+
   const InputBoxClass = `
     flex 
     items-center
@@ -88,6 +95,7 @@ export const Input = ({
     ${colorClass} 
     py-[0.8rem]
     px-[1.6rem]
+    gap-[1.6rem]
   `;
   const InputClass = ` 
     w-full 
@@ -97,8 +105,8 @@ export const Input = ({
     ${colorClass} 
     bg-transparent 
     outline-none 
-    placeholder-gray 
     focus:placeholder-transparent 
+    ${placeholderColorClass}
   `;
   return (
     <div className={InputBoxClass}>
