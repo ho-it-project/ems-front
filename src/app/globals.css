@@ -14,39 +14,6 @@
   /**
   * Custom font class
   */
-  .fontSize-xlarge {
-    @apply text-[2.4rem] font-bold;
-  }
-  .fontSize-xlarge-l {
-    @apply text-[2.4rem] font-semibold;
-  }
-
-  .fontSize-large {
-    @apply text-[2rem] font-bold;
-  }
-  .fontSize-large-l {
-    @apply text-[2rem] font-semibold;
-  }
-
-  .fontSize-medium {
-    @apply text-[1.8rem] font-bold;
-  }
-  .fontSize-medium-l {
-    @apply text-[1.8rem] font-semibold;
-  }
-
-  .fontSize-regular {
-    @apply text-[1.5rem] font-semibold;
-  }
-  .fontSize-regular-l {
-    @apply text-[1.5rem] font-medium;
-  }
-  .fontSize-small {
-    @apply text-[1.2rem] font-semibold;
-  }
-  .fontSize-small-l {
-    @apply text-[1.2rem] font-medium;
-  }
 
   /**
   * lagacy class
@@ -97,3 +64,4 @@
 }
 
 @import "./_spinner.css";
+@import "./_fontSize.css";

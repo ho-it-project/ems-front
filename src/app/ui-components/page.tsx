@@ -13,7 +13,8 @@ export default function UiComponents() {
           value=""
           rounded="nomal"
           placeholder="ID를 입력하세요"
-          fontSize="medium"
+          fontSize="large"
+          width="w-[30rem]"
         />
       </div>
     </div>

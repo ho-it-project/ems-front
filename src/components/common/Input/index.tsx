@@ -1,6 +1,5 @@
 import { FontSize } from "@/type";
 import Image from "next/image";
-
 interface InputProps {
   value: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -38,8 +37,7 @@ export const Input = ({
 }: InputProps) => {
   // Input Size
   const heightClass = height === "nomal" ? "h-[4rem]" : "h-[6rem]";
-  const widthClass = width === "nomal" ? "w-[20rem]" : "w-[30rem]";
-
+  const widthClass = width ? width : "w-full";
   // Style
   const roundedClass =
     rounded === "nomal" ? "rounded-[0.8rem]" : "rounded-[3rem]";
@@ -78,9 +76,9 @@ export const Input = ({
 
   const InputBoxClass = `
     flex 
-    items-center 
+    items-center
     ${heightClass} 
-    ${widthClass} 
+    ${widthClass}
     ${roundedClass} 
     ${bgColorClass} 
     ${borderClass} 
@@ -93,16 +91,15 @@ export const Input = ({
   `;
   const InputClass = ` 
     w-full 
-    h-full    
-    ${fontSizeClass}
+    h-full 
+    ${fontSizeClass} 
     ${textLocationClass} 
-    ${colorClass}
+    ${colorClass} 
     bg-transparent 
-    outline-none
-    placeholder-gray
-    focus:placeholder-transparent
+    outline-none 
+    placeholder-gray 
+    focus:placeholder-transparent 
   `;
-
   return (
     <div className={InputBoxClass}>
       {img && (
