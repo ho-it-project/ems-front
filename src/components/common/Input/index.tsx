@@ -4,14 +4,14 @@ interface InputProps {
   value: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
-  rounded?: "nomal" | "large";
+  rounded?: "normal" | "large";
   fontSize?: FontSize;
   name?: string;
   bgColor?: "transparent" | "bg" | "white";
   color?: "white" | "black";
   width?: string;
-  height?: "nomal" | "large";
-  border?: "nomal" | "large" | "none";
+  height?: "normal" | "large";
+  border?: "normal" | "large" | "none";
   borderStyle?: "solid" | "dashed" | "dotted";
   borderColor?: "black" | "gray" | "main";
   textLocation?: "left" | "center" | "right";
@@ -22,25 +22,25 @@ export const Input = ({
   value,
   onChange,
   placeholder,
-  rounded = "nomal",
+  rounded = "normal",
   fontSize = "medium",
   name,
   bgColor = "white",
   color = "black",
   width,
-  height = "nomal",
-  border = "nomal",
+  height = "normal",
+  border = "normal",
   borderStyle = "solid",
   borderColor = "main",
   textLocation = "center",
   img,
 }: InputProps) => {
   // Input Size
-  const heightClass = height === "nomal" ? "h-[4rem]" : "h-[6rem]";
+  const heightClass = height === "normal" ? "h-[4rem]" : "h-[6rem]";
   const widthClass = width ? width : "w-full";
   // Style
   const roundedClass =
-    rounded === "nomal" ? "rounded-[0.8rem]" : "rounded-[3rem]";
+    rounded === "normal" ? "rounded-[0.8rem]" : "rounded-[3rem]";
   const bgColorClass =
     bgColor === "transparent"
       ? "bg-transparent"
@@ -50,7 +50,7 @@ export const Input = ({
 
   // Input Border
   const borderClass =
-    border === "nomal" ? "border-[0.1rem]" : "border-[0.2rem]";
+    border === "normal" ? "border-[0.1rem]" : "border-[0.2rem]";
   const borderStyleClass =
     borderStyle === "solid"
       ? "border-solid"

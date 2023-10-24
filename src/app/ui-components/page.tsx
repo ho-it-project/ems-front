@@ -11,7 +11,7 @@ export default function UiComponents() {
       <div className="width-[100px] height-[100px] p-[5rem]">
         <Input
           value=""
-          rounded="nomal"
+          rounded="large"
           placeholder="ID를 입력하세요"
           fontSize="large"
           width="w-[30rem]"
