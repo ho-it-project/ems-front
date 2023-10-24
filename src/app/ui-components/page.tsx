@@ -1,5 +1,6 @@
 import { Button } from "@/components/common/Button";
 import { Input } from "@/components/common/Input";
+import { Tag } from "@/components/common/Tag";
 
 export default function UiComponents() {
   return (
@@ -19,6 +20,13 @@ export default function UiComponents() {
           textLocation="left"
           // img="/icon/icon-search.png"
         />
+      </div>
+      <div>
+        <Tag text="초대중" border="none" color="black" />
+        <Tag text="초대" bgColor="main" color="white" />
+        <Tag text="초대완료" />
+        <Tag text="경고" bgColor="red" color="yellow" border="none" />
+        <Tag text="한세종" />
       </div>
     </div>
   );

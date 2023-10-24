@@ -1,8 +1,15 @@
-import { ButtonColor } from "@/type";
+import { BrandColor } from "@/type";
 
 interface ButtonProps {
   text: string;
-  color?: ButtonColor;
+  color?: BrandColor;
+  border?: "normal" | "large" | "none";
+  borderStyle?: "solid" | "dashed" | "dotted";
+  borderColor?: BrandColor;
+
+  
+
+
   onClick?: () => void;
   rounded?: "none" | "small" | "medium" | "large";
 }

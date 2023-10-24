@@ -1,4 +1,4 @@
-export type ButtonColor =
+export type BrandColor =
   | "main"
   | "main30"
   | "bg"
@@ -7,7 +7,8 @@ export type ButtonColor =
   | "gray"
   | "l-gray"
   | "red"
-  | "yellow";
+  | "yellow"
+  | "transparent";
 
 export type FontSize =
   | "small"
