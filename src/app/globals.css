@@ -14,37 +14,37 @@
   /**
   * Custom font class
   */
-  .font-xlarge {
+  .fontSize-xlarge {
     @apply text-[2.4rem] font-bold;
   }
-  .font-xlarge-l {
+  .fontSize-xlarge-l {
     @apply text-[2.4rem] font-semibold;
   }
 
-  .font-large {
+  .fontSize-large {
     @apply text-[2rem] font-bold;
   }
-  .font-large-l {
+  .fontSize-large-l {
     @apply text-[2rem] font-semibold;
   }
 
-  .font-medium {
+  .fontSize-medium {
     @apply text-[1.8rem] font-bold;
   }
-  .font-medium-l {
+  .fontSize-medium-l {
     @apply text-[1.8rem] font-semibold;
   }
 
-  .font-regular {
+  .fontSize-regular {
     @apply text-[1.5rem] font-semibold;
   }
-  .font-regular-l {
+  .fontSize-regular-l {
     @apply text-[1.5rem] font-medium;
   }
-  .font-small {
+  .fontSize-small {
     @apply text-[1.2rem] font-semibold;
   }
-  .font-small-l {
+  .fontSize-small-l {
     @apply text-[1.2rem] font-medium;
   }
 
