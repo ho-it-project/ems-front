@@ -1,6 +1,7 @@
 import { Button } from "@/components/common/Button";
 import { Input } from "@/components/common/Input";
 import { Tag } from "@/components/common/Tag";
+import { Toggle } from "@/components/common/Toggle";
 
 export default function UiComponents() {
   return (
@@ -27,6 +28,66 @@ export default function UiComponents() {
         <Tag text="초대완료" />
         <Tag text="경고" bgColor="red" color="yellow" border="none" />
         <Tag text="한세종" />
+      </div>
+      <div className="m-20">
+        <div className="p-20">
+          <Toggle id={"1"} noneCheckedColor="lgrey" checkedColor="main" />
+          <Toggle id={"2"} noneCheckedColor="yellow" checkedColor="main" />
+          <Toggle id={"3"} />
+        </div>
+        <div className="p-20">
+          <Toggle
+            id={"4"}
+            size="small"
+            noneCheckedColor="lgrey"
+            checkedColor="main"
+          />
+          <Toggle
+            id={"5"}
+            size="small"
+            noneCheckedColor="yellow"
+            checkedColor="main"
+          />
+          <Toggle id={"6"} size="small" />
+        </div>
+        <div className="p-20">
+          <Toggle
+            id={"7"}
+            size="large"
+            noneCheckedColor="main"
+            checkedColor="main"
+          />
+          <Toggle
+            id={"8"}
+            size="large"
+            noneCheckedColor="main"
+            checkedColor="main"
+            textOnButton={true}
+            texts={["좌측", "우측"]}
+          />{" "}
+          <Toggle
+            id={"9"}
+            size="large"
+            noneCheckedColor="main"
+            checkedColor="main"
+            textOnButton={true}
+            texts={["좌측", "우측"]}
+          />
+          <Toggle
+            id={"10"}
+            size="large"
+            noneCheckedColor="main"
+            checkedColor="main"
+            texts={["좌측", "우측"]}
+          />
+          <Toggle
+            id={"11"}
+            size="large"
+            noneCheckedColor="main"
+            checkedColor="main"
+            texts={["좌측", "우측"]}
+          />
+        </div>
       </div>
     </div>
   );

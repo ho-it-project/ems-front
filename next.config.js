@@ -17,6 +17,12 @@ const nextConfig = {
           ? `${protocol}://api.${domain}/${apiPrefix}/:path*`
           : "http://localhost:8000/api/:path*",
       },
+      {
+        source: "/socket.io/:path*",
+        destination: domain
+          ? `${protocol}://socket.${domain}/socket.io/:path*/`
+          : "http://localhost:8001/socket.io/:path*",
+      },
     ];
   },
   webpack: (config, { webpack }) => {

@@ -4,8 +4,8 @@ export type BrandColor =
   | "bg"
   | "white"
   | "black"
-  | "gray"
-  | "l-gray"
+  | "grey"
+  | "lgrey"
   | "red"
   | "yellow"
   | "transparent";
