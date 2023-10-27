@@ -1,6 +1,11 @@
+"use client";
 import { MenuCard } from "./MenuCard";
 
-export const Nav = () => {
+interface NavProps {
+  shadow?: "large" | "medium";
+}
+
+export const Nav = ({ shadow = "medium" }: NavProps) => {
   const topSectionClass = `
     flex-1
     flex flex-col
@@ -8,24 +13,24 @@ export const Nav = () => {
   `;
 
   return (
-    <div className="flex h-full w-[18.3rem] flex-col gap-[2rem]">
+    <div className="flex h-full w-[18.3rem] min-w-[18.3rem] flex-col gap-[2rem] bg-transparent ">
       <div className={`${topSectionClass}`}>
-        <MenuCard size="large">
+        <MenuCard size="large" shadow={shadow}>
           <div></div>
         </MenuCard>
-        <MenuCard size="small">
+        <MenuCard size="small" shadow={shadow}>
           <div></div>
         </MenuCard>
-        <MenuCard>
+        <MenuCard shadow={shadow}>
           <div>메세지</div>
         </MenuCard>
-        <MenuCard>
+        <MenuCard shadow={shadow}>
           <div>주변 응급실 찾기</div>
         </MenuCard>
-        <MenuCard>
+        <MenuCard shadow={shadow}>
           <div>환자 정보 수정하기</div>
         </MenuCard>
-        <MenuCard size="x-small">
+        <MenuCard size="x-small" shadow={shadow}>
           <div className="flex h-full w-full items-center p-[0.8rem]">
             <div className="flex flex-1 items-center justify-center">설정</div>
             <div className="h-full border" />
@@ -33,7 +38,7 @@ export const Nav = () => {
           </div>
         </MenuCard>
       </div>
-      <MenuCard>
+      <MenuCard shadow={shadow}>
         <div>수용 요청 확인하기</div>
       </MenuCard>
     </div>

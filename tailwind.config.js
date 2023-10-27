@@ -37,8 +37,12 @@ module.exports = {
         "monospace",
         "NerdFontsSymbols Nerd Font",
       ],
+      nanum: ["Nanum Gothic", "sans-serif"],
     },
     extend: {
+      screens: {
+        md: "914px", //894 + 20(padding) px
+      },
       colors: {
         "antd-form": "#d9d9d9",
         brand: "#63489a",
@@ -80,6 +84,7 @@ module.exports = {
       },
       boxShadow: {
         medium: "1px -1px 14px 0px rgba(0, 0, 0, 0.05)",
+        large: "1px -1px 14px 0px rgba(0, 0, 0, 0.1)",
       },
     },
   },

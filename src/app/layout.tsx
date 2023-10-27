@@ -1,6 +1,5 @@
 import { CommonContentSection } from "@/components/layout/CommonContentSection";
 import { LayoutWrapper } from "@/components/layout/LayoutWrapper";
-import { Nav } from "@/components/layout/Nav";
 import LayoutProvider from "@/lib/provider/LayoutProvider";
 import { SWRProvider } from "@/lib/provider/SwrProvider";
 import type { Metadata } from "next";
@@ -27,7 +26,6 @@ export default function RootLayout({
           {/* <AuthProvider> */}
           <LayoutProvider>
             <LayoutWrapper>
-              <Nav />
               <CommonContentSection>{children}</CommonContentSection>
             </LayoutWrapper>
           </LayoutProvider>

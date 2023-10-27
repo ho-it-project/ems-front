@@ -1,9 +1,14 @@
 interface MenuCardProps {
   children: React.ReactNode;
   size?: "x-small" | "small" | "medium" | "large";
+  shadow?: "large" | "medium";
 }
 
-export const MenuCard = ({ size = "medium", children }: MenuCardProps) => {
+export const MenuCard = ({
+  size = "medium",
+  children,
+  shadow = "medium",
+}: MenuCardProps) => {
   const heightClass =
     size === "large"
       ? "h-[17rem]"
@@ -18,9 +23,12 @@ export const MenuCard = ({ size = "medium", children }: MenuCardProps) => {
   const roundedClass = `
     rounded-[1.4rem]
   `;
-  const shadowClass = `
-    shadow-medium
-  `;
+  const shadowClass =
+    shadow === "medium"
+      ? "shadow-medium"
+      : shadow === "large"
+      ? "shadow-large"
+      : "";
 
   const cardClass = `
     flex items-center justify-center
