@@ -1,7 +1,6 @@
 "use client";
 
 import { BrandColor, FontSize } from "@/type";
-import { useState } from "react";
 
 interface ToggleProps {
   id: string;
@@ -14,8 +13,8 @@ interface ToggleProps {
   textOnButtonColor?: BrandColor;
   textColor?: BrandColor;
   fontSize?: FontSize;
-  // checked: boolean;
-  // onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  checked: boolean;
+  onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const Toggle = ({
@@ -28,13 +27,9 @@ export const Toggle = ({
   textOnButtonColor = "white",
   textColor = "lgrey",
   fontSize = "small",
+  checked,
+  onChange,
 }: ToggleProps) => {
-  const [checked, setChecked] = useState(false);
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(e.target.checked);
-  };
-
   //common
   const sizeClass =
     size === "small"
@@ -84,6 +79,7 @@ export const Toggle = ({
     text-black
     rounded-full
     transition-all duration-300
+    cursor-pointer
     ${size === "large" ? "" : "px-[0.2rem]"}
     bg-bg
     ${sizeClass}

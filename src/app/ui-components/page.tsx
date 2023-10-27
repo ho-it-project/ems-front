@@ -31,9 +31,14 @@ export default function UiComponents() {
       </div>
       <div className="m-20">
         <div className="p-20">
-          <Toggle id={"1"} noneCheckedColor="lgrey" checkedColor="main" />
+          <Toggle
+            id={"1"}
+            noneCheckedColor="lgrey"
+            checkedColor="main"
+            checked={true}
+          />
           <Toggle id={"2"} noneCheckedColor="yellow" checkedColor="main" />
-          <Toggle id={"3"} />
+          <Toggle id={"3"} checked={false} />
         </div>
         <div className="p-20">
           <Toggle
@@ -41,14 +46,16 @@ export default function UiComponents() {
             size="small"
             noneCheckedColor="lgrey"
             checkedColor="main"
+            checked={true}
           />
           <Toggle
             id={"5"}
             size="small"
             noneCheckedColor="yellow"
             checkedColor="main"
+            checked={false}
           />
-          <Toggle id={"6"} size="small" />
+          <Toggle id={"6"} size="small" checked={false} />
         </div>
         <div className="p-20">
           <Toggle
@@ -56,6 +63,7 @@ export default function UiComponents() {
             size="large"
             noneCheckedColor="main"
             checkedColor="main"
+            checked={true}
           />
           <Toggle
             id={"8"}
@@ -64,6 +72,7 @@ export default function UiComponents() {
             checkedColor="main"
             textOnButton={true}
             texts={["좌측", "우측"]}
+            checked={false}
           />{" "}
           <Toggle
             id={"9"}
@@ -72,6 +81,7 @@ export default function UiComponents() {
             checkedColor="main"
             textOnButton={true}
             texts={["좌측", "우측"]}
+            checked={true}
           />
           <Toggle
             id={"10"}
@@ -79,6 +89,7 @@ export default function UiComponents() {
             noneCheckedColor="main"
             checkedColor="main"
             texts={["좌측", "우측"]}
+            checked={false}
           />
           <Toggle
             id={"11"}
@@ -86,6 +97,7 @@ export default function UiComponents() {
             noneCheckedColor="main"
             checkedColor="main"
             texts={["좌측", "우측"]}
+            checked={true}
           />
         </div>
       </div>
