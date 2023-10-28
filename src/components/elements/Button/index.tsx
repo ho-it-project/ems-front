@@ -6,10 +6,6 @@ interface ButtonProps {
   border?: "normal" | "large" | "none";
   borderStyle?: "solid" | "dashed" | "dotted";
   borderColor?: BrandColor;
-
-  
-
-
   onClick?: () => void;
   rounded?: "none" | "small" | "medium" | "large";
 }

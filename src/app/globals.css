@@ -21,59 +21,76 @@
     font-size: 62.5%;
     font-family: "inter", sans-serif;
   }
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 1.4rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
 }
 
-@layer components {
-  /**
-  * Custom font class
-  */
-
-  /**
-  * lagacy class
-  */
-  /* h2.title {
-    @apply my-5 text-xl;
+@layer base {
+  * {
+    @apply border-border;
   }
-
-  h3.title {
-    @apply my-5 text-lg;
+  body {
+    @apply bg-background text-foreground;
   }
-
-  .enable-transition {
-    @apply transition-all duration-300;
-  }
-
-  .link-with-icon {
-    @apply inline-flex items-center gap-1;
-  }
-
-  .flex-item-list {
-    @apply flex items-center gap-2;
-  }
-
-  .btn-with-icon {
-    @apply inline-flex items-center gap-1;
-  }
-
-  .btn-with-icon svg {
-    @apply h-4 w-4;
-  }
-
-  .btn {
-    @apply enable-transition cursor-pointer rounded-lg border border-gray-300 hover:border-brand;
-  }
-
-  .cols-2 {
-    @apply grid gap-2 sm:grid-cols-1 md:grid-cols-2;
-  }
-
-  .cols-3 {
-    @apply grid gap-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
-  }
-
-  .ellipsis-text {
-    @apply overflow-hidden overflow-ellipsis whitespace-nowrap;
-  } */
 }
 
 @import "./_spinner.css";

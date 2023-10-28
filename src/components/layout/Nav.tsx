@@ -1,4 +1,5 @@
 "use client";
+import { cn } from "@/lib/utils";
 import { MenuCard } from "./MenuCard";
 
 interface NavProps {
@@ -6,11 +7,11 @@ interface NavProps {
 }
 
 export const Nav = ({ shadow = "medium" }: NavProps) => {
-  const topSectionClass = `
+  const topSectionClass = cn(`
     flex-1
     flex flex-col
     gap-[2rem]
-  `;
+  `);
 
   return (
     <div className="flex h-full w-[18.3rem] min-w-[18.3rem] flex-col gap-[2rem] bg-transparent ">

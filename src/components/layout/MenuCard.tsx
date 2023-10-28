@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils";
+
 interface MenuCardProps {
   children: React.ReactNode;
   size?: "x-small" | "small" | "medium" | "large";
@@ -21,7 +23,7 @@ export const MenuCard = ({
   const widthClass = `w-full`;
 
   const roundedClass = `
-    rounded-[1.4rem]
+    rounded-lg
   `;
   const shadowClass =
     shadow === "medium"
@@ -30,13 +32,14 @@ export const MenuCard = ({
       ? "shadow-large"
       : "";
 
-  const cardClass = `
-    flex items-center justify-center
-    bg-white
-    ${heightClass}
-    ${widthClass}
-    ${roundedClass}
-    ${shadowClass}
-  `;
+  const cardClass = cn(`
+  flex items-center justify-center
+  bg-white
+  fontSize-medium
+  ${heightClass}
+  ${widthClass}
+  ${roundedClass}
+  ${shadowClass}
+  `);
   return <div className={cardClass}>{children}</div>;
 };

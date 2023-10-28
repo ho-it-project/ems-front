@@ -1,71 +1,55 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: ["class"],
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
   theme: {
-    fontFamily: {
-      sans: [
-        "var(--font-pretendard)",
-        "Helvetica Neue",
-        "Apple SD Gothic Neo",
-        "Malgun Gothic",
-        "맑은고딕",
-        "Dotum",
-        "돋움",
-        "Gulim",
-        "굴림",
-        "Helvetica",
-        "Arial",
-        "sans-serif",
-      ],
-      mono: [
-        "ui-monospace",
-        "Consolas",
-        "SFMono-Regular",
-        "Liberation Mono",
-        "Menlo",
-        "Monaco",
-        "Courier",
-        "Apple SD Gothic Neo",
-        "Nanum Gothic",
-        "나눔고딕",
-        "Malgun Gothic",
-        "맑은고딕",
-        "monospace",
-        "NerdFontsSymbols Nerd Font",
-      ],
-      nanum: ["Nanum Gothic", "sans-serif"],
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
     },
     extend: {
-      screens: {
-        md: "914px", //894 + 20(padding) px
-      },
       colors: {
-        "antd-form": "#d9d9d9",
-        brand: "#63489a",
-        turquoise: "#1abc9c",
-        greensea: "#16a085",
-        emerald: "#2ecc71",
-        nephritis: "#27ae60",
-        peterriver: "#3498db",
-        belizehole: "#2980b9",
-        amethyst: "#9b59b6",
-        wisteria: "#8e44ad",
-        wetasphalt: "#34495e",
-        midnightblue: "#2c3e50",
-        sunflower: "#f1c40f",
-        orange: "#f39c12",
-        carrot: "#e67e22",
-        pumpkin: "#d35400",
-        alizarin: "#e74c3c",
-        pomegranate: "#c0392b",
-        clouds: "#ecf0f1",
-        silver: "#bdc3c7",
-        concrete: "#95a5a6",
-        asbestos: "#7f8c8d",
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
 
         main: "#0AA7AC",
         main30: "#B0E3E4",
@@ -77,18 +61,27 @@ module.exports = {
         red: "#F42222",
         yellow: "#FFD541",
       },
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 6px)",
+        sm: "calc(var(--radius) - 8px)",
       },
-      boxShadow: {
-        medium: "1px -1px 14px 0px rgba(0, 0, 0, 0.05)",
-        large: "1px -1px 14px 0px rgba(0, 0, 0, 0.1)",
+      keyframes: {
+        "accordion-down": {
+          from: { height: 0 },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: 0 },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
   },
-  darkMode: "class",
   safelist: [
     "bg-main",
     "bg-white",
@@ -114,5 +107,5 @@ module.exports = {
     "border-black",
     "broder-grey",
   ],
-  plugins: [],
+  plugins: [require("tailwindcss-animate")],
 };

@@ -1,5 +1,13 @@
-import { PageHeader } from "@/components/common/Header";
+import { PageHeader } from "@/components/elements/PageHeader";
 import { CompanyStatusCard } from "@/components/module/CompanyInfo/CompanyStatusCard";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export const CompanyInfoContainer = () => {
   return (
@@ -19,6 +27,19 @@ export const CompanyInfoContainer = () => {
         <CompanyStatusCard title="차량/팀" status="42" />
         <CompanyStatusCard title="차량/팀" status="42" />
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Card Title</CardTitle>
+          <CardDescription>Card Description</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p>Card Content</p>
+        </CardContent>
+        <CardFooter>
+          <p>Card Footer</p>
+        </CardFooter>
+      </Card>
     </div>
   );
 };

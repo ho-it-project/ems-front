@@ -1,12 +1,12 @@
-import { Button } from "@/components/common/Button";
-import { Input } from "@/components/common/Input";
-import { Tag } from "@/components/common/Tag";
-import { Toggle } from "@/components/common/Toggle";
+import { Button } from "@/components/elements/Button";
+import { Input } from "@/components/elements/Input";
+import { Tag } from "@/components/elements/Tag";
+import { Toggle } from "@/components/elements/Toggle";
 
 export default function UiComponents() {
   return (
     <div className="font-large-x">
-      <button className="font-small rounded-[1.4rem] bg-main px-[4rem] py-[1.2rem]">
+      <button className="font-small rounded-lg bg-main px-[4rem] py-[1.2rem]">
         저장하기
       </button>
       <Button text="저장하기" />
@@ -37,7 +37,12 @@ export default function UiComponents() {
             checkedColor="main"
             checked={true}
           />
-          <Toggle id={"2"} noneCheckedColor="yellow" checkedColor="main" />
+          <Toggle
+            id={"2"}
+            noneCheckedColor="yellow"
+            checkedColor="main"
+            checked={false}
+          />
           <Toggle id={"3"} checked={false} />
         </div>
         <div className="p-20">
