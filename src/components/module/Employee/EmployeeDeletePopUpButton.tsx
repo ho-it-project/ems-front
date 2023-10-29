@@ -15,13 +15,7 @@ interface EmployeeDeletePopUpButtonProps {
 
 export const EmployeeDeletePopUpButton = ({
   onSubmmit,
-} //   employee = {
-//     name: "",
-//     role: "",
-//     id: "",
-//     password: "",
-//   },
-: EmployeeDeletePopUpButtonProps) => {
+}: EmployeeDeletePopUpButtonProps) => {
   const [open, setOpen] = React.useState(false);
   const onClickTrigger = () => {
     setOpen(true);

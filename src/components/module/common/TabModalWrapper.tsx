@@ -14,7 +14,7 @@ interface TabWrapperProps {
   onClickClose?: () => void;
 }
 
-export const ModalWrapper = ({
+export const TabModalWrapper = ({
   content,
   bgColor = "white",
   onClickClose,

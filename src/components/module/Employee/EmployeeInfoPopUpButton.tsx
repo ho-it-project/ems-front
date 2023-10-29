@@ -3,7 +3,7 @@ import { Input } from "@/components/elements/Input";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import Image from "next/image";
 import React, { useState } from "react";
-import { ModalWrapper } from "../common/ModalWrapper";
+import { TabModalWrapper } from "../common/TabModalWrapper";
 
 interface EmployeeInfoPopUpButtonProps {
   title: string;
@@ -79,7 +79,7 @@ export const EmployeeInfoPopUpButton = ({
       {trigger}
       <DialogContent className="max-w-[61.6rem] border-none bg-transparent shadow-none data-[state=open]:w-[80rem]">
         <div className="w-[58.6rem]">
-          <ModalWrapper
+          <TabModalWrapper
             bgColor="bg"
             onClickClose={onClickClose}
             content={{
