@@ -3,7 +3,9 @@ import { CompanyInfoContainer } from "@/components/container/CompanyInfoContaine
 export const CompanyInfo = () => {
   return (
     <div className="h-full w-full">
-      <CompanyInfoContainer />
+      <div className="m-auto w-fit">
+        <CompanyInfoContainer />
+      </div>
     </div>
   );
 };

@@ -51,6 +51,10 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 1.4rem;
+
+    --shadow-lg: 0.1rem 0.1rem 1.4rem 0rem rgba(0, 0, 0, 0.1);
+    --shadow-md: 0.1rem 0.1rem 1.4rem 0rem rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0.1rem 0.1rem 1.4rem 0rem rgba(0, 0, 0, 0.02);
   }
 
   .dark {

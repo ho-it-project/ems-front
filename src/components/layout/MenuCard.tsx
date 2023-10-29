@@ -26,11 +26,7 @@ export const MenuCard = ({
     rounded-lg
   `;
   const shadowClass =
-    shadow === "medium"
-      ? "shadow-medium"
-      : shadow === "large"
-      ? "shadow-large"
-      : "";
+    shadow === "medium" ? "shadow-md" : shadow === "large" ? "shadow-lg" : "";
 
   const cardClass = cn(`
   flex items-center justify-center
