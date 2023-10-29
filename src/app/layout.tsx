@@ -1,4 +1,4 @@
-import { CommonContentSection } from "@/components/layout/CommonContentSection";
+import { ContentSection } from "@/components/layout/ContentSection";
 import { LayoutWrapper } from "@/components/layout/LayoutWrapper";
 import LayoutProvider from "@/lib/provider/LayoutProvider";
 import { SWRProvider } from "@/lib/provider/SwrProvider";
@@ -26,7 +26,7 @@ export default function RootLayout({
           {/* <AuthProvider> */}
           <LayoutProvider>
             <LayoutWrapper>
-              <CommonContentSection>{children}</CommonContentSection>
+              <ContentSection>{children}</ContentSection>
             </LayoutWrapper>
           </LayoutProvider>
           {/* </AuthProvider> */}

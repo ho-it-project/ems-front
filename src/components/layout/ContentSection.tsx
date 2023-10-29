@@ -1,4 +1,4 @@
-export const CommonContentSection = ({
+export const ContentSection = ({
   children,
 }: {
   children: React.ReactNode;
