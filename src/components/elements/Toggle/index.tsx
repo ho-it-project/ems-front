@@ -3,7 +3,7 @@
 import { BrandColor, FontSize } from "@/type";
 
 interface ToggleProps {
-  id: string;
+  id?: string;
   size?: "small" | "medium" | "large";
   toggleText?: string;
   checkedColor?: BrandColor;

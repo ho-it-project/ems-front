@@ -116,6 +116,7 @@ export const AmbulanceInfoPopUpButton = ({
                         유형
                       </div>
                       <Toggle
+                        id="toggle"
                         size="large"
                         checkedColor="main"
                         noneCheckedColor="main"
