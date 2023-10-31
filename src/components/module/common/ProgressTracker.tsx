@@ -1,11 +1,12 @@
 import { cn } from "@/lib/utils";
-import { BrandColor } from "@/type";
+import { BrandColor, FontSize } from "@/type";
 
 interface ProgressTrackerProps {
   steps: string[];
   currentStep: number;
   progressColor?: BrandColor;
   defaultColor?: BrandColor;
+  fontSize?: FontSize;
 }
 
 export const ProgressTracker = ({
@@ -13,6 +14,7 @@ export const ProgressTracker = ({
   currentStep,
   progressColor = "main",
   defaultColor = "lgrey",
+  fontSize = "small-l",
 }: ProgressTrackerProps) => {
   const currentStepIndex = currentStep - 1;
 
@@ -29,7 +31,9 @@ export const ProgressTracker = ({
   const defaultTextColor = `text-${defaultColor}`;
   return (
     <div>
-      <div className="relative flex flex-row items-center justify-between">
+      <div
+        className={cn("relative flex flex-row items-center justify-between")}
+      >
         {steps.map((step, index) => {
           return (
             <div
@@ -39,7 +43,7 @@ export const ProgressTracker = ({
               <div className="absolute inset-0 -top-[100%] flex items-center justify-end px-[2rem]">
                 <span
                   className={cn(
-                    `fontSize-small`,
+                    `fontSize-${fontSize}`,
                     index <= currentStepIndex
                       ? currentTextColor
                       : defaultTextColor
@@ -50,15 +54,17 @@ export const ProgressTracker = ({
               </div>
               <div
                 className={cn(
-                  "bg-backgroundImage-gradient h-[0.1rem] w-full",
-                  index === 0 && currentStep >= index
+                  "h-[0.1rem] w-full",
+                  index === 0 && currentStepIndex >= index
                     ? gradientColor
-                    : index === 0 && currentStep < index
+                    : index === 0 && currentStepIndex < index
                     ? defaultGradientColor
                     : "",
                   index <= currentStepIndex && index !== 0
                     ? currentStepColor
-                    : defaultStepColor
+                    : index !== 0
+                    ? defaultStepColor
+                    : ""
                 )}
               ></div>
               <div

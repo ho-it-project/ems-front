@@ -20,15 +20,10 @@ export default function Home() {
               />
             </div>
           </div>
+
           <ProgressTracker
-            steps={[
-              "증상 확인",
-              "증상 기록",
-              "증상 기록",
-              "증상 기록",
-              "증상 기록",
-            ]}
-            currentStep={4}
+            steps={["증상 확인1", "증상 기록2", "증상 3", "증상 4", "증상 5"]}
+            currentStep={5}
             progressColor="main"
             defaultColor="lgrey"
           />
