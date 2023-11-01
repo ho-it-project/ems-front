@@ -9,6 +9,10 @@ interface ProgressTrackerProps {
   fontSize?: FontSize;
 }
 
+type GradientColor = {
+  [key in BrandColor]: `from-${BrandColor}`;
+};
+
 export const ProgressTracker = ({
   steps,
   currentStep,
@@ -16,6 +20,14 @@ export const ProgressTracker = ({
   defaultColor = "lgrey",
   fontSize = "small-l",
 }: ProgressTrackerProps) => {
+  const gradient: GradientColor = {
+    main: "from-main",
+    lgrey: "from-lgrey",
+    white: "from-white",
+    black: "from-black",
+    red: "from-red",
+    yellow: "from-yellow",
+  };
   const currentStepIndex = currentStep - 1;
 
   const currentStepColor = `bg-${progressColor}`;
@@ -24,8 +36,8 @@ export const ProgressTracker = ({
   const currentBorderColor = `border-${progressColor}`;
   const defaultBorderColor = `border-${defaultColor}`;
 
-  const gradientColor = `bg-gradient-to-l from-${progressColor}`;
-  const defaultGradientColor = `bg-gradient-to-l from-${defaultColor}`;
+  const gradientColor = cn(`bg-gradient-to-l`, gradient[progressColor]);
+  const defaultGradientColor = cn(`bg-gradient-to-l`, gradient[defaultColor]);
 
   const currentTextColor = `text-${progressColor}`;
   const defaultTextColor = `text-${defaultColor}`;
@@ -54,7 +66,7 @@ export const ProgressTracker = ({
               </div>
               <div
                 className={cn(
-                  "h-[0.1rem] w-full",
+                  "bg-backgroundImage-gradient h-[0.1rem] w-full",
                   index === 0 && currentStepIndex >= index
                     ? gradientColor
                     : index === 0 && currentStepIndex < index
