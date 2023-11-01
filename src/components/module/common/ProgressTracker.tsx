@@ -10,7 +10,7 @@ interface ProgressTrackerProps {
 }
 
 type GradientColor = {
-  [key in BrandColor]: `from-${BrandColor}`;
+  [key in BrandColor]: `from-${key}`;
 };
 
 export const ProgressTracker = ({
@@ -22,11 +22,15 @@ export const ProgressTracker = ({
 }: ProgressTrackerProps) => {
   const gradient: GradientColor = {
     main: "from-main",
-    lgrey: "from-lgrey",
+    main30: "from-main30",
+    bg: "from-bg",
     white: "from-white",
     black: "from-black",
+    grey: "from-grey",
+    lgrey: "from-lgrey",
     red: "from-red",
     yellow: "from-yellow",
+    transparent: "from-transparent",
   };
   const currentStepIndex = currentStep - 1;
 
