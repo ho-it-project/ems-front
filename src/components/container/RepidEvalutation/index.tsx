@@ -9,8 +9,8 @@ export const RepidEvalutationContainer = () => {
         <div className="flex h-full w-full flex-col gap-[3rem]">
           <PageHeader title="신속 평가">
             <div className="flex gap-[2rem]">
-              <div className="w-5rem h-full bg-main" />
-              <div className="w-5rem h-full bg-main" />
+              <div className="h-full w-[5rem] bg-main" />
+              <div className="h-full w-[5rem] bg-main" />
             </div>
           </PageHeader>
           <div className="h-full">
