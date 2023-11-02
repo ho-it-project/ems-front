@@ -73,7 +73,7 @@ export const CompanyInfoForm = () => {
               control={form.control}
               render={({ field }) => (
                 <FormItem className="flex items-center gap-[2rem]">
-                  <FormLabel htmlFor="companny_name" className="w-[10rem]">
+                  <FormLabel htmlFor="company_name" className="w-[10rem]">
                     <span className="fontSize-large">기관명</span>
                   </FormLabel>
                   <FormControl>
