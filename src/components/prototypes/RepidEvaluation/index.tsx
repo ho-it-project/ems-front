@@ -1,5 +1,5 @@
-import { RepidEvalutationContainer } from "@/components/container/RepidEvalutation";
+import { RepidEvaluationContainer } from "@/components/container/RepidEvaluation";
 
 export const RepidEvaluationPrototypes = () => {
-  return <RepidEvalutationContainer />;
+  return <RepidEvaluationContainer />;
 };

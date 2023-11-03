@@ -1,8 +1,8 @@
 import { PageHeader } from "@/components/elements/PageHeader";
-import { RepidEvaluationForm } from "@/components/module/RepidEvaluation/RepidEvaluationForm";
+import { RepidEvaluationForm } from "@/components/module/Evaluation/RepidEvaluation/RepidEvaluationForm";
 import { ProgressTracker } from "@/components/module/common/ProgressTracker";
 
-export const RepidEvalutationContainer = () => {
+export const RepidEvaluationContainer = () => {
   return (
     <>
       <div className="h-full w-full">

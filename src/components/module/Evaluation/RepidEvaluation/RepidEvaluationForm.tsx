@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { DualChoiceButton } from "../common/DualChoiceButton";
+import { DualChoiceButton } from "../../common/DualChoiceButton";
 
 export const RepidEvaluationForm = () => {
   const [isTrauma, setIsTrauma] = useState<null | boolean>();
