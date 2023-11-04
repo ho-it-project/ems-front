@@ -5,7 +5,7 @@ import LayoutProvider from "@/lib/provider/LayoutProvider";
 import { SWRProvider } from "@/lib/provider/SwrProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

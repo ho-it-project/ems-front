@@ -5,6 +5,7 @@ const protocol = process.env.NEXT_PUBLIC_PROTOCOL;
 const apiPrefix = process.env.NEXT_PUBLIC_API_PREFIX;
 const nextConfig = {
   reactStrictMode: true,
+  experimental: { instrumentationHook: true },
   images: {
     domains: [],
     formats: ["image/avif", "image/webp"],

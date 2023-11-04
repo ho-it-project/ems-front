@@ -7,9 +7,9 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import useSWR from "swr";
 interface IAuthProviderProps {}
 
+import { env } from "@/constants/env";
 import { Loader2 } from "lucide-react";
 
 export const Icons = {
@@ -45,22 +45,23 @@ export function useAuth() {
 //   return publicPageList.includes(pathname);
 // };
 function useProvideAuth() {
-  const fetcher = (input: RequestInfo | URL, init?: RequestInit) =>
-    fetch(input, init).then((res) => res.json());
+  // const fetcher = (input: RequestInfo | URL, init?: RequestInit) =>
+  //   fetch(input, init).then((res) => res.json());
   const [user, setUser] = useState<IAuthContext["user"] | null>(null);
-  const { data, error } = useSWR("/api/auth", fetcher);
-  const [status, setStatus] = useState("loading");
-  useEffect(() => {
-    if (data) {
-      setUser(data.result.user);
-      setStatus("success");
-    }
-    if (error) {
-      setStatus("error");
-    }
-  }, [data, status, error]);
+  // const { data, error } = useSWR("/api/auth", fetcher);
+  const [status] = useState("loading");
+  // const [status, setStatus] = useState("loading");
+  // useEffect(() => {
+  //   if (data?.result) {
+  //     setUser(data.result.user);
+  //     setStatus("success");
+  //   }
+  //   if (error) {
+  //     setStatus("error");
+  //   }
+  // }, [data, status, error]);
   const signIn = () => {
-    console.log("signIn", data);
+    // console.log("signIn", data);
   };
   const signOut = () => {
     fetch("api/auth/logout", { method: "GET" });
@@ -86,11 +87,15 @@ const AuthProvider = ({ children }: PropsWithChildren<IAuthProviderProps>) => {
     // if (status === 'loading') {
     //   return;
     // }
-    if (!user) {
-      router.push("/login");
+    if (env.NEXT_PUBLIC_NODE_ENV == "dev" && pathname == "/ui-components") {
       setIsLoading(false);
       return;
     }
+    // if (!user) {
+    //   router.push("/login");
+    //   setIsLoading(false);
+    //   return;
+    // }
     setIsLoading(false);
   }, [router, user]);
 
