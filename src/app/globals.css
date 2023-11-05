@@ -21,6 +21,21 @@
     font-size: 62.5%;
     font-family: "inter", sans-serif;
   }
+
+  .hidden-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 2.4rem;
+    height: 2.4rem;
+
+    background: black;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-top: -0.5rem;
+  }
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;

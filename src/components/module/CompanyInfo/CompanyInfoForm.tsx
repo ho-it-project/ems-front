@@ -4,7 +4,6 @@ import { PageHeader } from "@/components/elements/PageHeader";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -54,7 +53,7 @@ export const CompanyInfoForm = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          aria-controls="adsf"
+          aria-controls="company_form"
           id="company_form"
         >
           <div className="fontSize-medium flex flex-col gap-[3rem] pr-[6.4rem] text-main">
@@ -73,7 +72,7 @@ export const CompanyInfoForm = () => {
               control={form.control}
               render={({ field }) => (
                 <FormItem className="flex items-center gap-[2rem]">
-                  <FormLabel htmlFor="companny_name" className="w-[10rem]">
+                  <FormLabel htmlFor="company_name" className="w-[10rem]">
                     <span className="fontSize-large">기관명</span>
                   </FormLabel>
                   <FormControl>
@@ -87,7 +86,6 @@ export const CompanyInfoForm = () => {
                       border={editMode ? "normal" : "none"}
                     />
                   </FormControl>
-                  <FormDescription id="dis" className="hidden" />
                 </FormItem>
               )}
             />
@@ -112,7 +110,6 @@ export const CompanyInfoForm = () => {
                         border={editMode ? "normal" : "none"}
                       />
                     </FormControl>
-                    <FormDescription id="dis" className="hidden" />
                   </FormItem>
                 )}
               />
@@ -129,14 +126,13 @@ export const CompanyInfoForm = () => {
                       <Input
                         placeholder="서울시"
                         {...field}
-                        id="region_name"
+                        id="region_code"
                         aria-describedby="dis"
                         readOnly={!editMode}
                         className="focus:placeholder-grey"
                         border={editMode ? "normal" : "none"}
                       />
                     </FormControl>
-                    <FormDescription id="dis" className="hidden" />
                   </FormItem>
                 )}
               />
@@ -146,21 +142,23 @@ export const CompanyInfoForm = () => {
               control={form.control}
               render={({ field }) => (
                 <FormItem className="flex items-center gap-[2rem]">
-                  <FormLabel htmlFor="companny_name" className="w-[10rem]">
+                  <FormLabel
+                    htmlFor="companu_phone_number"
+                    className="w-[10rem]"
+                  >
                     <span className="fontSize-large">전화번호</span>
                   </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="전화번호를 입력하세요"
                       {...field}
-                      id="company_name"
+                      id="companu_phone_number"
                       aria-describedby="dis"
                       readOnly={!editMode}
                       className="focus:placeholder-grey"
                       border={editMode ? "normal" : "none"}
                     />
                   </FormControl>
-                  <FormDescription id="dis" className="hidden" />
                 </FormItem>
               )}
             />
@@ -169,21 +167,20 @@ export const CompanyInfoForm = () => {
               control={form.control}
               render={({ field }) => (
                 <FormItem className="flex items-center gap-[2rem]">
-                  <FormLabel htmlFor="companny_name" className="w-[10rem]">
+                  <FormLabel htmlFor="company_admin_name" className="w-[10rem]">
                     <span className="fontSize-large">관리자</span>
                   </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="shadcn"
                       {...field}
-                      id="company_name"
+                      id="company_admin_name"
                       aria-describedby="dis"
                       readOnly={!editMode}
                       className="focus:placeholder-grey"
                       border={editMode ? "normal" : "none"}
                     />
                   </FormControl>
-                  <FormDescription id="dis" className="hidden" />
                 </FormItem>
               )}
             />

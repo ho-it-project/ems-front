@@ -84,7 +84,6 @@ module.exports = {
         lg: "var(--shadow-lg)",
         md: "var(--shadow-md)",
         sm: "var(--shadow-sm)",
-        
       },
     },
   },
