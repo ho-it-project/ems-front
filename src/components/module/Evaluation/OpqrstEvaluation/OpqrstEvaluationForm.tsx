@@ -7,13 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { SymptomLabel } from "../../common/SymptomLabeledInput";
-type EvaluationKey =
-  | "onset"
-  | "provoke"
-  | "quality"
-  | "radiation"
-  | "severity"
-  | "time.date";
+type EvaluationKey = "onset" | "provoke" | "quality" | "radiation" | "severity";
+type EvaluationDateTimeKey = "time.date" | "time.hour" | "time.minute";
 
 interface EvaluationQuestionTypeInput {
   key: EvaluationKey;
@@ -34,6 +29,18 @@ interface EvaluationQuestionTypeSlider {
   };
 }
 
+interface EvaluationQuestionTypeDateTime {
+  key: EvaluationDateTimeKey;
+  type: "calendar" | "picker";
+  label?: {
+    title: string;
+    description: string;
+  };
+  unit?: string;
+  max?: number;
+  min?: number;
+}
+
 interface EvaluationQuestionTypeCalendar {
   key: EvaluationKey;
   title: string;
@@ -51,7 +58,6 @@ type EvaluationQuestionList = (
   | EvaluationQuestionTypeSlider
   | EvaluationQuestionTypeCalendar
 )[];
-
 const evaluationQuestionList: EvaluationQuestionList = [
   {
     key: "onset",
@@ -83,11 +89,29 @@ const evaluationQuestionList: EvaluationQuestionList = [
     description: "얼마나 아픈지?",
     type: "slider",
   },
+];
+const dateQuestion: EvaluationQuestionTypeDateTime[] = [
   {
     key: "time.date",
-    title: "time",
-    description: "시간에 따라 아픈 정도 (지속시간, 변화 등)",
+    label: {
+      title: "time",
+      description: "시간에 따라 아픈 정도 (지속시간, 변화 등)",
+    },
     type: "calendar",
+  },
+  {
+    key: "time.hour",
+    unit: "시",
+    type: "picker",
+    max: 23,
+    min: 0,
+  },
+  {
+    key: "time.minute",
+    unit: "분",
+    type: "picker",
+    min: 0,
+    max: 59,
   },
 ];
 
@@ -99,6 +123,8 @@ const opqrstEvaluationSchema = z.object({
   severity: z.string(),
   time: z.object({
     date: z.date(),
+    hour: z.number().max(23),
+    minute: z.number().max(59),
   }),
 });
 
@@ -113,6 +139,8 @@ export const OpqrstEvaluationForm = () => {
       severity: "0",
       time: {
         date: new Date(),
+        hour: 0,
+        minute: 0,
       },
     },
   });
@@ -180,25 +208,6 @@ export const OpqrstEvaluationForm = () => {
                           />
                         </FormControl>
                       </div>
-                    ) : question.type === "calendar" ? (
-                      <div className="flex h-[6.5rem] w-full items-center gap-[7rem]">
-                        <div className="flex min-w-[11rem] max-w-[11rem] flex-col justify-center">
-                          <span className="text-main">{question.title}</span>
-                          <span className="fontSize-small text-lgrey">
-                            {question.description}
-                          </span>
-                        </div>
-                        <FormControl>
-                          <CalendarSelector
-                            selected={
-                              typeof field.value === "string"
-                                ? new Date()
-                                : field.value
-                            }
-                            onSelect={field.onChange}
-                          />
-                        </FormControl>
-                      </div>
                     ) : (
                       ""
                     )}
@@ -207,9 +216,85 @@ export const OpqrstEvaluationForm = () => {
               />
             );
           })}
+          <div className="flex w-full gap-[1.8rem]">
+            {dateQuestion.map((question, index) => (
+              <FormField
+                key={index}
+                name={question.key}
+                control={form.control}
+                render={({ field }) =>
+                  question.label ? (
+                    <FormItem className="flex-[5]">
+                      <div className="flex h-[6.5rem] w-full items-center gap-[7rem]">
+                        <div className="flex min-w-[11rem] max-w-[11rem] flex-col justify-center">
+                          <span className="text-main">
+                            {question.label.title}
+                          </span>
+                          <span className="fontSize-small text-lgrey">
+                            {question.label.description}
+                          </span>
+                        </div>
+                        <FormControl>
+                          <CalendarSelector
+                            selected={
+                              typeof field.value === "number"
+                                ? new Date(field.value)
+                                : field.value
+                            }
+                            onSelect={field.onChange}
+                          />
+                        </FormControl>
+                      </div>
+                    </FormItem>
+                  ) : (
+                    <FormItem className="flex flex-[1] items-center text-main">
+                      <div className="flex h-full w-full items-center gap-[0.8rem]">
+                        <div className="flex h-full w-full flex-col justify-center rounded-lg bg-white">
+                          <FormControl>
+                            <Input
+                              {...field}
+                              onChange={(e) => {
+                                if (e.target.value === "")
+                                  return field.onChange(0);
+                                if (
+                                  question.max &&
+                                  parseInt(e.target.value) > question.max
+                                ) {
+                                  return field.onChange(question.max);
+                                }
+                                if (
+                                  question.min &&
+                                  parseInt(e.target.value) < question.min
+                                ) {
+                                  return field.onChange(question.min);
+                                }
+                                field.onChange(parseInt(e.target.value));
+                              }}
+                              bgColor="transparent"
+                              value={field.value.toLocaleString()}
+                              id={question.key}
+                              border="none"
+                              className="h-full w-full"
+                              textLocation="left"
+                              aria-describedby="opqrst_evaluation_form"
+                            />
+                          </FormControl>
+                        </div>
+                        <span>{question.unit}</span>
+                      </div>
+                    </FormItem>
+                  )
+                }
+              />
+            ))}
+          </div>
         </form>
       </Form>
-      <button type="submit" form="opqrst_evaluation_form" />
+      <button
+        type="submit"
+        form="opqrst_evaluation_form"
+        className="h-5 w-5 bg-red"
+      />
     </div>
   );
 };
