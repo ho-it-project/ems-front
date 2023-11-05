@@ -1,10 +1,11 @@
 import { ContentSection } from "@/components/layout/ContentSection";
 import { LayoutWrapper } from "@/components/layout/LayoutWrapper";
+import AuthProvider from "@/lib/auth/AuthProvider";
 import LayoutProvider from "@/lib/provider/LayoutProvider";
 import { SWRProvider } from "@/lib/provider/SwrProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -20,16 +21,16 @@ export default function RootLayout({
   // 초기 테마를 설정하는 함수
 
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className}`}>
+    <html lang="en" suppressHydrationWarning className="h-full w-full">
+      <body className={`${inter.className} h-full w-full`}>
         <SWRProvider>
-          {/* <AuthProvider> */}
           <LayoutProvider>
-            <LayoutWrapper>
-              <ContentSection>{children}</ContentSection>
-            </LayoutWrapper>
+            <AuthProvider>
+              <LayoutWrapper>
+                <ContentSection>{children}</ContentSection>
+              </LayoutWrapper>
+            </AuthProvider>
           </LayoutProvider>
-          {/* </AuthProvider> */}
         </SWRProvider>
       </body>
     </html>

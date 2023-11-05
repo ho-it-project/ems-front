@@ -84,6 +84,7 @@ export const CalendarSelector = ({
           locale={ko}
           onDayClick={closeHandler}
           {...props}
+          className="w-auto"
         />
       </PopoverContent>
     </Popover>

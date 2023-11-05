@@ -1,37 +1,42 @@
-// "use client";
-// import { usePathname, useRouter } from "next/navigation";
-// import React, {
-//   PropsWithChildren,
-//   createContext,
-//   useContext,
-//   useEffect,
-//   useState,
-// } from "react";
-// import useSWR from "swr";
-// interface IAuthProviderProps {}
+"use client";
+import { usePathname, useRouter } from "next/navigation";
+import React, {
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+interface IAuthProviderProps {}
 
-// interface IAuthContext {
-//   initialized: boolean;
-//   user: {
-//     user_id: string;
-//     role: string;
-//     nickname: string;
-//     email: string;
-//   } | null;
-//   signIn: () => void;
-//   signOut: () => void;
-// }
+import { env } from "@/constants/env";
+import { Loader2 } from "lucide-react";
 
-// export const AuthContext = createContext<IAuthContext | null>(null);
+export const Icons = {
+  spinner: Loader2,
+};
+interface IAuthContext {
+  initialized: boolean;
+  user: {
+    id_card: string;
+    employee_name: string;
+    hospital_name: string;
+    role: "ADMIN" | "DRIVER" | "EMERGENCY_MEDICAL_TECHNICIAN" | "DISPATCHER";
+  } | null;
+  signIn: () => void;
+  signOut: () => void;
+}
 
-// export function useAuth() {
-//   const result = useContext(AuthContext);
-//   if (!result?.initialized) {
-//     throw new Error("Auth context must be used within a AuthProvider!");
-//   }
-//   // console.log(result);
-//   return result;
-// }
+export const AuthContext = createContext<IAuthContext | null>(null);
+
+export function useAuth() {
+  const result = useContext(AuthContext);
+  if (!result?.initialized) {
+    throw new Error("Auth context must be used within a AuthProvider!");
+  }
+  // console.log(result);
+  return result;
+}
 
 // const publicPageList = ["/login"];
 // const ROOT_DOMAIN = process.env.NEXT_PUBLIC_ROOT_DOMAIN;
@@ -39,69 +44,72 @@
 // const isPublicPage = (pathname: string) => {
 //   return publicPageList.includes(pathname);
 // };
-// function useProvideAuth() {
-//   const fetcher = (input: RequestInfo | URL, init?: RequestInit) =>
-//     fetch(input, init).then((res) => res.json());
-//   const [user, setUser] = useState<IAuthContext["user"] | null>(null);
-//   const { data, error } = useSWR("/api/auth", fetcher);
-//   const [status, setStatus] = useState("loading");
-//   useEffect(() => {
-//     if (data) {
-//       setUser(data.result.user);
-//       setStatus("success");
-//     }
-//     if (error) {
-//       setStatus("error");
-//     }
-//   }, [data, status, error]);
-//   const signIn = () => {
-//     console.log("signIn", data);
-//   };
-//   const signOut = () => {
-//     fetch("api/auth/logout", { method: "GET" });
-//     setUser(null);
-//   };
+function useProvideAuth() {
+  // const fetcher = (input: RequestInfo | URL, init?: RequestInit) =>
+  //   fetch(input, init).then((res) => res.json());
+  const [user, setUser] = useState<IAuthContext["user"] | null>(null);
+  // const { data, error } = useSWR("/api/auth", fetcher);
+  const [status] = useState("loading");
+  // const [status, setStatus] = useState("loading");
+  // useEffect(() => {
+  //   if (data?.result) {
+  //     setUser(data.result.user);
+  //     setStatus("success");
+  //   }
+  //   if (error) {
+  //     setStatus("error");
+  //   }
+  // }, [data, status, error]);
+  const signIn = () => {
+    // console.log("signIn", data);
+  };
+  const signOut = () => {
+    fetch("api/auth/logout", { method: "GET" });
+    setUser(null);
+  };
 
-//   return {
-//     user,
-//     signIn,
-//     signOut,
-//     status,
-//   };
-// }
-// const AuthProvider = ({ children }: PropsWithChildren<IAuthProviderProps>) => {
-//   const router = useRouter();
-//   const pathname = usePathname();
-//   const { user, signIn, signOut, status } = useProvideAuth();
-//   const loading = status === "loading";
-//   console.log(pathname);
-//   useEffect(() => {
-//     console.log(user);
-//     if (loading) {
-//       return;
-//     }
-//     if (!user) {
-//       router.push("/login");
-//       return;
-//     }
-//     if (user && pathname === "/login") {
-//       router.push("/");
-//       return;
-//     }
+  return {
+    user,
+    signIn,
+    signOut,
+    status,
+  };
+}
+const AuthProvider = ({ children }: PropsWithChildren<IAuthProviderProps>) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const { user, signIn, signOut, status } = useProvideAuth();
+  const [isLoading, setIsLoading] = useState<boolean>(status === "loading");
+  console.log(pathname);
+  useEffect(() => {
+    setIsLoading(true);
+    console.log(user);
+    // if (status === 'loading') {
+    //   return;
+    // }
+    if (env.NEXT_PUBLIC_NODE_ENV == "dev" && pathname == "/ui-components") {
+      setIsLoading(false);
+      return;
+    }
+    // if (!user) {
+    //   router.push("/login");
+    //   setIsLoading(false);
+    //   return;
+    // }
+    setIsLoading(false);
+  }, [router, user]);
 
-//     if (user && user.role === "admin") {
-//       return;
-//     }
-//     if (user && user.role === "user") {
-//       router.push(PROTOCOL + "://www." + ROOT_DOMAIN);
-//     }
-//   }, [loading, router, user]);
+  return (
+    <AuthContext.Provider value={{ initialized: true, user, signIn, signOut }}>
+      {isLoading ? (
+        <div className="flex h-full w-full items-center justify-center">
+          <Icons.spinner className="h-24 w-24 animate-spin text-main" />
+        </div>
+      ) : (
+        children
+      )}
+    </AuthContext.Provider>
+  );
+};
 
-//   return (
-//     <AuthContext.Provider value={{ initialized: true, user, signIn, signOut }}>
-//       {children}
-//     </AuthContext.Provider>
-//   );
-// };
-
-// export default React.memo(AuthProvider);
+export default React.memo(AuthProvider);

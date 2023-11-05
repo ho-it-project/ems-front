@@ -2,7 +2,11 @@
 import { useState } from "react";
 import { DualChoiceButton } from "../../common/DualChoiceButton";
 
-export const RepidEvaluationForm = () => {
+interface RepidEvaluationFormProps {
+  formId: string;
+}
+
+export const RepidEvaluationForm = ({ formId }: RepidEvaluationFormProps) => {
   const [isTrauma, setIsTrauma] = useState<null | boolean>();
   const [isClear, setIsClear] = useState<null | boolean>();
   const [isConscious, setIsConscious] = useState<null | boolean>();
@@ -18,8 +22,18 @@ export const RepidEvaluationForm = () => {
   const handleConscious = (isConscious: boolean) => {
     setIsConscious(isConscious);
   };
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(isTrauma, isClear, isConscious);
+    // 로직 작성 필요
+  };
   return (
-    <div className="justify flex flex-col items-center justify-center gap-[5rem]">
+    <form
+      className="justify flex flex-col items-center justify-center gap-[5rem]"
+      id={formId}
+      onSubmit={onSubmit}
+    >
       <DualChoiceButton
         title="외상유무"
         leftButton="외상환자"
@@ -46,6 +60,6 @@ export const RepidEvaluationForm = () => {
         onClickLeftButton={() => handleConscious(true)}
         onClickRightButton={() => handleConscious(false)}
       />
-    </div>
+    </form>
   );
 };

@@ -39,6 +39,7 @@
     "date-fns": "^2.30.0",
     "framer-motion": "^10.13.1",
     "hoit-server-api": "^0.0.2",
+    "joi": "^17.11.0",
     "lucide-react": "^0.263.1",
     "next": "^13.4.12",
     "next-themes": "^0.2.1",

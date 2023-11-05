@@ -85,7 +85,7 @@ export const ProgressTracker = ({
               ></div>
               <div
                 className={cn(
-                  `flex  min-h-[1.5rem] min-w-[1.5rem] items-center justify-center rounded-full border`,
+                  `flex h-[1.5rem] min-h-[1.5rem] w-[1.5rem] min-w-[1.5rem] rounded-full border`,
                   index <= currentStepIndex
                     ? currentBorderColor
                     : defaultBorderColor
@@ -93,7 +93,7 @@ export const ProgressTracker = ({
               >
                 <div
                   className={cn(
-                    "h-[1rem] w-[1rem] rounded-full",
+                    "inset-0 h-[1rem] min-h-[1rem] w-[1rem] min-w-[1rem] translate-x-[0.15rem] translate-y-[0.15rem] rounded-full",
                     index <= currentStepIndex
                       ? currentStepColor
                       : defaultStepColor

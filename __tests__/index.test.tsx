@@ -1,4 +1,4 @@
-import Home from "@/app/page";
+import Home from "@/app/(main)/page";
 import { render, screen } from "@testing-library/react";
 
 it("test", () => {
