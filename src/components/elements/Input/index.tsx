@@ -6,7 +6,7 @@ interface InputProps {
   value: string | number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
-  placeholderColor?: "grey" | "main";
+  placeholderColor?: "grey" | "lgrey" | "main";
   rounded?: "normal" | "large";
   fontSize?: FontSize;
   name?: string;
