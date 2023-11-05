@@ -2,7 +2,6 @@ import { Button } from "@/components/elements/Button";
 import { ButtonProps } from "@/components/ui/button";
 
 const LoginButton = ({ onClick }: { onClick?: ButtonProps["onClick"] }) => {
-  // const handleLogin = useCallback(() => {}, []);
   return (
     <Button
       text="로그인"

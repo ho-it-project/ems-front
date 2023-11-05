@@ -10,20 +10,30 @@ import React, {
 interface IAuthProviderProps {}
 
 import { env } from "@/constants/env";
+import { LoginResponse } from "@/type";
 import { Loader2 } from "lucide-react";
+import useSWR from "swr";
+import { api } from "../utils";
 
 export const Icons = {
   spinner: Loader2,
 };
+
+interface LoginParam {
+  ambulance_company_name: string;
+  id_card: string;
+  password: string;
+}
+
 interface IAuthContext {
   initialized: boolean;
   user: {
     id_card: string;
-    employee_name: string;
-    hospital_name: string;
+    employee_id: string;
+    ambulance_company_id: string;
     role: "ADMIN" | "DRIVER" | "EMERGENCY_MEDICAL_TECHNICIAN" | "DISPATCHER";
   } | null;
-  signIn: () => void;
+  signIn: (loginParam: LoginParam) => Promise<boolean>;
   signOut: () => void;
 }
 
@@ -44,27 +54,52 @@ export function useAuth() {
 // const isPublicPage = (pathname: string) => {
 //   return publicPageList.includes(pathname);
 // };
+
+const loginApi = async (loginParam: LoginParam) =>
+  api<LoginResponse>("/api/ems/auth/login", {
+    method: "POST",
+    body: JSON.stringify(loginParam),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
 function useProvideAuth() {
-  // const fetcher = (input: RequestInfo | URL, init?: RequestInit) =>
-  //   fetch(input, init).then((res) => res.json());
+  const fetcher = async (input: RequestInfo | URL, init?: RequestInit) => {
+    const res = await api<LoginResponse>(input, init);
+    if (!res.is_success || !res.result.is_login) return false;
+    return res.result.employee;
+  };
+
   const [user, setUser] = useState<IAuthContext["user"] | null>(null);
-  // const { data, error } = useSWR("/api/auth", fetcher);
-  const [status] = useState("loading");
-  // const [status, setStatus] = useState("loading");
-  // useEffect(() => {
-  //   if (data?.result) {
-  //     setUser(data.result.user);
-  //     setStatus("success");
-  //   }
-  //   if (error) {
-  //     setStatus("error");
-  //   }
-  // }, [data, status, error]);
-  const signIn = () => {
-    // console.log("signIn", data);
+  const { data, error } = useSWR("/api/ems/auth", fetcher);
+  const [status, setStatus] = useState("loading");
+
+  useEffect(() => {
+    if (data === false) {
+      setStatus("success");
+    }
+    if (data) {
+      setUser({ ...data });
+      setStatus("success");
+    }
+    if (error) {
+      console.log("Unexpected Error", error);
+      setStatus("error");
+    }
+  }, [data, status, error]);
+
+  const signIn = async (loginParam: LoginParam) => {
+    const result = await loginApi(loginParam);
+    if (!result.is_success || !result.result.is_login) return false;
+    const user = result.result.employee;
+    setUser({ ...user });
+    return true;
   };
   const signOut = () => {
-    fetch("api/auth/logout", { method: "GET" });
+    fetch("api/ems/auth/logout", { method: "GET" });
     setUser(null);
   };
 
@@ -80,24 +115,20 @@ const AuthProvider = ({ children }: PropsWithChildren<IAuthProviderProps>) => {
   const pathname = usePathname();
   const { user, signIn, signOut, status } = useProvideAuth();
   const [isLoading, setIsLoading] = useState<boolean>(status === "loading");
-  console.log(pathname);
   useEffect(() => {
     setIsLoading(true);
-    console.log(user);
-    // if (status === 'loading') {
-    //   return;
-    // }
+    if (status === "loading") return;
     if (env.NEXT_PUBLIC_NODE_ENV == "dev" && pathname == "/ui-components") {
       setIsLoading(false);
       return;
     }
-    // if (!user) {
-    //   router.push("/login");
-    //   setIsLoading(false);
-    //   return;
-    // }
+    if (!user && pathname !== "/login") {
+      router.push(`/login?callbackURL=${pathname}`);
+      setIsLoading(false);
+      return;
+    }
     setIsLoading(false);
-  }, [router, user]);
+  }, [router, user, status]);
 
   return (
     <AuthContext.Provider value={{ initialized: true, user, signIn, signOut }}>

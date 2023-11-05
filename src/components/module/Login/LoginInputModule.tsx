@@ -14,7 +14,7 @@ const InputModule = ({
     (setState: Dispatch<SetStateAction<string>>) =>
       (v: ChangeEvent<HTMLInputElement>) => {
         const value = v.target.value;
-        if (value) setState(value);
+        setState(value);
       },
     []
   );
@@ -25,8 +25,9 @@ const InputModule = ({
         value={value}
         onChange={onChange(onChangeCb)}
         placeholder="ID를 입력하세요."
+        placeholderColor="lgrey"
         height="large"
-        className="text-2xl font-semibold placeholder-[#d2d2d2]"
+        className="text-2xl font-semibold"
       />
     </div>
   );
