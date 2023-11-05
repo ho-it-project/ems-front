@@ -3,7 +3,7 @@ import { FontSize } from "@/type";
 import Image from "next/image";
 import React, { ForwardedRef } from "react";
 interface InputProps {
-  value: string;
+  value: string | number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   placeholderColor?: "grey" | "lgrey" | "main";

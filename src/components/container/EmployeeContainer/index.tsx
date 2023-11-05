@@ -1,6 +1,6 @@
 "use client";
+import { EmployeePageHeader } from "@/components/module/Employee/EmployeePageHeader";
 import { EmployeeTable } from "@/components/module/Employee/EmployeeTable";
-import { EmployeePageHeader } from "@/components/module/Employee/Header";
 
 export const EmployeeContainer = () => {
   return (

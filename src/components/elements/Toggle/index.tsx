@@ -3,7 +3,7 @@
 import { BrandColor, FontSize } from "@/type";
 
 interface ToggleProps {
-  id: string;
+  id?: string;
   size?: "small" | "medium" | "large";
   toggleText?: string;
   checkedColor?: BrandColor;
@@ -15,6 +15,7 @@ interface ToggleProps {
   fontSize?: FontSize;
   checked: boolean;
   onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
+  bgColor?: BrandColor;
 }
 
 export const Toggle = ({
@@ -29,6 +30,7 @@ export const Toggle = ({
   fontSize = "small",
   checked,
   onChange,
+  bgColor = "bg",
 }: ToggleProps) => {
   //common
   const sizeClass =
@@ -81,7 +83,7 @@ export const Toggle = ({
     transition-all duration-300
     cursor-pointer
     ${size === "large" ? "" : "px-[0.2rem]"}
-    bg-bg
+    ${bgColor ? `bg-${bgColor}` : ""}
     ${sizeClass}
     ${checked ? checkedBackgroundClass : noneChecketBackgroundClass}
   `;
