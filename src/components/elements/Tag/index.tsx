@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { BrandColor, FontSize } from "@/type";
 
 interface TagProps {
@@ -11,6 +12,7 @@ interface TagProps {
   borderStyle?: "solid" | "dashed" | "dotted";
   borderColor?: BrandColor;
   bgColor?: BrandColor;
+  className?: string;
 }
 
 /**
@@ -42,6 +44,7 @@ export const Tag = ({
   borderStyle = "solid",
   borderColor = "main",
   bgColor = "white",
+  className,
 }: TagProps) => {
   // Tag Size
   const heightClass = height ? height : "h-[2.4rem]";
@@ -89,7 +92,7 @@ export const Tag = ({
     ${colorClass}
   `;
 
-  return <div className={tagClass}>{text}</div>;
+  return <div className={cn(tagClass, className)}>{text}</div>;
 };
 
 export const classNames = (...classes: string[]) => {
