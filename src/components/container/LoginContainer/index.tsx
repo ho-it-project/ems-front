@@ -47,6 +47,7 @@ export const LoginContainer = () => {
         fieldName="비밀번호"
         value={password}
         onChangeCb={setPassword}
+        type="password"
       />
       <div className="h-[1rem]" />
 

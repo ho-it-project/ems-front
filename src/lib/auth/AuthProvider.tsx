@@ -124,7 +124,6 @@ const AuthProvider = ({ children }: PropsWithChildren<IAuthProviderProps>) => {
     }
     if (!user && pathname !== "/login") {
       router.push(`/login?callbackURL=${pathname}`);
-      setIsLoading(false);
       return;
     }
     setIsLoading(false);
