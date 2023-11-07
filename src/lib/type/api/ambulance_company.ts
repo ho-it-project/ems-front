@@ -1,6 +1,6 @@
-import { Status, Try } from ".";
+import { Status } from ".";
 
-export type CompanyDetailResponse = Try<{
+export type CompanyDetailReturn = {
   ambulance_company_id: string;
   ambulance_company_name: string;
   ambulance_company_representative: string | null;
@@ -10,4 +10,6 @@ export type CompanyDetailResponse = Try<{
   created_at: Date;
   updated_at: Date;
   status: Status;
-}>;
+};
+
+// type Entity = Pick<CompanyDetailReturn,'ambulance_company_address'|'ambulance_company_name'>

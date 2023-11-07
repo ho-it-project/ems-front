@@ -48,10 +48,23 @@ interface Fail_ {
 
 export type Try<T> = Success_<T> | Fail_;
 export type Success<T extends Try<unknown>> = Extract<T, { is_success: true }>;
-export type Fail<T extends Try<unknown>> = Extract<T, { is_success: false }>;
+// export type Fail<T extends Try<unknown>> = Extract<T, { is_success: false }>;
+export type Fail = Fail_;
 
 export type UnhandledExeption = {
   message: string;
   statusCode: number;
   error?: unknown;
 };
+
+// 1. api마다 전체를 다주는 것이 아님. list? detail?
+
+// list가 필요한 컴포넌트 :
+//   detail1
+//   detail2
+//   ..
+
+// 각 디테일에서 useCompanyDetailQuery()질의
+// !/////
+// 상품에 대한 카드
+// 상품들
