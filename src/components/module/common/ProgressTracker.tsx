@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { BrandColor, FontSize } from "@/type";
+import { BrandColor, FontSize } from "@/types";
 
 interface ProgressTrackerProps {
   steps: string[];

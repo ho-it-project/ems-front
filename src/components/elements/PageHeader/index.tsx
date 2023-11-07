@@ -1,4 +1,4 @@
-import { BrandColor, FontSize } from "@/type";
+import { BrandColor, FontSize } from "@/types";
 
 interface PageHeaderProps {
   title: string;

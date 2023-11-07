@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { BrandColor } from "@/type";
+import { BrandColor } from "@/types";
 import { HTMLAttributes, MouseEventHandler } from "react";
 
 interface ButtonProps {

@@ -1,9 +1,8 @@
 import { env } from "@/constants/env";
-import { Fail, Success, Try } from "@/type";
+import { Fail, Success, Try, UnhandledExeption } from "@/types";
 import { clsx, type ClassValue } from "clsx";
 import useSWR from "swr";
 import { twMerge } from "tailwind-merge";
-import { UnhandledExeption } from "./../type/index";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
