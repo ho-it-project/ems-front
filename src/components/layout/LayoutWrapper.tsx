@@ -1,5 +1,5 @@
 "use client";
-import { useWindowSize } from "@/hook/useWindows";
+import { useWindowSize } from "@/hooks";
 import Spinner from "../Spinner";
 import { Nav } from "./Nav";
 import { SlideNav } from "./SlideNav";

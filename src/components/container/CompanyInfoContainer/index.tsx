@@ -1,8 +1,8 @@
 "use client";
+import { useCompanyDetailQuery } from "@/api";
 import { PageHeader } from "@/components/elements/PageHeader";
 import { CompanyInfoForm } from "@/components/module/CompanyInfo/CompanyInfoForm";
 import { CompanyStatusCard } from "@/components/module/CompanyInfo/CompanyStatusCard";
-import { useCompanyDetailQuery } from "@/hook/api";
 
 export const CompanyInfoContainer = () => {
   const { data, error } = useCompanyDetailQuery();

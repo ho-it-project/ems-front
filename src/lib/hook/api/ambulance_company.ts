@@ -1,6 +1,6 @@
 import { useAuth } from "@/lib/auth/AuthProvider";
 import { useSWRApi } from "@/lib/utils";
-import { CompanyDetailResponse } from "@/type";
+import { CompanyDetailResponse } from "@/types";
 
 export const useCompanyDetailQuery = () => {
   const { user } = useAuth();
