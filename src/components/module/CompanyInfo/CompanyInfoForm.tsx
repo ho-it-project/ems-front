@@ -8,6 +8,7 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
+import { CompanyDetailResponse, Success } from "@/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -25,17 +26,22 @@ const companyInfoSchema = z.object({
   admin_name: z.string(),
 });
 
-export const CompanyInfoForm = () => {
+interface CompnayInfoformProps {
+  companyDetail: Success<CompanyDetailResponse>;
+}
+
+export const CompanyInfoForm = ({ companyDetail }: CompnayInfoformProps) => {
+  const detail = companyDetail.result;
   const form = useForm<z.infer<typeof companyInfoSchema>>({
     resolver: zodResolver(companyInfoSchema),
     defaultValues: {
-      company_name: "",
+      company_name: detail.ambulance_company_name,
       region: {
-        region_name: "",
-        region_code: "",
+        region_name: detail.ambulance_company_address ?? "",
+        region_code: detail.ambulance_company_area,
       },
-      phone_number: "",
-      admin_name: "",
+      phone_number: detail.ambulance_company_phone,
+      admin_name: "TODO",
     },
   });
   function onSubmit(values: z.infer<typeof companyInfoSchema>) {

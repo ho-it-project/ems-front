@@ -1,6 +1,6 @@
 import { Try } from ".";
 
-interface LoginResponse_ {
+export type LoginResponse = Try<{
   is_login: boolean;
   employee: {
     ambulance_company_id: string;
@@ -8,6 +8,4 @@ interface LoginResponse_ {
     id_card: string;
     role: "ADMIN" | "DRIVER" | "EMERGENCY_MEDICAL_TECHNICIAN" | "DISPATCHER";
   };
-}
-
-export type LoginResponse = Try<LoginResponse_>;
+}>;
