@@ -1,12 +1,6 @@
 import { env } from "@/constants/env";
 import { Fail, Success, Try, UnhandledExeption } from "@/types";
-import { clsx, type ClassValue } from "clsx";
 import useSWR from "swr";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
 
 export async function api<T>(
   input: RequestInfo | URL,

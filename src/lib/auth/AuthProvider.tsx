@@ -14,7 +14,7 @@ import { env } from "@/constants/env";
 import { LoginResponse } from "@/types";
 import { Loader2 } from "lucide-react";
 import useSWR from "swr";
-import { api } from "../utils";
+import { api } from "../utils/api";
 
 export const Icons = {
   spinner: Loader2,
@@ -133,7 +133,7 @@ const AuthProvider = ({ children }: PropsWithChildren<IAuthProviderProps>) => {
       return;
     }
     setIsLoading(false);
-  }, [router, user, status]);
+  }, [router, user, status, pathname]);
 
   if (isLoading)
     return (

@@ -3,6 +3,7 @@
 const domain = process.env.NEXT_PUBLIC_ROOT_DOMAIN;
 const protocol = process.env.NEXT_PUBLIC_PROTOCOL;
 const apiPrefix = process.env.NEXT_PUBLIC_API_PREFIX;
+console.log(`${protocol}://api.${domain}/${apiPrefix}/:path*`);
 const nextConfig = {
   reactStrictMode: true,
   experimental: { instrumentationHook: true },

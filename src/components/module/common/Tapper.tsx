@@ -5,7 +5,7 @@ import { Minus, Plus } from "lucide-react";
 interface SteperProps {
   className?: string;
   unit?: string;
-  value: number;
+  value: number | string;
   leftButtonOnClick?: () => void;
   rightButtonOnClick?: () => void;
   label?: string;

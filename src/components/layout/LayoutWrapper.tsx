@@ -10,7 +10,7 @@ export const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
   if (!width) return <Spinner />;
 
   return (
-    <div className="fontSize-medium h-screen w-full bg-bg text-black">
+    <div className="fontSize-medium h-screen w-full overflow-hidden bg-bg text-black">
       <div className="flex h-full w-full justify-between gap-[2rem] px-[2rem] py-[1.6rem]">
         {width && width > 914 ? <Nav /> : <SlideNav />}
         {children}
