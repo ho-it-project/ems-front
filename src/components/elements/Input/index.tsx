@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { FontSize } from "@/type";
+import { FontSize } from "@/types";
 import Image from "next/image";
 import React, { ForwardedRef } from "react";
 interface InputProps {

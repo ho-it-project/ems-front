@@ -9,8 +9,9 @@ import React, {
 } from "react";
 interface IAuthProviderProps {}
 
+import Spinner from "@/components/Spinner";
 import { env } from "@/constants/env";
-import { LoginResponse } from "@/type";
+import { LoginResponse } from "@/types";
 import { Loader2 } from "lucide-react";
 import useSWR from "swr";
 import { api } from "../utils";
@@ -47,13 +48,6 @@ export function useAuth() {
   // console.log(result);
   return result;
 }
-
-// const publicPageList = ["/login"];
-// const ROOT_DOMAIN = process.env.NEXT_PUBLIC_ROOT_DOMAIN;
-// const PROTOCOL = process.env.NEXT_PUBLIC_PROTOCOL;
-// const isPublicPage = (pathname: string) => {
-//   return publicPageList.includes(pathname);
-// };
 
 const loginApi = async (loginParam: LoginParam) =>
   api<LoginResponse>("/api/ems/auth/login", {
@@ -110,34 +104,61 @@ function useProvideAuth() {
     status,
   };
 }
+const publicPageList = ["/login"];
+const isPublicPage = (pathname: string) => publicPageList.includes(pathname);
+const devPageList = ["/ui-components"];
+const isDevPage = (pathname: string) =>
+  env.NEXT_PUBLIC_NODE_ENV === "dev" && devPageList.includes(pathname);
+
 const AuthProvider = ({ children }: PropsWithChildren<IAuthProviderProps>) => {
   const router = useRouter();
   const pathname = usePathname();
   const { user, signIn, signOut, status } = useProvideAuth();
-  const [isLoading, setIsLoading] = useState<boolean>(status === "loading");
+  const [isLoading, setIsLoading] = useState<boolean>(
+    status ? status === "loading" : true
+  );
   useEffect(() => {
     setIsLoading(true);
     if (status === "loading") return;
-    if (env.NEXT_PUBLIC_NODE_ENV == "dev" && pathname == "/ui-components") {
+    if (isDevPage(pathname)) {
       setIsLoading(false);
       return;
     }
-    if (!user && pathname !== "/login") {
+    if (isPublicPage(pathname)) {
+      setIsLoading(false);
+      return;
+    }
+    if (!user) {
       router.push(`/login?callbackURL=${pathname}`);
       return;
     }
     setIsLoading(false);
   }, [router, user, status]);
 
+  if (isLoading)
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        {/* <Icons.spinner className="h-24 w-24 animate-spin text-main" /> */}
+        <Spinner />
+      </div>
+    );
+
+  if (isDevPage(pathname)) return <>{children}</>;
+
+  if (isPublicPage(pathname))
+    return (
+      <AuthContext.Provider
+        value={{ initialized: true, user, signIn, signOut }}
+      >
+        {children}
+      </AuthContext.Provider>
+    );
+
+  if (!user) router.push(`/login?callbackURL=${pathname}`);
+
   return (
     <AuthContext.Provider value={{ initialized: true, user, signIn, signOut }}>
-      {isLoading ? (
-        <div className="flex h-full w-full items-center justify-center">
-          <Icons.spinner className="h-24 w-24 animate-spin text-main" />
-        </div>
-      ) : (
-        children
-      )}
+      {children}
     </AuthContext.Provider>
   );
 };
