@@ -5,10 +5,12 @@ const InputModule = ({
   value,
   fieldName,
   onChangeCb,
+  type,
 }: {
   value: string;
   fieldName: string;
   onChangeCb: Dispatch<SetStateAction<string>>;
+  type?: React.ComponentPropsWithoutRef<"input">["type"];
 }) => {
   const onChange = useCallback(
     (setState: Dispatch<SetStateAction<string>>) =>
@@ -28,6 +30,7 @@ const InputModule = ({
         placeholderColor="lgrey"
         height="large"
         className="text-2xl font-semibold"
+        type={type}
       />
     </div>
   );
