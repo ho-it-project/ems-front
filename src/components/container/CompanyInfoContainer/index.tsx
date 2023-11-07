@@ -2,10 +2,10 @@
 import { PageHeader } from "@/components/elements/PageHeader";
 import { CompanyInfoForm } from "@/components/module/CompanyInfo/CompanyInfoForm";
 import { CompanyStatusCard } from "@/components/module/CompanyInfo/CompanyStatusCard";
-import { useCompanyDetail } from "@/hook/api/CompanyInfo";
+import { useCompanyDetailQuery } from "@/hook/api";
 
 export const CompanyInfoContainer = () => {
-  const { data, error } = useCompanyDetail();
+  const { data, error } = useCompanyDetailQuery();
   if (error) return <>error: {JSON.stringify(error)}</>;
   if (!data) return <>error: no data</>; //TODO: isloading개발하면서 수정.
   return (
