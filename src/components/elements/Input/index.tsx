@@ -1,12 +1,12 @@
 import { cn } from "@/lib/utils";
-import { FontSize } from "@/type";
+import { FontSize } from "@/types";
 import Image from "next/image";
 import React, { ForwardedRef } from "react";
 interface InputProps {
   value: string | number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
-  placeholderColor?: "grey" | "main";
+  placeholderColor?: "grey" | "lgrey" | "main";
   rounded?: "normal" | "large";
   fontSize?: FontSize;
   name?: string;

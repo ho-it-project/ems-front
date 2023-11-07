@@ -1,8 +1,13 @@
+"use client";
+import { useCompanyDetailQuery } from "@/api";
 import { PageHeader } from "@/components/elements/PageHeader";
 import { CompanyInfoForm } from "@/components/module/CompanyInfo/CompanyInfoForm";
 import { CompanyStatusCard } from "@/components/module/CompanyInfo/CompanyStatusCard";
 
 export const CompanyInfoContainer = () => {
+  const { data, error } = useCompanyDetailQuery();
+  if (error) return <>error: {JSON.stringify(error)}</>;
+  if (!data) return <>error: no data</>; //TODO: isloading개발하면서 수정.
   return (
     <div className="flex h-full w-full max-w-[75rem] flex-col ">
       <PageHeader title="회사 정보" fontSize="xlarge">
@@ -18,7 +23,7 @@ export const CompanyInfoContainer = () => {
         <CompanyStatusCard title="차량/팀" status="42" />
       </div>
       <div className="mt-[5rem]">
-        <CompanyInfoForm />
+        <CompanyInfoForm companyDetail={data} />
       </div>
     </div>
   );

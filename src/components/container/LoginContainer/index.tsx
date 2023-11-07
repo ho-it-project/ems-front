@@ -1,78 +1,69 @@
 "use client";
-import { Input } from "@/components/elements/Input";
+import LoginButton from "@/components/module/Login/LoginButton";
+import InputModule from "@/components/module/Login/LoginInputModule";
 import { TabModalWrapper } from "@/components/module/common/TabModalWrapper";
-import {
-  ChangeEvent,
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useState,
-} from "react";
+import { useAuth } from "@/lib/auth/AuthProvider";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 export const LoginContainer = () => {
   const [centerId, setCenterId] = useState<string>("");
   const [id, setId] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const onChange = useCallback(
-    (setState: Dispatch<SetStateAction<string>>) =>
-      (v: ChangeEvent<HTMLInputElement>) => {
-        const value = v.target.value;
-        if (value) setState(value);
-      },
-    []
-  );
-  const InputModule = ({
-    value,
-    fieldName,
-    onChangeCallback,
-  }: {
-    value: string;
-    fieldName: string;
-    onChangeCallback: Dispatch<SetStateAction<string>>;
-  }) => {
-    return (
-      <div className="flex h-[8.9rem] w-[42rem] flex-col justify-between">
-        {fieldName}
-        <Input
-          value={value}
-          onChange={onChange(onChangeCallback)}
-          placeholder="ID를 입력하세요."
-          height="large"
-        />
-      </div>
-    );
+  const [invalid, setInvalid] = useState<boolean>(false);
+  const { push } = useRouter();
+  const backUrl = useSearchParams().get("callbackURL");
+
+  const { signIn, user } = useAuth();
+  if (user) push(backUrl ? backUrl : "/");
+
+  const handleLogin = async () => {
+    const isSuccess = await signIn({
+      ambulance_company_name: centerId,
+      id_card: id,
+      password,
+    });
+    if (isSuccess) push(backUrl ? backUrl : "/");
+    setInvalid(!isSuccess);
   };
-  const wrong = true;
 
   const Content = (
     <div className="h-[55rem] w-[50rem] flex-col pl-16 pr-16 align-middle">
       <div className="h-[3.5rem]" />
+      {/* Center Id */}
       <InputModule
         fieldName="기관 ID"
         value={centerId}
-        onChangeCallback={setCenterId}
+        onChangeCb={setCenterId}
       />
       <div className="h-[2rem]" />
-      <InputModule fieldName="ID" value={id} onChangeCallback={setId} />
+
+      {/* Id */}
+      <InputModule fieldName="ID" value={id} onChangeCb={setId} />
       <div className="h-[2rem]" />
+
+      {/* Password */}
       <InputModule
         fieldName="비밀번호"
         value={password}
-        onChangeCallback={setPassword}
+        onChangeCb={setPassword}
+        type="password"
       />
       <div className="h-[1rem]" />
-      {wrong ? (
+
+      {invalid ? (
         <div className=" text-lg text-red">
           * 등록되지 않은 아이디거나, 아이디 또는 비밀번호가 회원정보와 일치하지
           않습니다.
         </div>
       ) : null}
       <div className="h-[3rem]" />
+
       <div className="flex justify-end">
-        <div>id, pw 찾기</div>
+        <div className="text-[#979797] underline">ID/비밀번호 찾기</div>
       </div>
       <div className="h-[1.4rem]" />
-      <div>로그인</div>
+      <LoginButton onClick={handleLogin} />
     </div>
   );
 

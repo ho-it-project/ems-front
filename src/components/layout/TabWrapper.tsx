@@ -1,5 +1,5 @@
 "use client";
-import { BrandColor } from "@/type";
+import { BrandColor } from "@/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { X } from "lucide-react";
 import React from "react";

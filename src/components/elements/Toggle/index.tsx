@@ -1,6 +1,6 @@
 "use client";
 
-import { BrandColor, FontSize } from "@/type";
+import { BrandColor, FontSize } from "@/types";
 
 interface ToggleProps {
   id?: string;

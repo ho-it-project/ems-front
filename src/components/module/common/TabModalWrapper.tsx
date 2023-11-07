@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { BrandColor } from "@/type";
+import { BrandColor } from "@/types";
 import { X } from "lucide-react";
 import React, { HTMLAttributes } from "react";
 
