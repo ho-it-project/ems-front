@@ -1,7 +1,6 @@
-import { useAuth } from "@/lib/auth/AuthProvider";
-import { useSWRApi } from "@/lib/utils";
-import { CompanyDetailReturn } from "@/types";
-
+import { useSWRApi } from "@/hooks/api";
+import { useAuth } from "@/providers/AuthProvider";
+import { CompanyDetailReturn } from "@/types/api";
 export const useCompanyDetailQuery = () => {
   const { user } = useAuth();
   return useSWRApi<CompanyDetailReturn>(

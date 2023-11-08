@@ -1,4 +1,4 @@
-import { Status } from ".";
+import { Status } from "../model";
 
 export type CompanyDetailReturn = {
   ambulance_company_id: string;

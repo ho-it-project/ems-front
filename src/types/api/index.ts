@@ -1,7 +1,6 @@
 export * from "./ambulance_company";
 export * from "./auth";
 
-export type Status = "ACTIVE" | "INACTIVE" | "DELETED";
 interface Success_<T> {
   /**
    * @type T

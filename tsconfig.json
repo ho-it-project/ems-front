@@ -27,15 +27,6 @@
       "@/*": [
         "./src/*"
       ],
-      "@/types": [
-        "./src/lib/type/index.ts"
-      ],
-      "@/hooks": [
-        "./src/lib/hook/index.ts"
-      ],
-      "@/api": [
-        "./src/lib/hook/api/index.ts"
-      ]
     }
   },
   "include": [
