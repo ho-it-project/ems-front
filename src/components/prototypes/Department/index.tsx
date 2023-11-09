@@ -1,4 +1,4 @@
-import { DepartmentContainer } from "@/components/container/Department";
+import { DepartmentContainer } from "@/components/container/DepartmentContainer";
 
 export const DepartmentPrototypes = () => {
   return <DepartmentContainer />;

@@ -20,6 +20,7 @@ interface InputProps {
   textLocation?: "left" | "center" | "right";
   img?: string;
   className?: string;
+  rightIcon?: React.ReactNode;
 }
 
 export const Input = React.forwardRef(
@@ -42,6 +43,7 @@ export const Input = React.forwardRef(
       textLocation = "center",
       img,
       className,
+      rightIcon,
       ...props
     }: InputProps & React.ComponentPropsWithoutRef<"input">,
     ref: ForwardedRef<HTMLInputElement>
@@ -132,6 +134,9 @@ export const Input = React.forwardRef(
             <Image src={img} width={24} height={24} alt="input iamge" />
           </div>
         )}
+        {rightIcon && textLocation === "center" && (
+          <div className="opacity-0">{rightIcon}</div>
+        )}
         <input
           className={InputClass}
           value={value || ""}
@@ -141,6 +146,8 @@ export const Input = React.forwardRef(
           ref={ref}
           {...props}
         />
+        {img && textLocation === "center" && <div className="w-[2.4rem]" />}
+        {rightIcon && <div>{rightIcon}</div>}
       </div>
     );
   }
