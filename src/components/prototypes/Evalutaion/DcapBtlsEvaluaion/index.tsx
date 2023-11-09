@@ -1,4 +1,4 @@
-import { DcapBtlsEvaluaionContainer } from "@/components/container/Evaluation/DcapBtlsEvaluation";
+import { DcapBtlsEvaluaionContainer } from "@/components/container/EvaluationContainer/DcapBtlsEvaluation";
 
 export const DcapBtlsEvaluaionPrototype = () => {
   return <DcapBtlsEvaluaionContainer />;

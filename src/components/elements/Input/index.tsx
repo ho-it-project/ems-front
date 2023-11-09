@@ -21,6 +21,7 @@ interface InputProps {
   img?: string;
   className?: string;
   rightIcon?: React.ReactNode;
+  inputBoxClassName?: string;
 }
 
 export const Input = React.forwardRef(
@@ -44,6 +45,7 @@ export const Input = React.forwardRef(
       img,
       className,
       rightIcon,
+      inputBoxClassName,
       ...props
     }: InputProps & React.ComponentPropsWithoutRef<"input">,
     ref: ForwardedRef<HTMLInputElement>
@@ -97,21 +99,22 @@ export const Input = React.forwardRef(
 
     const InputBoxClass = cn(
       `
-    flex 
-    items-center
-    ${heightClass} 
-    ${widthClass}
-    ${roundedClass} 
-    ${bgColorClass} 
-    ${borderClass} 
-    ${borderStyleClass} 
-    ${borderColorClass} 
-    ${textLocationClass} 
-    ${colorClass} 
-    py-[0.8rem]
-    px-[1.6rem]
-    gap-[1.6rem]
-  `
+      flex 
+      items-center
+      ${heightClass} 
+      ${widthClass}
+      ${roundedClass} 
+      ${bgColorClass} 
+      ${borderClass} 
+      ${borderStyleClass} 
+      ${borderColorClass} 
+      ${textLocationClass} 
+      ${colorClass} 
+      py-[0.8rem]
+      px-[1.6rem]
+      gap-[1.6rem]
+    `,
+      inputBoxClassName
     );
     const InputClass = cn(
       ` 
@@ -130,7 +133,7 @@ export const Input = React.forwardRef(
     return (
       <div className={InputBoxClass}>
         {img && (
-          <div>
+          <div className="min-w-[2.4rem]">
             <Image src={img} width={24} height={24} alt="input iamge" />
           </div>
         )}
