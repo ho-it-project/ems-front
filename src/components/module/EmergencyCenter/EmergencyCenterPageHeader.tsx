@@ -1,5 +1,6 @@
 "use client";
 import { Input } from "@/components/elements/Input";
+import { useWindowSize } from "@/lib/hook";
 import { cn } from "@/lib/utils";
 import {
   EmergencyCenterType,
@@ -8,6 +9,7 @@ import {
 import { useEffect, useState } from "react";
 
 export const EmergencyCenterPageHeader = () => {
+  const { width } = useWindowSize();
   const [searchMode, setSearchMode] = useState<boolean>(false);
   const { query, setQueryType, setQeurySearch } = useEmergencyCenterStore();
   const { type, search } = query;
@@ -36,8 +38,14 @@ export const EmergencyCenterPageHeader = () => {
   useEffect(() => {
     setSearchMode(false);
   }, [type]);
+
   return (
-    <div className="flex justify-between ">
+    <div
+      className={cn(
+        "flex justify-between",
+        width && width < 1100 && "flex-col"
+      )}
+    >
       <div className="flex  items-center gap-[1rem]">
         <div
           onClick={typeHandler()}
@@ -88,6 +96,7 @@ export const EmergencyCenterPageHeader = () => {
             onChange={searchOnChangeHandler}
             className="transition-all duration-300 ease-in-out"
             type="search"
+            textLocation="left"
             onKeyDown={searchHandler}
           />
         </div>

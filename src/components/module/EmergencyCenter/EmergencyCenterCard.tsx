@@ -31,15 +31,44 @@ export const EmergencyCenterCard = ({
             {emergency_center_address}
           </div>
         </div>
-        <div className="flex flex-1 items-end gap-[1rem]">
-          <Tag text="test" />
-          <Tag text="test" />
-          <Tag text="test" />
-          <Tag text="test" />
-          <Tag text="test" />
-          <Tag text="test" />
-          <Tag text="test" />
-          <Tag text="test" />
+        <div className="flex flex-1 flex-col justify-end">
+          <div>
+            <Tag
+              text="일반"
+              width="w-fit"
+              className="mr-[1rem] inline-block px-[1rem] py-[0.4rem]"
+            />
+            <Tag
+              text="코호트"
+              width="w-fit"
+              className="mr-[1rem] inline-block px-[1rem] py-[0.4rem]"
+            />
+            <Tag
+              text="음압"
+              width="w-fit"
+              className="mr-[1rem] inline-block px-[1rem] py-[0.4rem]"
+            />
+            <Tag
+              text="일반격리"
+              width="w-fit"
+              className="mr-[1rem] inline-block px-[1rem] py-[0.4rem]"
+            />
+            <Tag
+              text="소아음압격리"
+              width="w-fit"
+              className="mr-[1rem] inline-block px-[1rem] py-[0.4rem]"
+            />
+            <Tag
+              text="소아일반격리"
+              width="w-fit"
+              className="mr-[1rem] inline-block px-[1rem] py-[0.4rem]"
+            />
+            <Tag
+              text="소아"
+              width="w-fit"
+              className="mr-[1rem] inline-block px-[1rem] py-[0.4rem]"
+            />
+          </div>
         </div>
       </div>
     </div>

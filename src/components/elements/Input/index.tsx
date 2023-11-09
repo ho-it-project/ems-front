@@ -149,7 +149,7 @@ export const Input = React.forwardRef(
           ref={ref}
           {...props}
         />
-        {img && textLocation === "center" && <div className="w-[2.4rem]" />}
+        {/* {img && textLocation === "center" && <div className="w-[2.4rem]" />} */}
         {rightIcon && <div>{rightIcon}</div>}
       </div>
     );
