@@ -26,7 +26,9 @@ export const EmergencyCenterCard = ({
         <div className="fontSize-regular-l flex-1">
           {EMERGENCY_CENTER_TYPE[emergency_center_type]}
         </div>
-        <div className="fontSize-large flex flex-1 items-end">{distance}km</div>
+        <div className="fontSize-large flex flex-1 items-end text-main">
+          {(Number(distance) / 1000).toFixed(2)}km
+        </div>
       </div>
       <div className="flex flex-[2] flex-col">
         <div className="flex flex-1  flex-col gap-[0.8rem]">
@@ -38,6 +40,9 @@ export const EmergencyCenterCard = ({
           </div>
         </div>
         <div className="flex flex-1 flex-col justify-end">
+          {
+            //TODO: 수용가능한 병실 표시
+          }
           <div>
             <Tag
               text="일반"
