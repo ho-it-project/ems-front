@@ -46,7 +46,6 @@ export const AmbulanceInfoPopUpButton = ({
       ...AmbulanceInfo,
       [name]: value,
     });
-    console.log(AmbulanceInfo);
   };
   const trigger =
     type === "add" ? (

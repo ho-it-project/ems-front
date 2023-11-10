@@ -5,7 +5,7 @@ import { DcapBtlsInfoCard } from "@/components/module/Evaluation/DcapBtlsEvaluat
 import { ProgressTracker } from "@/components/module/common/ProgressTracker";
 import { DCAP_BTLS_AffectArea } from "@/type/evaluation";
 import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type DCAP_BTLS_Evaluation = {
   affected_area: DCAP_BTLS_AffectArea;
@@ -49,9 +49,6 @@ export const DcapBtlsEvaluaionContainer = () => {
       )
     );
   };
-  useEffect(() => {
-    console.log(dcapBtlsEvaluations);
-  }, [dcapBtlsEvaluations]);
 
   return (
     <div className="h-full w-full">

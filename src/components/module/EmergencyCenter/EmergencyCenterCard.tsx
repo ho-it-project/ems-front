@@ -18,7 +18,6 @@ export const EmergencyCenterCard = ({
     emergency_center_primary_phone,
     emergency_center_address,
   } = emergencyCenter;
-  console.log(emergencyCenter);
   return (
     <div className="flex w-full gap-[4rem] rounded-lg border border-main px-[4rem] py-[2.4rem]">
       <div className="flex max-w-[23rem] flex-[1]  flex-col gap-[0.6rem]">
