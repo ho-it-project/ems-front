@@ -6,6 +6,6 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function arr_diff(a1: unknown[], a2: unknown[]) {
-  if (a1.length === 0 && a2.length === 0) return [];
-  return a1.filter((x) => !a2.includes(x));
+  if (a1.length === 0 && a2.length === 0) return false;
+  return a1.filter((x) => !a2.includes(x)).length > 0;
 }

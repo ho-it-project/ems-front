@@ -12,14 +12,15 @@ export const EmergencyCenterPageHeader = () => {
   const { width } = useWindowSize();
   const [searchMode, setSearchMode] = useState<boolean>(false);
   const { query, setQueryType, setQeurySearch } = useEmergencyCenterStore();
-  const { type, search } = query;
-
+  const { emergency_center_type } = query;
+  const [search, setSearch] = useState<string>("");
   const searchOnChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQeurySearch(e.target.value);
+    setSearch(e.target.value);
   };
   const searchHandler = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && search?.length) {
+    if (e.key === "Enter") {
       console.log("enter");
+      setQeurySearch(search);
     }
   };
 
@@ -29,15 +30,17 @@ export const EmergencyCenterPageHeader = () => {
       return;
     }
     setQueryType([type]);
+    setSearchMode(false);
+    setSearch("");
   };
 
   const selectHandler = (type: EmergencyCenterType) => {
-    return query.type.includes(type) ? "text-main" : "";
+    return query.emergency_center_type.includes(type) ? "text-main" : "";
   };
 
   useEffect(() => {
     setSearchMode(false);
-  }, [type]);
+  }, [emergency_center_type]);
 
   return (
     <div
@@ -49,7 +52,7 @@ export const EmergencyCenterPageHeader = () => {
       <div className="flex  items-center gap-[1rem]">
         <div
           onClick={typeHandler()}
-          className={cn(type.length === 0 && "text-main")}
+          className={cn(emergency_center_type.length === 0 && "text-main")}
         >
           전체
         </div>
@@ -91,7 +94,7 @@ export const EmergencyCenterPageHeader = () => {
           }
           <Input
             img="/icon/icon-search.png"
-            value={query.search || ""}
+            value={search || ""}
             placeholder="검색하기"
             onChange={searchOnChangeHandler}
             className="transition-all duration-300 ease-in-out"
