@@ -35,8 +35,10 @@ export const EmergencyCenterContainer = () => {
                 e.currentTarget?.scrollHeight - e.currentTarget?.scrollTop ===
                 e.currentTarget?.clientHeight
               ) {
-                if (query.page < pageLimit.total_page)
+                if (query.page < pageLimit.total_page) {
                   setQueryPage(query.page + 1);
+                  console.log("fetch");
+                }
               }
             }}
           >

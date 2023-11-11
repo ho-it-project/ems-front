@@ -71,7 +71,7 @@ export const useEmergencyCenterStore = create<EmergencyCenterStore>((set) => ({
     set((state) => {
       return {
         ...state,
-        emmergencyCenters: arr_diff(
+        emergencyCenters: arr_diff(
           emergency_center_type,
           state.query.emergency_center_type
         )
