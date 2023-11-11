@@ -1,4 +1,5 @@
 import { EmergencyCenter } from "@/store/emergencyCenter.store";
+import Link from "next/link";
 import { EmergencyCenterCard } from "./EmergencyCenterCard";
 
 interface EmergencyCenterListProps {
@@ -15,7 +16,12 @@ export const EmergencyCenterList = ({
           <div key={i} className="mb-[2rem]">
             <div className="flex  w-full">
               <div className="min-w-[7.2rem]">{i + 1}</div>
-              <EmergencyCenterCard emergencyCenter={emergency_center} />
+              <Link
+                href={`/emergency-center/${emergency_center.emergency_center_id}`}
+                className="w-full"
+              >
+                <EmergencyCenterCard emergencyCenter={emergency_center} />
+              </Link>
             </div>
           </div>
         );

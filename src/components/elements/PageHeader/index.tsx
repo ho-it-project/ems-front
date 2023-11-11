@@ -38,10 +38,10 @@ export const PageHeader = ({
   const descriptionClass = `text-${descriptionColor} fontSize-${descriptionFontSize}`;
   return (
     <div
-      className={
-        (cn("flex w-full justify-between pb-[0.8rem] pt-[1.2rem]"),
-        wrapperClassName)
-      }
+      className={cn(
+        "flex w-full justify-between pb-[0.8rem] pt-[1.2rem]",
+        wrapperClassName
+      )}
     >
       <div className={cn(titleClass, LeftSectionClassName)}>
         {button}

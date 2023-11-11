@@ -1,6 +1,6 @@
 import {
   EmergencyCenter,
-  useEmergencyCenterStore,
+  useEmergencyCenterListStore,
 } from "@/store/emergencyCenter.store";
 import { useEffect } from "react";
 import useSWR from "swr";
@@ -19,7 +19,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 export const useEmergencyCenterList = () => {
   const laction = useGeoLocation();
   const { emergencyCenters, query, setPageLimit, setEmergencyCenters } =
-    useEmergencyCenterStore();
+    useEmergencyCenterListStore();
   const latitude = laction?.[0].toString() || "0";
   const longitude = laction?.[1].toString() || "0";
 

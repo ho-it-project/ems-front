@@ -4,12 +4,12 @@ import Spinner from "@/components/Spinner";
 import { EmergencyCenterList } from "@/components/module/EmergencyCenter/EmergencyCenterList";
 import { EmergencyCenterPageHeader } from "@/components/module/EmergencyCenter/EmergencyCenterPageHeader";
 import { useEmergencyCenterList } from "@/lib/hook/useEmergencyCenterList";
-import { useEmergencyCenterStore } from "@/store/emergencyCenter.store";
+import { useEmergencyCenterListStore } from "@/store/emergencyCenter.store";
 import { useEffect, useRef } from "react";
 
 export const EmergencyCenterContainer = () => {
   const emergencyCenterListRef = useRef<HTMLDivElement>(null);
-  const { query, setQueryPage, pageLimit } = useEmergencyCenterStore();
+  const { query, setQueryPage, pageLimit } = useEmergencyCenterListStore();
   const { emergencyCenters, isLoading } = useEmergencyCenterList();
   useEffect(() => {
     if (emergencyCenterListRef.current) {

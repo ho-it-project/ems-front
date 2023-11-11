@@ -24,6 +24,7 @@ export interface EmergencyCeterQuery {
 }
 
 export interface EmergencyCenter {
+  emergency_center_id: string;
   emergency_center_name: string;
   emergency_center_type: EmergencyCenterType;
   distance: string;
@@ -31,7 +32,7 @@ export interface EmergencyCenter {
   emergency_center_address: string;
 }
 
-interface EmergencyCenterStore {
+interface EmergencyCenterListStore {
   query: EmergencyCeterQuery;
   emergencyCenters: EmergencyCenter[];
   pageLimit: {
@@ -54,58 +55,60 @@ interface EmergencyCenterStore {
 }
 
 // 고민: query와 emmergencyCenters를 각각 store로 분리할지, 하나의 store로 관리할지
-export const useEmergencyCenterStore = create<EmergencyCenterStore>((set) => ({
-  query: {
-    emergency_center_type: [],
-    search: "",
-    page: 1,
-    limit: 10,
-  },
-  pageLimit: {
-    total_count: 0,
-    total_page: 0,
-  },
-  emergencyCenters: [],
+export const useEmergencyCenterListStore = create<EmergencyCenterListStore>(
+  (set) => ({
+    query: {
+      emergency_center_type: [],
+      search: "",
+      page: 1,
+      limit: 10,
+    },
+    pageLimit: {
+      total_count: 0,
+      total_page: 0,
+    },
+    emergencyCenters: [],
 
-  setQueryType: (emergency_center_type: EmergencyCenterType[]) =>
-    set((state) => {
-      return {
+    setQueryType: (emergency_center_type: EmergencyCenterType[]) =>
+      set((state) => {
+        return {
+          ...state,
+          emergencyCenters: arr_diff(
+            emergency_center_type,
+            state.query.emergency_center_type
+          )
+            ? []
+            : state.emergencyCenters,
+          query: { ...state.query, emergency_center_type, page: 1, search: "" },
+        };
+      }),
+    setQeurySearch: (search: string) =>
+      set((state) => ({
         ...state,
-        emergencyCenters: arr_diff(
-          emergency_center_type,
-          state.query.emergency_center_type
-        )
-          ? []
-          : state.emergencyCenters,
-        query: { ...state.query, emergency_center_type, page: 1, search: "" },
-      };
-    }),
-  setQeurySearch: (search: string) =>
-    set((state) => ({
-      ...state,
+        emergencyCenters:
+          search !== state.query.search ? [] : state.emergencyCenters,
+        query: { ...state.query, search, page: 1 },
+      })),
+    setQueryPage: (page: number) =>
+      set((state) => ({ ...state, query: { ...state.query, page } })),
+    setQueryLimit: (limit: number) =>
+      set((state) => ({ ...state, query: { ...state.query, limit } })),
+
+    setEmergencyCenters: (
       emergencyCenters:
-        search !== state.query.search ? [] : state.emergencyCenters,
-      query: { ...state.query, search, page: 1 },
-    })),
-  setQueryPage: (page: number) =>
-    set((state) => ({ ...state, query: { ...state.query, page } })),
-  setQueryLimit: (limit: number) =>
-    set((state) => ({ ...state, query: { ...state.query, limit } })),
+        | EmergencyCenter[]
+        | ((prevState: EmergencyCenter[]) => EmergencyCenter[])
+    ) =>
+      set((state) => {
+        // Check if emergencyCenters is a function and call it with the current state if it is
+        const newEmergencyCenters =
+          typeof emergencyCenters === "function"
+            ? emergencyCenters(state.emergencyCenters)
+            : emergencyCenters;
 
-  setEmergencyCenters: (
-    emergencyCenters:
-      | EmergencyCenter[]
-      | ((prevState: EmergencyCenter[]) => EmergencyCenter[])
-  ) =>
-    set((state) => {
-      // Check if emergencyCenters is a function and call it with the current state if it is
-      const newEmergencyCenters =
-        typeof emergencyCenters === "function"
-          ? emergencyCenters(state.emergencyCenters)
-          : emergencyCenters;
-
-      return { ...state, emergencyCenters: newEmergencyCenters };
-    }),
-  setPageLimit: (pageLimit: { total_count: number; total_page: number }) =>
-    set((state) => ({ ...state, pageLimit })),
-}));
+        return { ...state, emergencyCenters: newEmergencyCenters };
+      }),
+    setPageLimit: (pageLimit: { total_count: number; total_page: number }) =>
+      set((state) => ({ ...state, pageLimit })),
+  })
+);

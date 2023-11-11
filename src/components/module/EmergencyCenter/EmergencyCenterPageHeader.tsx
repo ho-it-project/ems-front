@@ -4,14 +4,14 @@ import { useWindowSize } from "@/lib/hook";
 import { cn } from "@/lib/utils";
 import {
   EmergencyCenterType,
-  useEmergencyCenterStore,
+  useEmergencyCenterListStore,
 } from "@/store/emergencyCenter.store";
 import { useEffect, useState } from "react";
 
 export const EmergencyCenterPageHeader = () => {
   const { width } = useWindowSize();
   const [searchMode, setSearchMode] = useState<boolean>(false);
-  const { query, setQueryType, setQeurySearch } = useEmergencyCenterStore();
+  const { query, setQueryType, setQeurySearch } = useEmergencyCenterListStore();
   const { emergency_center_type } = query;
   const [search, setSearch] = useState<string>("");
   const searchOnChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
