@@ -1,6 +1,8 @@
 import { TabWrapper } from "@/components/layout/TabWrapper";
 import { EmergencyCenterDetailPrototype } from "@/components/prototypes/EmergencyCenter/Detail";
 import { GetEmergencyCenterDetailResponse } from "@/lib/type/emergencyCenter.type";
+import { ChevronLeft } from "lucide-react";
+import Link from "next/link";
 
 interface Params {
   emergency_center_id: string;
@@ -32,16 +34,26 @@ export default async function Page({ params }: { params: Params }) {
       },
     }
   ).then((res) => res.json());
-  if (data.http_status_code === 404) return <div>404 NOT FOUND</div>;
-  if (!data.is_success) return <div>ERROR</div>;
 
   return (
     <TabWrapper
       contents={[
         {
           title: "주변 응급실 찾기",
-          content: (
+          content: data.is_success ? (
             <EmergencyCenterDetailPrototype emergency_center={data.result} />
+          ) : (
+            <div className=" w-full p-[2.4rem]">
+              <Link
+                href={"/emergency-center"}
+                className="flex items-center text-lgrey"
+              >
+                <ChevronLeft />
+                <span className="fontSize-small-l">주변 응급실 찾기</span>
+              </Link>
+
+              <div className="flex flex-col items-center justify-center"></div>
+            </div>
           ),
         },
       ]}

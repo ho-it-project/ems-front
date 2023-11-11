@@ -25,7 +25,7 @@ export const EmergencyCenterInfoCard = ({
           >
             {emergencyCenter.emergency_center_name}
           </p>
-          <p>
+          <div>
             <Tag
               text="요청거절"
               bgColor="grey"
@@ -33,7 +33,7 @@ export const EmergencyCenterInfoCard = ({
               border="none"
               className="w-fit grid-cols-1 whitespace-nowrap px-[1.4rem]"
             />
-          </p>
+          </div>
         </div>
 
         <div className="flex h-full flex-col justify-between gap-[1.6rem]">
