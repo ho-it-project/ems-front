@@ -27,6 +27,7 @@ export const DualChoiceButton = ({
             select === "left" ? "bg-main text-white" : ""
           )}
           onClick={onClickLeftButton}
+          type="button"
         >
           {leftButton}
         </button>
@@ -36,6 +37,7 @@ export const DualChoiceButton = ({
             select === "right" ? "bg-main text-white" : ""
           )}
           onClick={onClickRightButton}
+          type="button"
         >
           {rightButton}
         </button>

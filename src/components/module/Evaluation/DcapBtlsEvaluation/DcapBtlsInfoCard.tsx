@@ -4,7 +4,7 @@ import { Tag } from "@/components/elements/Tag";
 import {
   DCAP_BTLS_AFFECT_AREA_KOR,
   DCAP_BTLS_AffectArea,
-} from "@/type/evaluation";
+} from "@/lib/type/evaluation";
 
 interface DcapBtlsInfoCardProps {
   affected_area: DCAP_BTLS_AffectArea;
