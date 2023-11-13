@@ -5,7 +5,7 @@ import { FormControl, FormField, FormItem } from "@/components/ui/form";
 import { ControllerRenderProps, UseFormReturn } from "react-hook-form";
 import { SymptomLabel } from "../../common/SymptomLabeledInput";
 
-// TODO : 리팩토링 필요 (코드정리 및 의존성 제거 필요)- 2023.11.13 
+// TODO : 리팩토링 필요 (코드정리 및 의존성 제거 필요)- 2023.11.13
 export type EvaluationKey =
   | "symptoms"
   | "allergies"

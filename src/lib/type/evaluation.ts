@@ -27,6 +27,7 @@ export type DCAP_BTLS_AffectAreaKor =
 export const DCAP_BTLS_AFFECT_AREA_KOR: {
   [key in DCAP_BTLS_AffectArea]: DCAP_BTLS_AffectAreaKor;
 } = {
+  UNKNOWN: "알수없음",
   HEAD: "머리",
   NECK: "목",
   CHEST: "가슴",
@@ -37,5 +38,38 @@ export const DCAP_BTLS_AFFECT_AREA_KOR: {
   RIGHT_LEG: "오른쪽다리",
   BACK: "등",
   PELVIS: "골반",
-  UNKNOWN: "알수없음",
 };
+
+export interface DCAP_BTLS_AFFECT {
+  deformity: boolean;
+  contusion: boolean;
+  abrasion: boolean;
+  puncture: boolean;
+  burn: boolean;
+  tenderness: boolean;
+  laceration: boolean;
+  swelling: boolean;
+}
+
+export const DCAP_BTLS_AFFECT_KOR: {
+  [kye in keyof DCAP_BTLS_AFFECT]: string;
+} = {
+  deformity: "변형",
+  contusion: "타박상",
+  abrasion: "찰과상",
+  puncture: "찌름상",
+  burn: "화상",
+  tenderness: "압통",
+  laceration: "열상",
+  swelling: "부종",
+};
+export const DCAP_BTLS_AFFECT_KEYS: (keyof DCAP_BTLS_AFFECT)[] = [
+  "deformity",
+  "contusion",
+  "abrasion",
+  "puncture",
+  "burn",
+  "tenderness",
+  "laceration",
+  "swelling",
+];
