@@ -1,8 +1,8 @@
 import { ContentSection } from "@/components/layout/ContentSection";
 import { LayoutWrapper } from "@/components/layout/LayoutWrapper";
-import AuthProvider from "@/lib/auth/AuthProvider";
-import LayoutProvider from "@/lib/provider/LayoutProvider";
-import { SWRProvider } from "@/lib/provider/SwrProvider";
+import AuthProvider from "@/providers/AuthProvider";
+import LayoutProvider from "@/providers/LayoutProvider";
+import { SWRProvider } from "@/providers/SwrProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../globals.css";

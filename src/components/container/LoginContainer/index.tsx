@@ -2,7 +2,7 @@
 import LoginButton from "@/components/module/Login/LoginButton";
 import InputModule from "@/components/module/Login/LoginInputModule";
 import { TabModalWrapper } from "@/components/module/common/TabModalWrapper";
-import { useAuth } from "@/lib/auth/AuthProvider";
+import { useAuth } from "@/providers/AuthProvider";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 

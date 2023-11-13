@@ -1,8 +1,7 @@
 export * from "./ambulance_company";
 export * from "./auth";
 
-export type Status = "ACTIVE" | "INACTIVE" | "DELETED";
-interface Success_<T> {
+interface Success<T> {
   /**
    * @type T
    * @description 요청에 대한 응답
@@ -30,7 +29,7 @@ interface Success_<T> {
   message: string;
 }
 
-interface Fail_ {
+export interface Fail {
   /**
    * @type boolean
    * @description 요청이 성공했는지 여부
@@ -46,12 +45,24 @@ interface Fail_ {
   message: string;
 }
 
-export type Try<T> = Success_<T> | Fail_;
-export type Success<T extends Try<unknown>> = Extract<T, { is_success: true }>;
-export type Fail<T extends Try<unknown>> = Extract<T, { is_success: false }>;
+export type Try<T> = Success<T> | Fail;
+// export type Success<T extends Try<unknown>> = Extract<T, { is_success: true }>;
+// export type Fail<T extends Try<unknown>> = Extract<T, { is_success: false }>;
 
 export type UnhandledExeption = {
   message: string;
   statusCode: number;
   error?: unknown;
 };
+
+// 1. api마다 전체를 다주는 것이 아님. list? detail?
+
+// list가 필요한 컴포넌트 :
+//   detail1
+//   detail2
+//   ..
+
+// 각 디테일에서 useCompanyDetailQuery()질의
+// !/////
+// 상품에 대한 카드
+// 상품들

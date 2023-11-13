@@ -1,4 +1,4 @@
-import { validateEnv } from "./constants/env";
+import { validateEnv } from "./lib/constants";
 
 export function register() {
   validateEnv();
