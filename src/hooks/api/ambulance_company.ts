@@ -1,9 +1,13 @@
-import { useSWRApi } from "@/hooks/api";
 import { useAuth } from "@/providers/AuthProvider";
-import { CompanyDetailReturn } from "@/types/api";
+import { useGetApi } from "./api";
+
 export const useCompanyDetailQuery = () => {
   const { user } = useAuth();
-  return useSWRApi<CompanyDetailReturn>(
-    `/api/ems/ambulance-companies/${user?.ambulance_company_id}`
-  );
+  return useGetApi("/ems/ambulance-companies/{ems_ambulance_company_id}", {
+    params: {
+      path: {
+        ems_ambulance_company_id: user?.ambulance_company_id ?? "",
+      },
+    },
+  });
 };

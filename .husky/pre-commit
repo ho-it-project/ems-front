@@ -3,3 +3,5 @@
 
 #exit 1
 npx lint-staged
+npm run generate
+tsc --noEmit
