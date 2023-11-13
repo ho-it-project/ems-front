@@ -5,3 +5,4 @@
 npx lint-staged
 npm run generate
 tsc --noEmit
+git add src/types/api/api.d.ts
