@@ -1,5 +1,5 @@
 import { EmergencyCenterDetailContainer } from "@/components/container/EmergencyCenterCentainer/Detail";
-import { GetEmergencyCenterDetailResponse } from "@/lib/type/emergencyCenter.type";
+import { GetEmergencyCenterDetailResponse } from "@/types/emergencyCenter.type";
 
 interface EmergencyCenterDetailProps {
   emergency_center: GetEmergencyCenterDetailResponse; // ssr 응답값을 직접 사용

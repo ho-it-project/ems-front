@@ -3,7 +3,7 @@
 import { PageHeader } from "@/components/elements/PageHeader";
 import { DcapBtlsInfoCard } from "@/components/module/Evaluation/DcapBtlsEvaluation/DcapBtlsInfoCard";
 import { ProgressTracker } from "@/components/module/common/ProgressTracker";
-import { DCAP_BTLS_AFFECT, DCAP_BTLS_AffectArea } from "@/lib/type/evaluation";
+import { DCAP_BTLS_AFFECT, DCAP_BTLS_AffectArea } from "@/types/evaluation";
 import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
 import { useState } from "react";
 

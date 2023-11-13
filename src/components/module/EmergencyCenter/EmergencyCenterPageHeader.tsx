@@ -1,6 +1,6 @@
 "use client";
 import { Input } from "@/components/elements/Input";
-import { useWindowSize } from "@/lib/hook";
+import { useWindowSize } from "@/hooks";
 import { cn } from "@/lib/utils";
 import {
   EmergencyCenterType,

@@ -9,7 +9,7 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { useGeoLocation } from "@/lib/hook/useGeoLocation";
+import { useGeoLocation } from "@/hooks/useGeoLocation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";

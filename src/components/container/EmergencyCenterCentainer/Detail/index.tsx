@@ -2,7 +2,7 @@ import { PageHeader } from "@/components/elements/PageHeader";
 import { EmergencyCenterIllnessStatusCard } from "@/components/module/EmergencyCenter/Detail/EmergencyCenterIllnessStatusCard";
 import { EmergencyCenterInfoCard } from "@/components/module/EmergencyCenter/Detail/EmergencyCenterInfoCard";
 import { EmergencyRoomStatusCard } from "@/components/module/EmergencyCenter/Detail/EmergencyRoomStatusCard";
-import { GetEmergencyCenterDetailResponse } from "@/lib/type/emergencyCenter.type";
+import { GetEmergencyCenterDetailResponse } from "@/types/emergencyCenter.type";
 import { ChevronLeftIcon } from "lucide-react";
 import Link from "next/link";
 

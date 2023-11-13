@@ -1,7 +1,7 @@
-import { useSWRApi } from "@/lib/utils/api";
+import { useSWRApi } from "@/hooks/api";
 import { useDepartmentStore } from "@/store/department.store";
+import { GetDepartmentResponse } from "@/types/department/remote";
 import { useEffect } from "react";
-import { GetDepartmentResponse } from "../type/department/remote";
 
 export const useDepartment = () => {
   const {

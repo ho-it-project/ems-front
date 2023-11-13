@@ -1,6 +1,6 @@
 "use client";
-import { useWindowSize } from "@/lib/hook";
-import { useDepartment } from "@/lib/hook/useDepartment";
+import { useWindowSize } from "@/hooks";
+import { useDepartment } from "@/hooks/api/useDepartment";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { DepartmentSelectButton } from "./DepartmentSelectButton";

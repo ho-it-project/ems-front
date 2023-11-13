@@ -10,11 +10,11 @@ import React, {
 interface IAuthProviderProps {}
 
 import Spinner from "@/components/Spinner";
-import { env } from "@/constants/env";
-import { LoginResponse } from "@/types";
+import { api } from "@/lib/api";
+import { env } from "@/lib/constants";
 import { Loader2 } from "lucide-react";
 import useSWR from "swr";
-import { api } from "../utils/api";
+import { LoginResponse } from "../types/api";
 
 export const Icons = {
   spinner: Loader2,
@@ -133,7 +133,7 @@ const AuthProvider = ({ children }: PropsWithChildren<IAuthProviderProps>) => {
       return;
     }
     setIsLoading(false);
-  }, [router, user, status, pathname]);
+  }, [router, user, status]);
 
   if (isLoading)
     return (

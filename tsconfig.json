@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2015",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -20,10 +24,9 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@/types": ["./src/lib/type/index.ts"],
-      "@/hooks": ["./src/lib/hook/index.ts"],
-      "@/api": ["./src/lib/hook/api/index.ts"]
+      "@/*": [
+        "./src/*"
+      ],
     }
   },
   "include": [
@@ -34,5 +37,8 @@
     "jest.setup.js",
     "src/lib/utils/index.ts"
   ],
-  "exclude": ["node_modules", "**/*.test.ts"]
+  "exclude": [
+    "node_modules",
+    "**/*.test.ts"
+  ]
 }

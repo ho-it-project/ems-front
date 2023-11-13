@@ -4,7 +4,7 @@ import {
 } from "@/store/emergencyCenter.store";
 import { useEffect } from "react";
 import useSWR from "swr";
-import { useGeoLocation } from "./useGeoLocation";
+import { useGeoLocation } from "../useGeoLocation";
 
 interface GetEmergencyCenterListResponse {
   result: {

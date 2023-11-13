@@ -1,13 +1,13 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import {
   DCAP_BTLS_AFFECT,
   DCAP_BTLS_AFFECT_AREA_KOR,
   DCAP_BTLS_AFFECT_KEYS,
   DCAP_BTLS_AFFECT_KOR,
   DCAP_BTLS_AffectArea,
-} from "@/lib/type/evaluation";
-import { cn } from "@/lib/utils";
+} from "@/types/evaluation";
 import { Check, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 

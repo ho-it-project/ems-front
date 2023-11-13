@@ -1,8 +1,8 @@
 "use client";
-import { useCompanyDetailQuery } from "@/api";
 import { PageHeader } from "@/components/elements/PageHeader";
 import { CompanyInfoForm } from "@/components/module/CompanyInfo/CompanyInfoForm";
 import { CompanyStatusCard } from "@/components/module/CompanyInfo/CompanyStatusCard";
+import { useCompanyDetailQuery } from "@/hooks/api";
 import { cn } from "@/lib/utils";
 
 export const CompanyInfoContainer = () => {

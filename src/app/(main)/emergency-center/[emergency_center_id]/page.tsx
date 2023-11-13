@@ -1,6 +1,6 @@
 import { TabWrapper } from "@/components/layout/TabWrapper";
 import { EmergencyCenterDetailPrototype } from "@/components/prototypes/EmergencyCenter/Detail";
-import { GetEmergencyCenterDetailResponse } from "@/lib/type/emergencyCenter.type";
+import { GetEmergencyCenterDetailResponse } from "@/types/emergencyCenter.type";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 

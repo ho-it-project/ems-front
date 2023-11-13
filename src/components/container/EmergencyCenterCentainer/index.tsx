@@ -3,7 +3,7 @@
 import Spinner from "@/components/Spinner";
 import { EmergencyCenterList } from "@/components/module/EmergencyCenter/EmergencyCenterList";
 import { EmergencyCenterPageHeader } from "@/components/module/EmergencyCenter/EmergencyCenterPageHeader";
-import { useEmergencyCenterList } from "@/lib/hook/useEmergencyCenterList";
+import { useEmergencyCenterList } from "@/hooks/api/useEmergencyCenterList";
 import { useEmergencyCenterListStore } from "@/store/emergencyCenter.store";
 import { useEffect, useRef } from "react";
 

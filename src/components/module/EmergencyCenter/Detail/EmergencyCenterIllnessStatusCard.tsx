@@ -1,8 +1,5 @@
-import {
-  Department,
-  HospitalDepartment,
-} from "@/lib/type/emergencyCenter.type";
 import { cn } from "@/lib/utils";
+import { Department, HospitalDepartment } from "@/types/emergencyCenter.type";
 
 interface EmergencyCenterIllnessStatusCardProps {
   departemnts: (HospitalDepartment & { department: Department })[];

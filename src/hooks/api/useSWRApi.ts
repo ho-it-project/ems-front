@@ -1,19 +1,11 @@
-import { env } from "@/constants/env";
-import { Fail, Success, Try, UnhandledExeption } from "@/types";
+import { api } from "@/lib/api";
+import { env } from "@/lib/constants";
+import { Fail, Try, UnhandledExeption } from "@/types/api";
 import useSWR from "swr";
 
-export async function api<T>(
-  input: RequestInfo | URL,
-  init?: RequestInit
-): Promise<T> {
-  return fetch(input, init).then((res) => {
-    return res.json() as Promise<T>;
-  });
-}
-
-type UseSWRApiReturn<T extends Try<unknown>> = {
-  data: Success<T> | undefined;
-  error: Extract<T, { is_success: false }> | undefined;
+type UseSWRApiReturn<T> = {
+  data: T | undefined;
+  error: Fail | undefined;
 };
 
 /**
@@ -26,7 +18,7 @@ type UseSWRApiReturn<T extends Try<unknown>> = {
  *    - `{is_success: true}`: response 데이터를 data에 담아 리턴
  *    - `{is_success: false}`: response 데이터를 error에 담아 리턴
  */
-export function useSWRApi<T extends Try<unknown>>(
+export function useSWRApi<T>(
   input: RequestInfo | URL,
   init?: RequestInit
 ): UseSWRApiReturn<T> {
@@ -35,9 +27,9 @@ export function useSWRApi<T extends Try<unknown>>(
   /** 예시
    * if(!data) return <div>Empty Data</div>;
    */
-  const { data, error } = useSWR<T | UnhandledExeption>(
+  const { data, error } = useSWR<Try<T> | UnhandledExeption>(
     input,
-    (input: RequestInfo | URL) => api<T>(input, init)
+    (input: RequestInfo | URL) => api<Try<T>>(input, init)
   );
 
   if (data && "statusCode" in data) {
@@ -51,7 +43,7 @@ export function useSWRApi<T extends Try<unknown>>(
   if (!data.is_success)
     return {
       data: undefined,
-      error: data as Fail<T>,
+      error: data,
     };
-  return { data: data as Success<T>, error: undefined };
+  return { data: data.result, error: undefined };
 }

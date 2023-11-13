@@ -3,7 +3,7 @@ import {
   EMERGENCY_ROOM_TYPE_KOR,
   EmergencyRoom,
   EmergencyRoomBed,
-} from "@/lib/type/emergencyCenter.type";
+} from "@/types/emergencyCenter.type";
 
 interface EmergencyRoomStatusCardProps {
   emergencyRooms: (EmergencyRoom & {

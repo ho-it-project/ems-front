@@ -8,12 +8,11 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { CompanyDetailResponse, Success } from "@/types";
+import { CompanyDetailReturn } from "@/types/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-
 const companyInfoSchema = z.object({
   company_name: z.string().min(2, {
     message: "2글자 이상 입력해주세요",
@@ -27,20 +26,19 @@ const companyInfoSchema = z.object({
 });
 
 interface CompnayInfoformProps {
-  companyDetail: Success<CompanyDetailResponse>;
+  companyDetail: CompanyDetailReturn;
 }
 
 export const CompanyInfoForm = ({ companyDetail }: CompnayInfoformProps) => {
-  const detail = companyDetail.result;
   const form = useForm<z.infer<typeof companyInfoSchema>>({
     resolver: zodResolver(companyInfoSchema),
     defaultValues: {
-      company_name: detail.ambulance_company_name,
+      company_name: companyDetail.ambulance_company_name,
       region: {
-        region_name: detail.ambulance_company_address ?? "",
-        region_code: detail.ambulance_company_area,
+        region_name: companyDetail.ambulance_company_address ?? "",
+        region_code: companyDetail.ambulance_company_area,
       },
-      phone_number: detail.ambulance_company_phone,
+      phone_number: companyDetail.ambulance_company_phone,
       admin_name: "TODO",
     },
   });

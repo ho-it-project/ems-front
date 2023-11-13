@@ -1,7 +1,7 @@
 import { Tag } from "@/components/elements/Tag";
-import { EmergencyCenter_ } from "@/lib/type/emergencyCenter.type";
 import { cn } from "@/lib/utils";
 import { EMERGENCY_CENTER_TYPE } from "@/store/emergencyCenter.store";
+import { EmergencyCenter_ } from "@/types/emergencyCenter.type";
 
 interface EmergencyInfoCardProps {
   emergencyCenter: EmergencyCenter_;
