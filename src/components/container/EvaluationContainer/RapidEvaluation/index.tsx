@@ -1,9 +1,9 @@
 import { PageHeader } from "@/components/elements/PageHeader";
-import { RepidEvaluationForm } from "@/components/module/Evaluation/RepidEvaluation/RepidEvaluationForm";
+import { RapidEvaluationForm } from "@/components/module/Evaluation/RapidEvaluation/RapidEvaluationForm";
 import { ProgressTracker } from "@/components/module/common/ProgressTracker";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-export const RepidEvaluationContainer = () => {
+export const RapidEvaluationContainer = () => {
   const FORM_ID = "rapid-evaluation-form";
   return (
     <>
@@ -29,7 +29,7 @@ export const RepidEvaluationContainer = () => {
             </div>
           </PageHeader>
           <div className="h-full">
-            <RepidEvaluationForm formId={FORM_ID} />
+            <RapidEvaluationForm formId={FORM_ID} />
           </div>
           <ProgressTracker
             steps={["신속평가", "환자정보입력", "증상평가", "요청", "이송"]}

@@ -11,6 +11,7 @@ export const Nav = ({ shadow = "medium" }: NavProps) => {
     flex-1
     flex flex-col
     gap-[2rem]
+    bg-transparent 
   `);
 
   return (

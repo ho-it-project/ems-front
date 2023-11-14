@@ -16,7 +16,7 @@
   @apply text-[1.8rem] font-bold;
 }
 .fontSize-medium-l {
-  @apply text-[1.8rem] font-semibold;
+  @apply text-[1.8rem] font-normal;
 }
 
 .fontSize-regular {

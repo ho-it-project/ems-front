@@ -91,7 +91,7 @@ module.exports = {
     "bg-main",
     "bg-white",
     "bg-black",
-    "bg-gray",
+    "bg-grey",
     "bg-lgrey",
     "bg-red",
     "bg-yellow",

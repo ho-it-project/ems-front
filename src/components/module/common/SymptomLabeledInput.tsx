@@ -17,9 +17,9 @@ export const SymptomLabel = ({
 }: SymptomLabeledProps) => {
   const bgColorClass = `bg-${bgColor}`;
   return (
-    <div className="flex h-[6.5rem] w-full items-center gap-[7rem]">
-      <div className="flex min-w-[11rem] max-w-[11rem] flex-col justify-center">
-        <span className="text-main">{title}</span>
+    <div className="flex h-[6.5rem] w-full items-center gap-[1.2rem]">
+      <div className="flex min-w-[16rem] max-w-[16rem] flex-col justify-center">
+        <span className="fontSize-medium text-main">{title}</span>
         <span className="fontSize-small text-lgrey">{description}</span>
       </div>
       <div

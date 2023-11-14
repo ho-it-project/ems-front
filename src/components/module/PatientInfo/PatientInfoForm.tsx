@@ -9,22 +9,34 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
+import { useGeoLocation } from "@/hooks/useGeoLocation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 const patientInfoSchema = z.object({
-  patient_name: z.string().default("알수없음"),
+  patient_name: z.string().default("익명"),
   patient_gender: z.string(),
-  patient_birth: z.string().default(""),
-  patient_identity_number: z.string().default(""),
-  patient_phone: z.string().default(""),
+  patient_birth: z.string().default("000000"),
+  patient_identity_number: z.string().default("0000000"),
+  patient_phone: z.string().default("00000000000"),
   patient_address: z.string().default(""),
+  patient_latitude: z.number().default(0),
+  patient_longitude: z.number().default(0),
+  patient_severity: z.string().default("UNKNOWN"),
 });
 
 export const PatientInfoForm = () => {
+  const location = useGeoLocation();
+  const [patient_latitude, patient_longitude] = location ?? [0, 0];
+
   const form = useForm<z.infer<typeof patientInfoSchema>>({
     resolver: zodResolver(patientInfoSchema),
+    defaultValues: {
+      patient_latitude,
+      patient_longitude,
+      patient_severity: "UNKNOWN",
+    },
   });
   function onSubmit(values: z.infer<typeof patientInfoSchema>) {
     // Do something with the form values.
@@ -53,7 +65,7 @@ export const PatientInfoForm = () => {
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="shadcn"
+                      placeholder="익명"
                       {...field}
                       id="patient_name"
                       aria-describedby="dis"
@@ -61,6 +73,7 @@ export const PatientInfoForm = () => {
                       border={"none"}
                       bgColor="bg"
                       rounded="large"
+                      defaultValue={"익명"}
                     />
                   </FormControl>
                   <FormDescription id="dis" className="hidden" />
@@ -77,8 +90,8 @@ export const PatientInfoForm = () => {
                     <span className="fontSize-medium">성별</span>
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="전화번호를 입력하세요"
+                    {/* <Input
+                      placeholder="성별"
                       {...field}
                       id="patient_gender"
                       aria-describedby="dis"
@@ -86,7 +99,17 @@ export const PatientInfoForm = () => {
                       border={"none"}
                       bgColor="bg"
                       rounded="large"
-                    />
+                    /> */}
+                    <select
+                      {...field}
+                      id="patient_gender"
+                      defaultValue={"UNKNOWN"}
+                      className="w-full bg-transparent text-center focus:text-center focus:outline-none"
+                    >
+                      <option value={"UNKNOWN"}>성별</option>
+                      <option value={"MALE"}>남자</option>
+                      <option value={"FEMALE"}>여자</option>
+                    </select>
                   </FormControl>
                   <FormDescription id="dis" className="hidden" />
                 </FormItem>
@@ -95,7 +118,7 @@ export const PatientInfoForm = () => {
 
             <div className="flex items-center gap-[2rem] ">
               <FormLabel htmlFor="patient_birth" className="min-w-[10rem]">
-                <span className="fontSize-medium">주민등록번화</span>
+                <span className="fontSize-medium">주민등록번호</span>
               </FormLabel>
               <div className="flex w-full items-center justify-between">
                 <FormField
@@ -105,7 +128,7 @@ export const PatientInfoForm = () => {
                     <FormItem className="flex max-w-[12rem] items-center">
                       <FormControl>
                         <Input
-                          placeholder="서울시"
+                          placeholder="000000"
                           {...field}
                           id="patient_birth"
                           aria-describedby="dis"
@@ -114,6 +137,7 @@ export const PatientInfoForm = () => {
                           border={"none"}
                           bgColor="bg"
                           rounded="large"
+                          defaultValue={"000000"}
                         />
                       </FormControl>
                       <FormDescription id="dis" className="hidden" />
@@ -128,7 +152,7 @@ export const PatientInfoForm = () => {
                     <FormItem className="flex max-w-[12rem] items-center">
                       <FormControl>
                         <Input
-                          placeholder="서울시"
+                          placeholder="0000000"
                           {...field}
                           id="patient_identity_number"
                           aria-describedby="dis"
@@ -137,6 +161,7 @@ export const PatientInfoForm = () => {
                           border={"none"}
                           bgColor="bg"
                           rounded="large"
+                          defaultValue={"0000000"}
                         />
                       </FormControl>
                       <FormDescription id="dis" className="hidden" />

@@ -1,4 +1,4 @@
-import { OpqrstEvaluationPrototype } from "@/components/prototypes/OpqrstEvaluation";
+import { OpqrstEvaluationPrototype } from "@/components/prototypes/Evalutaion/OpqrstEvaluation";
 
 export default function Home() {
   return (

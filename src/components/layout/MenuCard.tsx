@@ -29,6 +29,7 @@ export const MenuCard = ({
     shadow === "medium" ? "shadow-md" : shadow === "large" ? "shadow-lg" : "";
 
   const cardClass = cn(`
+  z-10
   flex items-center justify-center
   bg-white
   fontSize-medium
