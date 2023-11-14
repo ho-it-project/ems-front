@@ -28,11 +28,51 @@ export type Init<
 
 export type PathMethod<T extends keyof paths> = keyof paths[T];
 
-export type SuccessRes<
-  P extends keyof paths,
-  M extends PathMethod<P>,
-> = paths[P][M] extends {
-  responses: { 200: { content: { "application/json": { result: unknown } } } };
+export type PathStatus<
+  T extends keyof paths,
+  M extends PathMethod<T>,
+> = "responses" extends keyof paths[T][M]
+  ? keyof paths[T][M]["responses"]
+  : null;
+
+type res<P extends keyof paths, M extends PathMethod<P>> = paths[P][M] extends {
+  responses: unknown;
 }
-  ? paths[P][M]["responses"][200]["content"]["application/json"]["result"]
+  ? paths[P][M]["responses"]
   : undefined;
+
+// [key: number]: { content: { "application/json": { result: unknown } } };
+//[number]["content"]["application/json"]["result"]
+type successCode = 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 226;
+
+export type SuccessRes<P extends keyof paths, M extends PathMethod<P>> = Pick<
+  res<P, M>,
+  Extract<keyof res<P, M>, successCode>
+> extends {
+  [key in number | string]?: {
+    content: { "application/json": { result: infer B } };
+  };
+}
+  ? B
+  : never;
+
+export type Fail_<P extends keyof paths, M extends PathMethod<P>> = Omit<
+  res<P, M>,
+  successCode
+> extends {
+  [key in number | string]?: {
+    content: { "application/json": infer A };
+  };
+}
+  ? A
+  : never;
+
+/*
+| Omit<SuccessRes<P, M>, successCode> extends {
+        [key in number | string]?: infer A;
+      }
+    ? A extends { content: { "application/json": infer B } }
+      ? B
+      : never
+    : never
+*/

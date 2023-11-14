@@ -1,5 +1,6 @@
 import { client } from "@/lib/api";
 import {
+  Fail,
   Init,
   PathMethod,
   PathsWithMethod,
@@ -25,14 +26,14 @@ function commonLogic<
 
   if (!data) return { data: undefined, error: undefined };
 
-  if (!data.is_success)
+  if (data.is_success == false)
     return {
       data: undefined,
-      error: data,
+      error: data as Fail,
     };
+
   return { data: data.result, error: undefined };
 }
-
 export function useGetApi<P extends PathsWithMethod<"get">>(
   url: P,
   ...init: Init<"get", P>
