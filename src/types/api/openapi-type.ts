@@ -57,36 +57,33 @@ export type SuccessRes<P extends keyof paths, M extends PathMethod<P>> = Pick<
   : never;
 
 export type Response<P extends keyof paths, M extends PathMethod<P>> = {
-  data:
-    | undefined
-    | (Pick<res<P, M>, Extract<keyof res<P, M>, successCode>> extends {
-        [key in number | string]?: {
-          content: { "application/json": { result: infer A } };
-        };
-      }
-        ? A
-        : undefined);
-  error:
-    | undefined
-    | (Omit<res<P, M>, successCode> extends {
-        [key in number | string]?: {
-          content: { "application/json": infer A };
-        };
-      }
-        ? A
-        : undefined);
+  data: undefined | SuccessRes<P, M>;
+  error: undefined | Error<P, M>;
 };
 
-export type Fail_<P extends keyof paths, M extends PathMethod<P>> = Omit<
+type FF<P extends keyof paths, M extends PathMethod<P>> = Omit<
   res<P, M>,
   successCode
-> extends {
-  [key in number | string]?: {
-    content: { "application/json": infer A };
-  };
-}
+>;
+
+type IsEmptyObject<Obj extends Record<PropertyKey, unknown>> = [
+  keyof Obj,
+] extends [never]
+  ? true
+  : false;
+
+export type Error<
+  P extends keyof paths,
+  M extends PathMethod<P>,
+> = IsEmptyObject<FF<P, M>> extends true
+  ? undefined
+  : FF<P, M> extends {
+      [key in number | string]: {
+        content: { "application/json": infer A };
+      };
+    }
   ? A
-  : never;
+  : undefined;
 
 /*
 | Omit<SuccessRes<P, M>, successCode> extends {
