@@ -1,8 +1,8 @@
 export * from "./ambulance_company";
 export * from "./auth";
 export * from "./openapi-type";
-export interface Success<T> {
-  result: T;
+export interface Success {
+  result: unknown;
   request_to_response: number;
 
   is_success: true;
@@ -16,10 +16,7 @@ export interface Fail {
   message: string;
 }
 
-export type Res<T> = Success<T> | Fail;
-export type Try__<T> = T | Fail;
-export type Success_<T> = Extract<T, { is_success: true }>;
-// export type Fail<T extends Try<unknown>> = Extract<T, { is_success: false }>;
+export type Res = Success | Fail;
 
 export type UnhandledExeption = {
   message: string;
