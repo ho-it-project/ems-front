@@ -56,6 +56,27 @@ export type SuccessRes<P extends keyof paths, M extends PathMethod<P>> = Pick<
   ? B
   : never;
 
+export type Response<P extends keyof paths, M extends PathMethod<P>> = {
+  data:
+    | undefined
+    | (Pick<res<P, M>, Extract<keyof res<P, M>, successCode>> extends {
+        [key in number | string]?: {
+          content: { "application/json": { result: infer A } };
+        };
+      }
+        ? A
+        : undefined);
+  error:
+    | undefined
+    | (Omit<res<P, M>, successCode> extends {
+        [key in number | string]?: {
+          content: { "application/json": infer A };
+        };
+      }
+        ? A
+        : undefined);
+};
+
 export type Fail_<P extends keyof paths, M extends PathMethod<P>> = Omit<
   res<P, M>,
   successCode
