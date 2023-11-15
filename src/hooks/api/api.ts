@@ -1,14 +1,16 @@
 import { client } from "@/lib/api";
-import { Init, PathsWithMethod, Res, SuccessRes } from "@/types/api";
+import { Init, MethodPaths, Response } from "@/types/api";
 import { paths } from "@/types/api/api";
-import { Error, PathMethod, Response } from "@/types/api/openapi-type";
+import {
+  ApiResponse,
+  ErrorResponse,
+  PathMethod,
+} from "@/types/api/openapi-type";
 import { env } from "process";
 import useSWR from "swr";
 
-export type Path = keyof paths;
-
 function commonLogic<P extends keyof paths, M extends PathMethod<P>>(
-  data: Res,
+  data: ApiResponse<P, M>,
   error: unknown
 ): Response<P, M> {
   if (data && "statusCode" in data) {
@@ -23,12 +25,13 @@ function commonLogic<P extends keyof paths, M extends PathMethod<P>>(
   if (data.is_success == false)
     return {
       data: undefined,
-      error: data as Error<P, M>,
+      error: data as ErrorResponse<P, M>,
     };
+  data;
 
-  return { data: data.result as SuccessRes<P, M>, error: undefined };
+  return { data: data.result, error: undefined };
 }
-export function useGetApi<P extends PathsWithMethod<"get">>(
+export function useGetApi<P extends MethodPaths<"get">>(
   url: P,
   ...init: Init<"get", P>
 ) {
@@ -40,12 +43,12 @@ export function useGetApi<P extends PathsWithMethod<"get">>(
       return data;
     }
   );
-  const data = data_ as Res; //모든 response는 Success | Fail정보를 따름
+  const data = data_ as ApiResponse<P, "get">; //모든 response는 Success | Fail정보를 따름
 
   return commonLogic<P, "get">(data, error);
 }
 
-export function usePostApi<P extends PathsWithMethod<"post">>(
+export function usePostApi<P extends MethodPaths<"post">>(
   url: P,
   ...init: Init<"post", P>
 ) {
@@ -57,12 +60,12 @@ export function usePostApi<P extends PathsWithMethod<"post">>(
       return data;
     }
   );
-  const data = data_ as Res; //모든 response는 Success | Fail정보를 따름
+  const data = data_ as ApiResponse<P, "post">; //모든 response는 Success | Fail정보를 따름
 
   return commonLogic<P, "post">(data, error);
 }
 
-export function usePatchApi<P extends PathsWithMethod<"patch">>(
+export function usePatchApi<P extends MethodPaths<"patch">>(
   url: P,
   ...init: Init<"patch", P>
 ) {
@@ -74,12 +77,12 @@ export function usePatchApi<P extends PathsWithMethod<"patch">>(
       return data;
     }
   );
-  const data = data_ as Res; //모든 response는 Success | Fail정보를 따름
+  const data = data_ as ApiResponse<P, "patch">; //모든 response는 Success | Fail정보를 따름
 
   return commonLogic<P, "patch">(data, error);
 }
 
-export function usePutApi<P extends PathsWithMethod<"put">>(
+export function usePutApi<P extends MethodPaths<"put">>(
   url: P,
   ...init: Init<"put", P>
 ) {
@@ -91,7 +94,7 @@ export function usePutApi<P extends PathsWithMethod<"put">>(
       return data;
     }
   );
-  const data = data_ as Res; //모든 response는 Success | Fail정보를 따름
+  const data = data_ as ApiResponse<P, "put">; //모든 response는 Success | Fail정보를 따름
 
   return commonLogic<P, "put">(data, error);
 }
