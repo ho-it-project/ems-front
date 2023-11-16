@@ -4,8 +4,9 @@ interface Department {
   department_id: number;
   department_name: string;
   parent_department_id?: number | null;
-  sub_departments: Department[];
+  sub_departments?: Department[];
 }
+// department_id
 type DepartmentStore = {
   departments: Department[];
   classificatedDepartments: {

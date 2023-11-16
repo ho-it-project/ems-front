@@ -1,6 +1,5 @@
-import { useSWRApi } from "@/hooks/api";
+import { useGetApi } from "@/hooks/api";
 import { useDepartmentStore } from "@/store/department.store";
-import { GetDepartmentResponse } from "@/types/department/remote";
 import { useEffect } from "react";
 
 export const useDepartment = () => {
@@ -12,18 +11,16 @@ export const useDepartment = () => {
     setNoSubDepartments,
   } = useDepartmentStore();
 
-  const { data, error } = useSWRApi<GetDepartmentResponse>(
-    "/api/er/departments"
-  );
+  const { data, error } = useGetApi("/er/departments");
 
   useEffect(() => {
-    if (data && data.is_success) {
-      const parentDepartments = data.result.filter(
+    if (data) {
+      const parentDepartments = data.filter(
         (item) => !item.parent_department_id
       );
       const classify = parentDepartments.map((parent) => ({
         ...parent,
-        sub_departments: data.result.filter(
+        sub_departments: data.filter(
           (sub) => sub.parent_department_id === parent.department_id
         ),
       }));
@@ -33,10 +30,9 @@ export const useDepartment = () => {
       const noSubDepartments = classify.filter(
         (item) => !item.sub_departments.length
       );
-
       setHaveSubDepartments(haveSubDepartments);
       setNoSubDepartments(noSubDepartments);
-      setDepartments(data.result);
+      setDepartments(data);
     }
   }, [data, setDepartments, setHaveSubDepartments, setNoSubDepartments]);
 

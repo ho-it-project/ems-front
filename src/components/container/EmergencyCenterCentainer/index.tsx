@@ -32,8 +32,10 @@ export const EmergencyCenterContainer = () => {
             ref={emergencyCenterListRef}
             onScroll={(e) => {
               if (
-                e.currentTarget?.scrollHeight - e.currentTarget?.scrollTop ===
-                e.currentTarget?.clientHeight
+                e.currentTarget?.scrollHeight -
+                  e.currentTarget?.scrollTop -
+                  e.currentTarget?.clientHeight <
+                1
               ) {
                 if (query.page < pageLimit.total_page) {
                   setQueryPage(query.page + 1);
