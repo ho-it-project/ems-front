@@ -18,8 +18,8 @@ export const useProfile = () => {
     }
   );
   useEffect(() => {
-    if (data && user) {
-      setCompany(data);
+    if (data?.is_success && user) {
+      setCompany(data.result);
       setUser(user);
     }
   }, [data, setCompany, user, setUser]);
