@@ -1,4 +1,7 @@
-import { Try } from "../api";
 import { Department } from "./client";
 
-export type GetDepartmentResponse = Try<Department[]>;
+export type GetDepartmentResponse = {
+  result: Department[];
+  is_success: boolean;
+  message: string;
+};

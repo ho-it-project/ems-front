@@ -56,16 +56,17 @@ export const DepartmentForm = ({ formId }: DepartmentFormProps) => {
             <p className="fontSize-small-l absolute w-full -translate-y-[100%] px-[2.4rem] text-left text-lgrey">
               {item.department_name}
             </p>
-            {item.sub_departments.map((sub) => {
-              return (
-                <DepartmentSelectButton
-                  onClick={handleSelectDepartment(sub.department_id)}
-                  isSelect={isSelected(sub.department_id)}
-                  department_name={sub.department_name}
-                  key={sub.department_id}
-                />
-              );
-            })}
+            {item.sub_departments &&
+              item.sub_departments.map((sub) => {
+                return (
+                  <DepartmentSelectButton
+                    onClick={handleSelectDepartment(sub.department_id)}
+                    isSelect={isSelected(sub.department_id)}
+                    department_name={sub.department_name}
+                    key={sub.department_id}
+                  />
+                );
+              })}
           </div>
         );
       })}
