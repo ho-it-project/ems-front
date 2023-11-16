@@ -6,4 +6,4 @@ export type Model<T> = T & {
 };
 
 export * from "./ambulance";
-export * from "./company";
+export * from "./company.model";

@@ -8,7 +8,8 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { CompanyDetailReturn } from "@/types/api";
+import { Company } from "@/types/model";
+import { Employee } from "@/types/model/employ.model";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -26,7 +27,13 @@ const companyInfoSchema = z.object({
 });
 
 interface CompnayInfoformProps {
-  companyDetail: CompanyDetailReturn;
+  companyDetail: Pick<
+    Company,
+    | "ambulance_company_name"
+    | "ambulance_company_address"
+    | "ambulance_company_area"
+    | "ambulance_company_phone"
+  > & { admin_name: Pick<Employee, "employee_name">["employee_name"] };
 }
 
 export const CompanyInfoForm = ({ companyDetail }: CompnayInfoformProps) => {
@@ -39,7 +46,7 @@ export const CompanyInfoForm = ({ companyDetail }: CompnayInfoformProps) => {
         region_code: companyDetail.ambulance_company_area,
       },
       phone_number: companyDetail.ambulance_company_phone,
-      admin_name: "TODO",
+      admin_name: companyDetail.admin_name,
     },
   });
   function onSubmit(values: z.infer<typeof companyInfoSchema>) {

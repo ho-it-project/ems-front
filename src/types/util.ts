@@ -4,3 +4,5 @@ export type IsEmptyObject<Obj extends Record<PropertyKey, unknown>> = [
 ] extends [never]
   ? true
   : false;
+
+export type COmit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;

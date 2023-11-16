@@ -5,6 +5,7 @@ import {
   ApiResponse,
   ErrorResponse,
   PathMethod,
+  SuccessResponse,
 } from "@/types/api/openapi-type";
 import { env } from "process";
 import useSWR from "swr";
@@ -21,15 +22,13 @@ function commonLogic<P extends keyof paths, M extends PathMethod<P>>(
     throw new Error(error as string);
 
   if (!data) return { data: undefined, error: undefined };
-
   if (data.is_success == false)
     return {
       data: undefined,
       error: data as ErrorResponse<P, M>,
     };
-  data;
 
-  return { data: data.result, error: undefined };
+  return { data: data as SuccessResponse<P, M>, error: undefined };
 }
 export function useGetApi<P extends MethodPaths<"get">>(
   url: P,
