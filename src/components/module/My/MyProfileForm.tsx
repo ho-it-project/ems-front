@@ -7,6 +7,8 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
+import { Company } from "@/types/model";
+import { Employee, EmployeeRoleLabel } from "@/types/model/employee";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronRight } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -14,6 +16,10 @@ import { z } from "zod";
 
 interface MyProfileFormProps {
   formId: string;
+
+  user: Employee;
+  company: Pick<Company, "ambulance_company_name">;
+  onSubmit?: () => void;
 }
 
 const myProfileSchema = z.object({
@@ -26,22 +32,27 @@ const myProfileSchema = z.object({
   id_card: z.string(),
 });
 
-export const MyProfileForm = ({ formId }: MyProfileFormProps) => {
+export const MyProfileForm = ({
+  formId,
+  user,
+  company,
+  onSubmit,
+}: MyProfileFormProps) => {
   const form = useForm<z.infer<typeof myProfileSchema>>({
     resolver: zodResolver(myProfileSchema),
     defaultValues: {
       img: "TODO",
-      name: "TODO",
-      role: "TODO",
-      ambulance_company_name: "TODO",
-      id_card: "TODO",
+      name: user.employee_name,
+      role: EmployeeRoleLabel[user.role],
+      ambulance_company_name: company.ambulance_company_name,
+      id_card: user.id_card,
     },
   });
 
   return (
     <div className="flex flex-col gap-[2rem]">
       <Form {...form}>
-        <form id={formId} aria-controls="my-profile-form">
+        <form id={formId} aria-controls="my-profile-form" onSubmit={onSubmit}>
           <div className="flex justify-center gap-[2rem]">
             <div className="grid min-h-[43.7rem] w-[63rem] min-w-[63rem] grid-cols-9 grid-rows-6">
               <FormField
@@ -90,21 +101,16 @@ export const MyProfileForm = ({ formId }: MyProfileFormProps) => {
                 )}
               />
               <FormField
-                name="name"
+                name="role"
                 control={form.control}
                 render={({ field }) => (
                   <FormItem className="col-span-5 col-start-5 row-start-3">
                     <div className="flex h-full w-full items-center justify-center gap-[3rem]">
                       <FormLabel className="min-w-[7rem]">
-                        <span className="fontSize-medium">이름</span>
+                        <span className="fontSize-medium">역할</span>
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          {...field}
-                          id="name"
-                          readOnly
-                          className="flex-1"
-                        />
+                        <Input {...field} id="" readOnly className="flex-1" />
                       </FormControl>
                     </div>
                   </FormItem>
@@ -120,7 +126,7 @@ export const MyProfileForm = ({ formId }: MyProfileFormProps) => {
                         className="min-w-[5rem]"
                         htmlFor="ambulance_company_name"
                       >
-                        <span className="fontSize-medium">이름</span>
+                        <span className="fontSize-medium">기관명</span>
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -141,7 +147,7 @@ export const MyProfileForm = ({ formId }: MyProfileFormProps) => {
                   <FormItem className="col-span-full">
                     <div className="flex h-full w-full items-center justify-center gap-[5rem]">
                       <FormLabel className="min-w-[5rem]">
-                        <span className="fontSize-medium">이름</span>
+                        <span className="fontSize-medium">ID</span>
                       </FormLabel>
                       <FormControl>
                         <Input

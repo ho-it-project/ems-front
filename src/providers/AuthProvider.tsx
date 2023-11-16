@@ -33,6 +33,7 @@ interface IAuthContext {
     employee_id: string;
     ambulance_company_id: string;
     role: "ADMIN" | "DRIVER" | "EMERGENCY_MEDICAL_TECHNICIAN" | "DISPATCHER";
+    employee_name: string;
   } | null;
   signIn: (loginParam: LoginParam) => Promise<boolean>;
   signOut: () => void;

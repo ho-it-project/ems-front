@@ -5,7 +5,7 @@ import { create } from "zustand";
 interface ProfileStore {
   profile: {
     user?: Employee;
-    company?: Company;
+    company?: Pick<Company, "ambulance_company_id" | "ambulance_company_name">;
   };
   setUser: (user: Employee) => void;
   setCompany: (company: Company) => void;
