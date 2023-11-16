@@ -15,12 +15,12 @@ export const useDepartment = () => {
 
   useEffect(() => {
     if (data) {
-      const parentDepartments = data.filter(
+      const parentDepartments = data.result.filter(
         (item) => !item.parent_department_id
       );
       const classify = parentDepartments.map((parent) => ({
         ...parent,
-        sub_departments: data.filter(
+        sub_departments: data.result.filter(
           (sub) => sub.parent_department_id === parent.department_id
         ),
       }));
@@ -32,7 +32,7 @@ export const useDepartment = () => {
       );
       setHaveSubDepartments(haveSubDepartments);
       setNoSubDepartments(noSubDepartments);
-      setDepartments(data);
+      setDepartments(data.result);
     }
   }, [data, setDepartments, setHaveSubDepartments, setNoSubDepartments]);
 
