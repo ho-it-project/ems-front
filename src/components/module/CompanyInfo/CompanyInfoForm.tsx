@@ -14,6 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { TabModalWrapper } from "../common/TabModalWrapper";
 const companyInfoSchema = z.object({
   company_name: z.string().min(2, {
     message: "2글자 이상 입력해주세요",
@@ -49,9 +50,11 @@ export const CompanyInfoForm = ({ companyDetail }: CompnayInfoformProps) => {
       admin_name: companyDetail.admin_name,
     },
   });
+  const [submit, setSubmit] = useState<boolean>(false);
   function onSubmit(values: z.infer<typeof companyInfoSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    setSubmit(true);
     console.log(values);
   }
   const [editMode, setEditMode] = useState<boolean>(false);
@@ -61,6 +64,19 @@ export const CompanyInfoForm = ({ companyDetail }: CompnayInfoformProps) => {
 
   return (
     <div>
+      {submit && (
+        <div className="w-100 fixed left-1/2 top-1/2 flex h-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center bg-gray-600">
+          <div className=" w-[200px]">
+            <TabModalWrapper
+              content={{ content: "저장완료", title: "안내" }}
+              onClickClose={() => setSubmit(false)}
+              bgColor="main"
+              textColor="white"
+            ></TabModalWrapper>
+          </div>
+        </div>
+      )}
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -71,6 +87,7 @@ export const CompanyInfoForm = ({ companyDetail }: CompnayInfoformProps) => {
             <PageHeader title="기본정보" fontSize="regular" color="grey">
               <div>
                 <button
+                  type="button" //not for submit
                   className="fontSize-small rounded-lg border-[0.1rem] border-main px-[0.8rem] py-[0.2rem] text-main"
                   onClick={clickEdit}
                 >
