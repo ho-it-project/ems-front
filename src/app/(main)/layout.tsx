@@ -1,5 +1,6 @@
 import { ContentSection } from "@/components/layout/ContentSection";
 import { LayoutWrapper } from "@/components/layout/LayoutWrapper";
+import { Toaster } from "@/components/ui/toaster";
 import AuthProvider from "@/providers/AuthProvider";
 import LayoutProvider from "@/providers/LayoutProvider";
 import { SWRProvider } from "@/providers/SwrProvider";
@@ -28,6 +29,7 @@ export default function RootLayout({
             <AuthProvider>
               <LayoutWrapper>
                 <ContentSection>{children}</ContentSection>
+                <Toaster />
               </LayoutWrapper>
             </AuthProvider>
           </LayoutProvider>

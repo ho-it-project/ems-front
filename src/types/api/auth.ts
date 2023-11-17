@@ -4,6 +4,7 @@ export type LoginResponse = {
     employee: {
       ambulance_company_id: string;
       employee_id: string;
+      employee_name: string;
       id_card: string;
       role: "ADMIN" | "DRIVER" | "EMERGENCY_MEDICAL_TECHNICIAN" | "DISPATCHER";
     };
