@@ -30,7 +30,7 @@ export type Init<
   : [FetchOptions<FilterKeys<paths[P], M>>];
 
 /** Response types of Path P */
-type PathResponses<
+export type PathResponses<
   P extends keyof paths,
   M extends PathMethod<P>,
 > = paths[P][M] extends {

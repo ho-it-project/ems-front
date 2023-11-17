@@ -4,8 +4,10 @@ import { useGetApi } from "./api";
 
 export const useCompanyDetailQuery = () => {
   const { user } = useAuth();
+
   const { data: detailData, error: detailErr } = useGetApi(
     "/ems/ambulance-companies/{ems_ambulance_company_id}",
+    true,
     {
       params: {
         path: {
@@ -14,9 +16,13 @@ export const useCompanyDetailQuery = () => {
       },
     }
   );
-  const { data: adminData, error: adminErr } = useGetApi("/ems/employees", {
-    params: { query: { query: { role: ["ADMIN"] } } },
-  });
+  const { data: adminData, error: adminErr } = useGetApi(
+    "/ems/employees",
+    true,
+    {
+      params: { query: { query: { role: ["ADMIN"] } } },
+    }
+  );
 
   if (!detailData || !adminData)
     return { data: undefined, error: { detailErr, adminErr } };

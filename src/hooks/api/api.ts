@@ -1,19 +1,22 @@
-import { client } from "@/lib/api";
 import { Init, MethodPaths, Response } from "@/types/api";
-import { paths } from "@/types/api/api";
 import {
   ApiResponse,
   ErrorResponse,
   PathMethod,
   SuccessResponse,
 } from "@/types/api/openapi-type";
+import { Expand } from "@/types/util";
 import { env } from "process";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
+import { useLoading } from "../useLoading";
+import { client } from "./../../lib/api";
+import { paths } from "./../../types/api/api.d";
 
 function commonLogic<P extends keyof paths, M extends PathMethod<P>>(
   data: ApiResponse<P, M>,
   error: unknown
-): Response<P, M> {
+): Expand<Response<P, M>> {
   if (data && "statusCode" in data) {
     if (env.NEXT_PUBLIC_NODE_ENV == "dev") throw new Error(data.message);
     else return { data: undefined, error: undefined };
@@ -32,68 +35,118 @@ function commonLogic<P extends keyof paths, M extends PathMethod<P>>(
 }
 export function useGetApi<P extends MethodPaths<"get">>(
   url: P,
+  useLoader: boolean,
   ...init: Init<"get", P>
 ) {
-  const { data: data_, error } = useSWR(
-    { url, init },
-    async (obj: { url: P; init: Init<"get", P> }) => {
-      const { data, error } = await client.GET(obj.url, ...init);
-      if (error) throw new Error(error as string);
-      return data;
-    }
-  );
-  const data = data_ as ApiResponse<P, "get">; //모든 response는 Success | Fail정보를 따름
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [data, setData] = useState<Expand<Response<P, "get">>>();
+  const loader = useLoading();
 
-  return commonLogic<P, "get">(data, error);
+  const {
+    data: data_,
+    error,
+    isLoading: isLoadingSWR,
+  } = useSWR({ url, init }, async (obj: { url: P; init: Init<"get", P> }) => {
+    const { data, error } = await client.GET(obj.url, ...init);
+    if (error) throw new Error(error as string);
+    return data;
+  });
+
+  useEffect(() => {
+    if (!isLoadingSWR && data_)
+      setData(commonLogic<P, "get">(data_ as ApiResponse<P, "get">, error));
+    if (useLoader) isLoadingSWR ? loader.on() : loader.off();
+    setIsLoading(isLoadingSWR);
+  }, [isLoadingSWR, data_]);
+
+  // const data = data_ as ApiResponse<P, "get">; //모든 response는 Success | Fail정보를 따름
+  return { isLoading, ...data };
 }
 
 export function usePostApi<P extends MethodPaths<"post">>(
   url: P,
-  ...init: Init<"post", P>
+  useLoader: boolean = true
 ) {
-  const { data: data_, error } = useSWR(
-    { url, init },
-    async (obj: { url: P; init: Init<"post", P> }) => {
-      const { data, error } = await client.POST(obj.url, ...init);
-      if (error) throw new Error(error as string);
-      return data;
-    }
-  );
-  const data = data_ as ApiResponse<P, "post">; //모든 response는 Success | Fail정보를 따름
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [data, setData] = useState<Expand<Response<P, "post">>>();
+  const loader = useLoading();
+  const mutation = async (...body: Init<"post", P>) => {
+    if (useLoader) loader.on();
+    setIsLoading(true);
 
-  return commonLogic<P, "post">(data, error);
+    const { data: data_, error } = await client.POST(url, ...body);
+    const data = data_ as ApiResponse<P, "post">; //모든 response는 Success | Fail정보를 따름
+
+    setData(commonLogic<P, "post">(data, error));
+
+    if (useLoader) loader.off();
+    setIsLoading(false);
+  };
+  return { mutation, isLoading, ...data };
 }
 
 export function usePatchApi<P extends MethodPaths<"patch">>(
   url: P,
-  ...init: Init<"patch", P>
+  useLoader: boolean = true
 ) {
-  const { data: data_, error } = useSWR(
-    { url, init },
-    async (obj: { url: P; init: Init<"patch", P> }) => {
-      const { data, error } = await client.PATCH(obj.url, ...init);
-      if (error) throw new Error(error as string);
-      return data;
-    }
-  );
-  const data = data_ as ApiResponse<P, "patch">; //모든 response는 Success | Fail정보를 따름
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [data, setData] = useState<Expand<Response<P, "patch">>>();
+  const loader = useLoading();
+  const mutation = async (...body: Init<"patch", P>) => {
+    if (useLoader) loader.on();
+    setIsLoading(true);
 
-  return commonLogic<P, "patch">(data, error);
+    const { data: data_, error } = await client.PATCH(url, ...body);
+    const data = data_ as ApiResponse<P, "patch">; //모든 response는 Success | Fail정보를 따름
+
+    setData(commonLogic<P, "patch">(data, error));
+
+    if (useLoader) loader.off();
+    setIsLoading(false);
+  };
+  return { mutation, isLoading, ...data };
 }
 
 export function usePutApi<P extends MethodPaths<"put">>(
   url: P,
-  ...init: Init<"put", P>
+  useLoader: boolean = true
 ) {
-  const { data: data_, error } = useSWR(
-    { url, init },
-    async (obj: { url: P; init: Init<"put", P> }) => {
-      const { data, error } = await client.PUT(obj.url, ...init);
-      if (error) throw new Error(error as string);
-      return data;
-    }
-  );
-  const data = data_ as ApiResponse<P, "put">; //모든 response는 Success | Fail정보를 따름
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [data, setData] = useState<Expand<Response<P, "put">>>();
+  const loader = useLoading();
+  const mutation = async (...body: Init<"put", P>) => {
+    if (useLoader) loader.on();
+    setIsLoading(true);
 
-  return commonLogic<P, "put">(data, error);
+    const { data: data_, error } = await client.PUT(url, ...body);
+    const data = data_ as ApiResponse<P, "put">; //모든 response는 Success | Fail정보를 따름
+
+    setData(commonLogic<P, "put">(data, error));
+
+    if (useLoader) loader.off();
+    setIsLoading(false);
+  };
+  return { mutation, isLoading, ...data };
 }
+
+export const delayTest = (ms: number) => {
+  return new Promise((resolve) =>
+    setTimeout(() => {
+      resolve(ms);
+    }, ms)
+  );
+};
+
+/*
+  backup: 1117
+export const usePatchApi =
+  <P extends MethodPaths<"patch">>(url: P) =>
+  async (...body: Init<"patch", P>) => {
+    const { data: data_, error } = await client.PATCH(url, ...body);
+    if (error) throw new Error(error as string);
+
+    const data = data_ as ApiResponse<P, "patch">; //모든 response는 Success | Fail정보를 따름
+
+    return commonLogic<P, "patch">(data, error);
+  };
+  */
