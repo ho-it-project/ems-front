@@ -1,5 +1,4 @@
 import { useAuth } from "@/providers/AuthProvider";
-import _ from "lodash";
 import { useGetApi } from "./api";
 
 export const useCompanyDetailQuery = () => {
@@ -16,31 +15,30 @@ export const useCompanyDetailQuery = () => {
       },
     }
   );
-  const { data: adminData, error: adminErr } = useGetApi(
+  const { data: employeeData, error: adminErr } = useGetApi(
     "/ems/employees",
     true,
     {
-      params: { query: { query: { role: ["ADMIN"] } } },
+      params: { query: { query: {} } },
     }
   );
 
-  if (!detailData || !adminData)
+  if (!detailData || !employeeData)
     return { data: undefined, error: { detailErr, adminErr } };
 
   if (detailErr || adminErr)
     return { data: undefined, error: { detailErr, adminErr } };
 
-  const admin_employee_name = adminData.result.employee_list[0].employee_name;
+  const admin_employee_name = employeeData.result.employee_list.filter(
+    (v) => v.role === "ADMIN"
+  )[0].employee_name;
 
   return {
     data: {
-      ..._.pick(detailData.result, [
-        "ambulance_company_name",
-        "ambulance_company_address",
-        "ambulance_company_area",
-        "ambulance_company_phone",
-      ]),
+      ...detailData.result,
       admin_name: admin_employee_name,
+      employee_count: employeeData.result.employee_list.length.toString(),
+      ambulance_count: detailData.result.ambulances.length.toString(),
     },
     error: undefined,
   };
