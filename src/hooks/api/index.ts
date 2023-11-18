@@ -1,2 +1,2 @@
-export * from "./ambulance_company";
 export * from "./api";
+export * from "./useCompanyInfo";

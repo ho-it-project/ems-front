@@ -344,6 +344,55 @@ export interface paths {
       };
     };
   };
+  "/ems/employees/{employee_id}": {
+    /**
+     * 2023-11-18 직원삭제 API
+     * @description 직원 삭제 API
+     *
+     * 직원을 삭제하는 API입니다.
+     * ADMIN 권한이 필요합니다.
+     *
+     * 필수값 : [employee_id]
+     * employee_id는 삭제할 직원의 id입니다. (id_card가 아닙니다.)
+     * ADMIN 권한이 있어야 삭제할 수 있습니다.
+     *
+     * 삭제된 직원은 복구할 수 없습니다.
+     * admin은 삭제할 수 없습니다. (초기관리자)
+     */
+    put: {
+      parameters: {
+        path: {
+          employee_id: string;
+        };
+      };
+      responses: {
+        /** @description 직원 삭제 성공 여부 */
+        201: {
+          content: {
+            "application/json": components["schemas"]["ResponseDTO_lt__doublequote_SUCCESS_doublequote__gt_"];
+          };
+        };
+        /** @description EMS_EMPLOYEE_ERROR.EMPLOYEE_ADMIN_NOT_DELETE */
+        400: {
+          content: {
+            "application/json": components["schemas"]["EMS_EMPLOYEE_ERROR.EMPLOYEE_ADMIN_NOT_DELETE"];
+          };
+        };
+        /** @description AUTH_ERROR.FORBIDDEN */
+        403: {
+          content: {
+            "application/json": components["schemas"]["AUTH_ERROR.FORBIDDEN"];
+          };
+        };
+        /** @description EMS_EMPLOYEE_ERROR.EMPLOYEE_NOT_FOUND */
+        404: {
+          content: {
+            "application/json": components["schemas"]["EMS_EMPLOYEE_ERROR.EMPLOYEE_NOT_FOUND"];
+          };
+        };
+      };
+    };
+  };
   "/ems/patients": {
     /**
      * 2023-10-06 - 환자 목록 조회 API
@@ -2271,6 +2320,14 @@ export interface components {
     "EmsEmployeeResponse.UpdatePassword": {
       update_success: boolean;
     };
+    "EMS_EMPLOYEE_ERROR.EMPLOYEE_ADMIN_NOT_DELETE": {
+      /** @enum {string} */
+      message: "EMPLOYEE_ADMIN_NOT_DELETE";
+      /** @enum {boolean} */
+      is_success: false;
+      /** @enum {number} */
+      http_status_code: 400;
+    };
     "EmsPatientRequest.CreatePatientDTO": {
       /**
        * 환자 이름
@@ -2331,7 +2388,7 @@ export interface components {
        * @description 환자의 상태를 입력하세요
        * @enum {string}
        */
-      patient_severity: "SEVERE" | "MILD" | "NONE" | "UNKNOW";
+      patient_severity: "UNKNOWN" | "SEVERE" | "MILD" | "NONE";
       /**
        * 환자 응급사유
        * @description 환자의 응급사유를 입력하세요
@@ -2388,7 +2445,7 @@ export interface components {
       /** @enum {string} */
       search_type?: "patient_name" | "patient_birth" | "patient_phone";
       patient_status?: ("PENDING" | "REQUESTED" | "ACCEPTED" | "CANCELED" | "COMPLETED")[];
-      patient_severity?: ("SEVERE" | "MILD" | "NONE" | "UNKNOW")[];
+      patient_severity?: ("UNKNOWN" | "SEVERE" | "MILD" | "NONE")[];
       patient_emergency_cause?: ("TRAFFIC_ACCIDENT" | "FIRE" | "CRIMINAL" | "DISASTER" | "DISEASE" | "OTHER")[];
       /** @enum {string} */
       gender?: "FEMALE" | "MALE";
@@ -2438,7 +2495,7 @@ export interface components {
     /** @enum {string} */
     Gender: "FEMALE" | "MALE";
     /** @enum {string} */
-    ems_Severity: "SEVERE" | "MILD" | "NONE" | "UNKNOW";
+    ems_Severity: "UNKNOWN" | "SEVERE" | "MILD" | "NONE";
     /** @enum {string} */
     ems_IncidentCause: "TRAFFIC_ACCIDENT" | "FIRE" | "CRIMINAL" | "DISASTER" | "DISEASE" | "OTHER";
     /** @enum {string} */
@@ -3942,7 +3999,7 @@ export interface components {
       search_type?: "patient_name" | "ambulance_company_name" | "patient_symptom_summary";
       request_status?: ("REQUESTED" | "ACCEPTED" | "CANCELED" | "COMPLETED" | "VIEWED" | "REJECTED")[];
       patient_gender?: ("FEMALE" | "MALE")[];
-      patient_severity?: ("SEVERE" | "MILD" | "NONE" | "UNKNOW")[];
+      patient_severity?: ("UNKNOWN" | "SEVERE" | "MILD" | "NONE")[];
       /** Format: date-time */
       request_start_date?: string;
     };
@@ -4007,6 +4064,7 @@ export interface components {
     };
     "EmsAuth.AccessTokenSignPayload.Nullable": {
       ambulance_company_id: string;
+      employee_name: string;
       employee_id: string;
       id_card: string;
       role: components["schemas"]["ems_EmployeeRole"];
@@ -4050,6 +4108,7 @@ export interface components {
     };
     "EmsAuth.AccessTokenSignPayload": {
       ambulance_company_id: string;
+      employee_name: string;
       employee_id: string;
       id_card: string;
       role: components["schemas"]["ems_EmployeeRole"];
@@ -4079,6 +4138,7 @@ export interface components {
     "ErAuth.AccessTokenSignPayload.Nullable": {
       hospital_id: string;
       emergency_center_id: string;
+      employee_name: string;
       employee_id: string;
       id_card: string;
       role: components["schemas"]["er_EmployeeRole"];
@@ -4111,6 +4171,7 @@ export interface components {
     "ErAuth.AccessTokenSignPayload": {
       hospital_id: string;
       emergency_center_id: string;
+      employee_name: string;
       employee_id: string;
       id_card: string;
       role: components["schemas"]["er_EmployeeRole"];

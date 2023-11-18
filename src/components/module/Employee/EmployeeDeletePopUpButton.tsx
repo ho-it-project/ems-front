@@ -48,7 +48,10 @@ export const EmployeeDeletePopUpButton = ({
             <div className="flex justify-center">
               <button
                 className="rounded-lg bg-main px-[9.5rem] py-[0.9rem] text-white"
-                onClick={onSubmmit}
+                onClick={() => {
+                  onSubmmit?.();
+                  onClickClose();
+                }}
               >
                 삭제
               </button>

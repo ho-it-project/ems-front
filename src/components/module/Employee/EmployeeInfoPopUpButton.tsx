@@ -1,6 +1,7 @@
 "use clinet";
 import { Input } from "@/components/elements/Input";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { EmployeeRole } from "@/types/model/employee";
 import Image from "next/image";
 import React, { useState } from "react";
 import { TabModalWrapper } from "../common/TabModalWrapper";
@@ -10,24 +11,21 @@ interface EmployeeInfoPopUpButtonProps {
   onSubmmit?: () => void;
   submitButtonName?: string;
   employee?: {
-    name: string;
+    employee_name: string;
     role: string;
-    id: string;
-    password: string;
+    id_card: string;
   };
   type?: "add" | "edit";
 }
 
 export const EmployeeInfoPopUpButton = ({
   title,
-  onSubmmit,
   employee = {
-    name: "",
+    employee_name: "",
     role: "",
-    id: "",
-    password: "",
+    id_card: "",
   },
-  submitButtonName = "추가하기",
+  submitButtonName = "수정하기",
   type = "add",
 }: EmployeeInfoPopUpButtonProps) => {
   const [open, setOpen] = React.useState(false);
@@ -35,18 +33,32 @@ export const EmployeeInfoPopUpButton = ({
     setOpen(true);
   };
   const onClickClose = () => {
+    setEmployeeInfo(employee);
     setOpen(false);
   };
   const [employeeInfo, setEmployeeInfo] = useState(employee);
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const roles: Array<EmployeeRole> = [
+    "ADMIN",
+    "DISPATCHER",
+    "DRIVER",
+    "EMERGENCY_MEDICAL_TECHNICIAN",
+  ];
+
+  const onChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
+    console.log(name, value);
     setEmployeeInfo({
       ...employeeInfo,
       [name]: value,
     });
     console.log(employeeInfo);
   };
+
+  const onSubmit = () => {};
+
   const trigger =
     type === "add" ? (
       <DialogTrigger
@@ -93,15 +105,15 @@ export const EmployeeInfoPopUpButton = ({
                       </div>
                       <Input
                         placeholder="이름"
-                        value={employeeInfo.name || ""}
-                        name="name"
+                        value={employeeInfo.employee_name || ""}
+                        name="employee_name"
                         onChange={onChange}
                       />
                     </div>
                     <div className="flex items-start justify-end">
                       <button
                         className="fontSize-small rounded-lg bg-main px-[4rem] py-[1.2rem] text-white"
-                        onClick={onSubmmit}
+                        onClick={onSubmit}
                       >
                         {submitButtonName}
                       </button>
@@ -110,26 +122,38 @@ export const EmployeeInfoPopUpButton = ({
                       <div className="fontSize-medium flex min-w-[8rem] flex-1 ">
                         역할
                       </div>
-                      <Input
+                      <select
+                        name="role"
+                        onChange={onChange}
+                        value={employeeInfo.role}
+                        className="fontSize-medium gap-[1.6rem] rounded-[0.8rem] border border-main bg-white px-[1.6rem] py-[0.8rem] text-center text-black"
+                      >
+                        {roles.map((item) => (
+                          <option value={item} key={item}>
+                            {item}
+                          </option>
+                        ))}
+                      </select>
+                      {/* <Input
                         placeholder="역할로 바꿔야함"
                         value={employeeInfo.role || ""}
                         name="role"
                         onChange={onChange}
-                      />
+                      /> */}
                     </div>
-                    <div className="mt-[2rem] flex items-center justify-between  gap-[0.8rem]"></div>
+                    {/* <div className="mt-[2rem] flex items-center justify-between  gap-[0.8rem]"></div> */}
                     <div className="col-span-2 mt-[2rem] flex items-center gap-[0.8rem]">
                       <div className="fontSize-medium flex  min-w-[8rem] ">
                         ID
                       </div>
                       <Input
                         placeholder="ID를 입력하세요"
-                        value={employeeInfo.id || ""}
-                        name="id"
+                        value={employeeInfo.id_card || ""}
+                        name="id_card"
                         onChange={onChange}
                       />
                     </div>
-                    <div className="col-span-2 mt-[2rem] flex items-center justify-between  gap-[0.8rem]">
+                    {/* <div className="col-span-2 mt-[2rem] flex items-center justify-between  gap-[0.8rem]">
                       <div className="fontSize-medium flex  min-w-[8rem] flex-1 ">
                         비밀번호
                       </div>
@@ -139,7 +163,7 @@ export const EmployeeInfoPopUpButton = ({
                         name="password"
                         onChange={onChange}
                       />
-                    </div>
+                    </div> */}
                   </div>
                 </>
               ),
