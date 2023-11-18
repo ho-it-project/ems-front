@@ -4,13 +4,7 @@ import { EmployeePrototype } from "@/components/prototypes/Employee";
 export default function Home() {
   return (
     <TabWrapper
-      contents={[
-        { title: "직원관리", content: <EmployeePrototype /> },
-        {
-          title: "test",
-          content: <div />,
-        },
-      ]}
+      contents={[{ title: "직원관리", content: <EmployeePrototype /> }]}
     />
   );
 }

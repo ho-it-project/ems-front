@@ -39,6 +39,15 @@ export type PathResponses<
   ? paths[P][M]["responses"]
   : never;
 
+export type PathQuery<
+  P extends keyof paths,
+  M extends PathMethod<P>,
+> = paths[P][M] extends {
+  parameters: { query: { query: infer A } };
+}
+  ? A
+  : undefined;
+
 type successCode = 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 226;
 
 /** Scheme of Success Response */

@@ -46,6 +46,7 @@ export function useGetApi<P extends MethodPaths<"get">>(
     data: data_,
     error,
     isLoading: isLoadingSWR,
+    mutate,
   } = useSWR({ url, init }, async (obj: { url: P; init: Init<"get", P> }) => {
     const { data, error } = await client.GET(obj.url, ...init);
     if (error) throw new Error(error as string);
@@ -60,7 +61,7 @@ export function useGetApi<P extends MethodPaths<"get">>(
   }, [isLoadingSWR, data_]);
 
   // const data = data_ as ApiResponse<P, "get">; //모든 response는 Success | Fail정보를 따름
-  return { isLoading, ...data };
+  return { isLoading, refetch: mutate, ...data };
 }
 
 export function usePostApi<P extends MethodPaths<"post">>(
@@ -72,19 +73,21 @@ export function usePostApi<P extends MethodPaths<"post">>(
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<Expand<Response<P, "post">>>();
   const loader = useLoading();
-  const mutation = async (...body: Init<"post", P>) => {
+  const mutate = async (...body: Init<"post", P>) => {
     if (options?.useLoader) loader.on();
     setIsLoading(true);
 
     const { data: data_, error } = await client.POST(url, ...body);
     const data = data_ as ApiResponse<P, "post">; //모든 response는 Success | Fail정보를 따름
 
-    setData(commonLogic<P, "post">(data, error));
+    const result = commonLogic<P, "post">(data, error);
+    setData(result);
 
     if (options?.useLoader) loader.off();
     setIsLoading(false);
+    return result;
   };
-  return { mutation, isLoading, ...data };
+  return { mutate, isLoading, ...data };
 }
 
 export function usePatchApi<P extends MethodPaths<"patch">>(
@@ -96,19 +99,21 @@ export function usePatchApi<P extends MethodPaths<"patch">>(
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<Expand<Response<P, "patch">>>();
   const loader = useLoading();
-  const mutation = async (...body: Init<"patch", P>) => {
+  const mutate = async (...body: Init<"patch", P>) => {
     if (options?.useLoader) loader.on();
     setIsLoading(true);
 
     const { data: data_, error } = await client.PATCH(url, ...body);
     const data = data_ as ApiResponse<P, "patch">; //모든 response는 Success | Fail정보를 따름
 
-    setData(commonLogic<P, "patch">(data, error));
+    const result = commonLogic<P, "patch">(data, error);
+    setData(result);
 
     if (options?.useLoader) loader.off();
     setIsLoading(false);
+    return result;
   };
-  return { mutation, isLoading, ...data };
+  return { mutate, isLoading, ...data };
 }
 
 export function usePutApi<P extends MethodPaths<"put">>(
@@ -120,19 +125,21 @@ export function usePutApi<P extends MethodPaths<"put">>(
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<Expand<Response<P, "put">>>();
   const loader = useLoading();
-  const mutation = async (...body: Init<"put", P>) => {
+  const mutate = async (...body: Init<"put", P>) => {
     if (options?.useLoader) loader.on();
     setIsLoading(true);
 
     const { data: data_, error } = await client.PUT(url, ...body);
     const data = data_ as ApiResponse<P, "put">; //모든 response는 Success | Fail정보를 따름
 
-    setData(commonLogic<P, "put">(data, error));
+    const result = commonLogic<P, "put">(data, error);
+    setData(result);
 
     if (options?.useLoader) loader.off();
     setIsLoading(false);
+    return result;
   };
-  return { mutation, isLoading, ...data };
+  return { mutate, isLoading, ...data };
 }
 
 export const delayTest = (ms: number) => {
