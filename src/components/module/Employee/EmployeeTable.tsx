@@ -1,4 +1,8 @@
-import { useEmployeeTableQuery } from "@/hooks/api/useEmployee";
+import { usePutApi } from "@/hooks/api";
+import { Response } from "@/types/api";
+import { Employee } from "@/types/model/employee";
+import { useState } from "react";
+import { EmployeeDeletedPopUp } from "./EmployDeletedPopUp";
 import { EmployeeDeletePopUpButton } from "./EmployeeDeletePopUpButton";
 import { EmployeeInfoPopUpButton } from "./EmployeeInfoPopUpButton";
 
@@ -11,8 +15,19 @@ import { EmployeeInfoPopUpButton } from "./EmployeeInfoPopUpButton";
 //   };
 // });
 
-export const EmployeeTable = () => {
-  const { data } = useEmployeeTableQuery();
+export const EmployeeTable = ({
+  data,
+  refetch,
+}: {
+  data: Employee[];
+  refetch: () => unknown;
+}) => {
+  const [deletedData, setDeletedData] =
+    useState<Response<"/ems/employees/{employee_id}", "put">>();
+  const { mutate } = usePutApi("/ems/employees/{employee_id}", {
+    useLoader: true,
+  });
+
   return (
     <div className="flex h-full w-full flex-col">
       <div className="fontSize-small flex rounded-[1rem] border border-main bg-bg py-[0.6rem] pl-[3.2rem] text-main">
@@ -42,7 +57,21 @@ export const EmployeeTable = () => {
                     // employee={{ ...item, password: "" }}
                     employee={{ ...item }}
                   />
-                  <EmployeeDeletePopUpButton />
+                  <EmployeeDeletePopUpButton
+                    onSubmmit={async () => {
+                      const result = await mutate({
+                        params: { path: { employee_id: item.employee_id } },
+                      });
+                      setDeletedData(result);
+                    }}
+                  />
+                  <EmployeeDeletedPopUp
+                    data={deletedData}
+                    onClose={() => {
+                      setDeletedData(undefined);
+                      refetch();
+                    }}
+                  />
                 </div>
               </div>
             );
