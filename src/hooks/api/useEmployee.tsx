@@ -1,9 +1,9 @@
-import { paths } from "@/types/api/api";
+import { PathQuery } from "@/types/api";
 import _ from "lodash";
 import { useGetApi } from ".";
 
 export const useEmployeeTableQuery = (
-  query: paths["/ems/employees"]["get"]["parameters"]["query"]["query"]
+  query: PathQuery<"/ems/employees", "get">
 ) => {
   const { data, error, refetch } = useGetApi(
     "/ems/employees",

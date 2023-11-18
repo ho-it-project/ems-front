@@ -2,13 +2,11 @@
 import { EmployeePageHeader } from "@/components/module/Employee/EmployeePageHeader";
 import { EmployeeTable } from "@/components/module/Employee/EmployeeTable";
 import { useEmployeeTableQuery } from "@/hooks/api/useEmployee";
-import { paths } from "@/types/api/api";
+import { PathQuery } from "@/types/api";
 import { useState } from "react";
 
 export const EmployeeContainer = () => {
-  const [query, setQuery] = useState<
-    paths["/ems/employees"]["get"]["parameters"]["query"]["query"]
-  >({});
+  const [query, setQuery] = useState<PathQuery<"/ems/employees", "get">>({});
   const { data, refetch } = useEmployeeTableQuery(query);
 
   const searchTypeObject = {
