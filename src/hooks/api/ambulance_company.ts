@@ -6,7 +6,7 @@ export const useCompanyDetailQuery = () => {
 
   const { data: detailData, error: detailErr } = useGetApi(
     "/ems/ambulance-companies/{ems_ambulance_company_id}",
-    true,
+    { useLoader: true },
     {
       params: {
         path: {
@@ -17,7 +17,7 @@ export const useCompanyDetailQuery = () => {
   );
   const { data: employeeData, error: adminErr } = useGetApi(
     "/ems/employees",
-    true,
+    { useLoader: true },
     {
       params: { query: { query: {} } },
     }

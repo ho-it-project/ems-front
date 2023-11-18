@@ -35,7 +35,7 @@ function commonLogic<P extends keyof paths, M extends PathMethod<P>>(
 }
 export function useGetApi<P extends MethodPaths<"get">>(
   url: P,
-  useLoader: boolean,
+  { useLoader = true }: { useLoader?: boolean },
   ...init: Init<"get", P>
 ) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -65,13 +65,15 @@ export function useGetApi<P extends MethodPaths<"get">>(
 
 export function usePostApi<P extends MethodPaths<"post">>(
   url: P,
-  useLoader: boolean = true
+  options?: { useLoader?: boolean }
 ) {
+  if (options?.useLoader === undefined) options = { useLoader: true };
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<Expand<Response<P, "post">>>();
   const loader = useLoading();
   const mutation = async (...body: Init<"post", P>) => {
-    if (useLoader) loader.on();
+    if (options?.useLoader) loader.on();
     setIsLoading(true);
 
     const { data: data_, error } = await client.POST(url, ...body);
@@ -79,7 +81,7 @@ export function usePostApi<P extends MethodPaths<"post">>(
 
     setData(commonLogic<P, "post">(data, error));
 
-    if (useLoader) loader.off();
+    if (options?.useLoader) loader.off();
     setIsLoading(false);
   };
   return { mutation, isLoading, ...data };
@@ -87,13 +89,15 @@ export function usePostApi<P extends MethodPaths<"post">>(
 
 export function usePatchApi<P extends MethodPaths<"patch">>(
   url: P,
-  useLoader: boolean = true
+  options?: { useLoader?: boolean }
 ) {
+  if (options?.useLoader === undefined) options = { useLoader: true };
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<Expand<Response<P, "patch">>>();
   const loader = useLoading();
   const mutation = async (...body: Init<"patch", P>) => {
-    if (useLoader) loader.on();
+    if (options?.useLoader) loader.on();
     setIsLoading(true);
 
     const { data: data_, error } = await client.PATCH(url, ...body);
@@ -101,7 +105,7 @@ export function usePatchApi<P extends MethodPaths<"patch">>(
 
     setData(commonLogic<P, "patch">(data, error));
 
-    if (useLoader) loader.off();
+    if (options?.useLoader) loader.off();
     setIsLoading(false);
   };
   return { mutation, isLoading, ...data };
@@ -109,13 +113,15 @@ export function usePatchApi<P extends MethodPaths<"patch">>(
 
 export function usePutApi<P extends MethodPaths<"put">>(
   url: P,
-  useLoader: boolean = true
+  options?: { useLoader?: boolean }
 ) {
+  if (options?.useLoader === undefined) options = { useLoader: true };
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<Expand<Response<P, "put">>>();
   const loader = useLoading();
   const mutation = async (...body: Init<"put", P>) => {
-    if (useLoader) loader.on();
+    if (options?.useLoader) loader.on();
     setIsLoading(true);
 
     const { data: data_, error } = await client.PUT(url, ...body);
@@ -123,7 +129,7 @@ export function usePutApi<P extends MethodPaths<"put">>(
 
     setData(commonLogic<P, "put">(data, error));
 
-    if (useLoader) loader.off();
+    if (options?.useLoader) loader.off();
     setIsLoading(false);
   };
   return { mutation, isLoading, ...data };
