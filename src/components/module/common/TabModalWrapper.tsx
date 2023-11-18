@@ -17,6 +17,7 @@ interface TabWrapperProps {
     titleHeight?: number;
   };
   contentClassName?: HTMLAttributes<HTMLDivElement>["className"];
+  textColor?: BrandColor;
 }
 
 export const TabModalWrapper = ({
@@ -25,6 +26,7 @@ export const TabModalWrapper = ({
   onClickClose,
   style,
   contentClassName,
+  textColor = "main",
 }: TabWrapperProps) => {
   const [rendered, setRendered] = React.useState(false);
   React.useEffect(() => {
@@ -39,7 +41,7 @@ export const TabModalWrapper = ({
   // const headerHeigthClass = `w-[${style?.titleMinWidth ?? 26}rem]`;
 
   return (
-    <div className="fontSize-regular flex flex-col text-main">
+    <div className={`fontSize-regular flex flex-col text-${textColor}`}>
       <div className="h-[4.2rem] w-full">
         <div
           className={cn(

@@ -3,6 +3,7 @@ import { LayoutWrapper } from "@/components/layout/LayoutWrapper";
 import { Toaster } from "@/components/ui/toaster";
 import AuthProvider from "@/providers/AuthProvider";
 import LayoutProvider from "@/providers/LayoutProvider";
+import { LoadingProvider } from "@/providers/LoadingProvider";
 import { SWRProvider } from "@/providers/SwrProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -25,14 +26,16 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className="h-full w-full">
       <body className={`${inter.className} h-full w-full`}>
         <SWRProvider>
-          <LayoutProvider>
-            <AuthProvider>
-              <LayoutWrapper>
-                <ContentSection>{children}</ContentSection>
-                <Toaster />
-              </LayoutWrapper>
-            </AuthProvider>
-          </LayoutProvider>
+          <LoadingProvider>
+            <LayoutProvider>
+              <AuthProvider>
+                <LayoutWrapper>
+                  <ContentSection>{children}</ContentSection>
+                  <Toaster />
+                </LayoutWrapper>
+              </AuthProvider>
+            </LayoutProvider>
+          </LoadingProvider>
         </SWRProvider>
       </body>
     </html>

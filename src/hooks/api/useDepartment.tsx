@@ -11,7 +11,7 @@ export const useDepartment = () => {
     setNoSubDepartments,
   } = useDepartmentStore();
 
-  const { data, error } = useGetApi("/er/departments");
+  const { data, error } = useGetApi("/er/departments", { useLoader: true });
 
   useEffect(() => {
     if (data) {
