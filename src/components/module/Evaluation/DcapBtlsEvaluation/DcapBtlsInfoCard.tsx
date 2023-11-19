@@ -74,7 +74,7 @@ export const DcapBtlsInfoCard = ({
     return (
       <div className="fontSize-medium-l flex w-full max-w-[72rem] flex-col gap-[1.2rem]  rounded-lg bg-white px-[1.6rem] pb-[2.1rem] pt-[1.2rem] text-main ">
         <div className="flex h-full items-center">
-          <button onClick={handlePrevClick}>
+          <button onClick={handlePrevClick} type="button">
             <ChevronLeft className="w-[3rem]" />
           </button>
           <div className="flex gap-[1rem] overflow-hidden " ref={selectBoxRef}>
@@ -101,7 +101,7 @@ export const DcapBtlsInfoCard = ({
               </div>
             ))}
           </div>
-          <button onClick={handleNextClick}>
+          <button onClick={handleNextClick} type="button">
             <ChevronRight className="w-[3rem]" />
           </button>
         </div>
@@ -122,7 +122,7 @@ export const DcapBtlsInfoCard = ({
             value={description}
           />
           <div className="flex flex-col justify-end">
-            <button className="h-fit" onClick={deleteHandler}>
+            <button className="h-fit" onClick={deleteHandler} type="button">
               <div className="flex bg-transparent">
                 <X />
                 삭제
@@ -130,7 +130,7 @@ export const DcapBtlsInfoCard = ({
             </button>
           </div>
           <div className="flex flex-col justify-end">
-            <button className="h-fit" onClick={saveHandler}>
+            <button className="h-fit" onClick={saveHandler} type="button">
               <div className="flex bg-transparent">
                 <Check />
                 저장
@@ -163,18 +163,30 @@ export const DcapBtlsInfoCard = ({
 
   return (
     <div className="fontSize-medium-l w-full max-w-[72rem] text-main">
-      <div className="flex w-full overflow-hidden rounded-lg">
-        <div className="flex h-[8rem] w-[12rem] flex-col justify-center border-r bg-white text-center">
+      <div className="flex min-h-[8rem] w-full overflow-hidden rounded-lg">
+        <div className="flex w-[15rem] flex-col justify-center border-r bg-white px-[3rem] py-[2rem] text-left">
+          <div className="flex flex-col gap-[1rem]">
+            {Object.entries(affect).map((item, index) => {
+              const [key, value] = item;
+              if (value)
+                return (
+                  <div key={index}>
+                    <p>{key}</p>
+                    <p className="fontSize-small-l text-grey">
+                      {DCAP_BTLS_AFFECT_KOR[key as keyof DCAP_BTLS_AFFECT]}
+                    </p>
+                  </div>
+                );
+            })}
+          </div>
+        </div>
+        <div className="flex w-[12rem] flex-col justify-center border-x bg-white p-[2rem] text-center">
           {affected_area === "NONE"
             ? "선택"
             : DCAP_BTLS_AFFECT_AREA_KOR[affected_area]}
         </div>
-        <div className="flex h-[8rem] w-[15rem] flex-col justify-center border-x bg-white p-[2rem] ">
-          <span>Abrasion</span>
-          <span className="text-lgrey">철과상</span>
-        </div>
-        <div className="flex h-[8rem] flex-1 flex-col justify-center border-x bg-white  px-[1.6rem]">
-          <div>타입</div>
+        <div className="flex  flex-1 flex-col justify-center border-x bg-white  px-[1.6rem]">
+          <div className="fontSize-small-l text-black">{description}</div>
         </div>
         <button
           className="w-[6rem] border-l bg-white text-lgrey"

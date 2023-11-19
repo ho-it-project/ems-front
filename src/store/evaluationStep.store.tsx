@@ -2,7 +2,6 @@ import { create } from "zustand";
 
 type EvalutaionStep =
   | "PATIENT_INFO"
-  | "GUARDIAN_INFO"
   | "REPID"
   | "OPQRST"
   | "DCAP_BTLS"
@@ -10,13 +9,14 @@ type EvalutaionStep =
   | "SAMPLE";
 
 interface EvaluationStepStore {
-  now: number;
+  next: number;
   steps: EvalutaionStep[];
   rapidEvaluation: {
     trauma: boolean;
     clear: boolean;
     conscious: boolean;
   };
+  guardian: boolean;
   setSteps: () => void;
   setRapidEvaluation: (
     rapidEvaluation: EvaluationStepStore["rapidEvaluation"]
@@ -25,13 +25,14 @@ interface EvaluationStepStore {
 }
 
 export const useEveluationStepStore = create<EvaluationStepStore>((set) => ({
-  now: 0,
+  next: 0,
   steps: [],
   rapidEvaluation: {
     trauma: false,
     clear: false,
     conscious: false,
   },
+  guardian: false,
   setRapidEvaluation: (
     rapidEvaluation: EvaluationStepStore["rapidEvaluation"]
   ) => set((state) => ({ ...state, rapidEvaluation })),
@@ -40,36 +41,35 @@ export const useEveluationStepStore = create<EvaluationStepStore>((set) => ({
     set((state) => {
       const { rapidEvaluation } = state;
       const { trauma, clear, conscious } = rapidEvaluation;
-
       if (trauma && clear) {
         return {
           ...state,
           steps: ["PATIENT_INFO", "DCAP_BTLS", "VS", "SAMPLE"],
+          guardian: false,
         };
       }
 
       if (trauma && !clear) {
-        return { ...state, steps: ["PATIENT_INFO", "VS", "SAMPLE"] };
+        return {
+          ...state,
+          steps: ["PATIENT_INFO", "VS", "SAMPLE"],
+          guardian: false,
+        };
       }
 
       if (!trauma && conscious) {
         return {
           ...state,
           steps: ["PATIENT_INFO", "OPQRST", "VS", "SAMPLE", "DCAP_BTLS"],
+          guardian: false,
         };
       }
 
       if (!trauma && !conscious) {
         return {
           ...state,
-          steps: [
-            "PATIENT_INFO",
-            "GUARDIAN_INFO",
-            "DCAP_BTLS",
-            "VS",
-            "OPQRST",
-            "SAMPLE",
-          ],
+          steps: ["PATIENT_INFO", "DCAP_BTLS", "VS", "OPQRST", "SAMPLE"],
+          guardian: true,
         };
       }
 
@@ -78,6 +78,6 @@ export const useEveluationStepStore = create<EvaluationStepStore>((set) => ({
 
   nextStep: () =>
     set((state) => {
-      return { ...state, now: state.now + 1 };
+      return { ...state, next: state.next + 1 };
     }),
 }));

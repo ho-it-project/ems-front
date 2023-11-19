@@ -1,6 +1,6 @@
 "use client";
+import { useEvaluationStep } from "@/hooks/useEvaluationStep";
 import { useEveluationStepStore } from "@/store/evaluationStep.store";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { DualChoiceButton } from "../../common/DualChoiceButton";
 
@@ -9,15 +9,9 @@ interface RapidEvaluationFormProps {
 }
 
 export const RapidEvaluationForm = ({ formId }: RapidEvaluationFormProps) => {
-  const {
-    now,
-    steps,
-    setRapidEvaluation,
-    setSteps,
-    nextStep,
-    rapidEvaluation,
-  } = useEveluationStepStore();
-  const router = useRouter();
+  const { setRapidEvaluation, setSteps, rapidEvaluation } =
+    useEveluationStepStore();
+  const { nextPage } = useEvaluationStep();
   const handleTrauma = (isTrauma: boolean) => {
     setRapidEvaluation({
       ...rapidEvaluation,
@@ -41,14 +35,7 @@ export const RapidEvaluationForm = ({ formId }: RapidEvaluationFormProps) => {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const next = steps[now];
-    console.log(next);
-    nextStep();
-    if (next === "PATIENT_INFO") router.push("/patient/");
-    if (next === "DCAP_BTLS") router.push("/patient/dcap-btls");
-    if (next === "VS") router.push("/patient/vs");
-    if (next === "SAMPLE") router.push("/patient/sample");
-    if (next === "OPQRST") router.push("/patient/opqrst");
+    nextPage();
     // 로직 작성 필요
   };
 

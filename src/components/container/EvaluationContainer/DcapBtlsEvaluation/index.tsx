@@ -3,9 +3,13 @@
 import { PageHeader } from "@/components/elements/PageHeader";
 import { DcapBtlsInfoCard } from "@/components/module/Evaluation/DcapBtlsEvaluation/DcapBtlsInfoCard";
 import { ProgressTracker } from "@/components/module/common/ProgressTracker";
+import { useToast } from "@/components/ui/use-toast";
+import { usePatient } from "@/hooks/api/usePatient";
+import { useEvaluationStep } from "@/hooks/useEvaluationStep";
 import { DCAP_BTLS_AFFECT, DCAP_BTLS_AffectArea } from "@/types/evaluation";
 import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 type DCAP_BTLS_Evaluation = {
   affected_area: DCAP_BTLS_AffectArea | "NONE";
@@ -16,6 +20,15 @@ type DCAP_BTLS_Evaluation = {
 
 export const DcapBtlsEvaluaionContainer = () => {
   const FORM_ID = "dcap-btls-form";
+  const { patient } = usePatient();
+  const { toast } = useToast();
+  const router = useRouter();
+  const { nextPage, steps } = useEvaluationStep();
+  useEffect(() => {
+    if (patient && !patient.patient_id) {
+      router.push("/patient/rapid-evaluation");
+    }
+  }, [router, patient]);
   const [dcapBtlsEvaluations, setDcapBtlsEvaluations] = useState<
     DCAP_BTLS_Evaluation[]
   >([]);
@@ -47,6 +60,19 @@ export const DcapBtlsEvaluaionContainer = () => {
     );
   };
   const saveHandler = (index: number) => () => {
+    if (dcapBtlsEvaluations[index].affected_area === "NONE") {
+      toast({ description: "부위를 선택해주세요." });
+      return;
+    }
+    if (
+      Object.entries(dcapBtlsEvaluations[index].affect).filter(
+        (item) => item[1] === true
+      ).length === 0
+    ) {
+      toast({ description: "증상을 선택해주세요." });
+      return;
+    }
+
     setDcapBtlsEvaluations((prev) =>
       prev.map((item, idx) =>
         idx === index ? { ...item, editMode: false } : item
@@ -69,13 +95,23 @@ export const DcapBtlsEvaluaionContainer = () => {
     };
   const selectAffectedAreaHandler =
     (index: number) => (affected_area: DCAP_BTLS_AffectArea | "NONE") => {
+      if (
+        dcapBtlsEvaluations.find(
+          (item, i) =>
+            item.affected_area === affected_area &&
+            index !== i &&
+            item.affected_area !== "NONE"
+        )
+      ) {
+        toast({ description: "이미 선택된 부위입니다." });
+        return;
+      }
       setDcapBtlsEvaluations((prev) =>
         prev.map((item, idx) =>
           idx === index ? { ...item, affected_area } : item
         )
       );
     };
-
   const descriptionHandler =
     (index: number) => (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       const { value } = e.target;
@@ -85,6 +121,73 @@ export const DcapBtlsEvaluaionContainer = () => {
         )
       );
     };
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(dcapBtlsEvaluations);
+    const filtered = dcapBtlsEvaluations.filter(
+      (item) => item.affected_area !== "NONE"
+    );
+    if (filtered.length === 0) {
+      toast({ description: "평가를 진행해주세요." });
+      return;
+    }
+    if (!patient) return;
+
+    const { patient_id } = patient;
+    const bodys = filtered.map((item) => {
+      const { affected_area, affect } = item;
+      const {
+        deformity,
+        contusion,
+        abrasion,
+        puncture,
+        burn,
+        tenderness,
+        laceration,
+        swelling,
+      } = affect;
+
+      //TODO: description 추가
+      return JSON.stringify({
+        affected_area,
+        deformity: deformity.toString(),
+        contusion: contusion.toString(),
+        abrasion: abrasion.toString(),
+        puncture: puncture.toString(),
+        burn: burn.toString(),
+        tenderness: tenderness.toString(),
+        laceration: laceration.toString(),
+        swelling: swelling.toString(),
+      });
+    });
+    const responses = await Promise.all(
+      bodys.map(async (body) => {
+        return await fetch(`/api/ems/patients/${patient_id}/dcap_btls`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body,
+        })
+          .then((res) => res.json())
+          .then((res: { is_success: boolean }) => {
+            console.log(res);
+            return res.is_success;
+          });
+      })
+    );
+    const isSuccess = responses.every((item) => item === true);
+    const faildIndex = responses.findIndex((item) => item === false || !item);
+    if (isSuccess) {
+      if (steps.length === 0) {
+        router.push("/request");
+      }
+      nextPage();
+    } else {
+      toast({ description: `${faildIndex + 1}번째 평가를 실패하였습니다.` });
+    }
+  };
 
   return (
     <div className="h-full w-full">
@@ -110,7 +213,11 @@ export const DcapBtlsEvaluaionContainer = () => {
         </PageHeader>
         <div className="h-full flex-1 overflow-scroll">
           <div className="m-auto max-w-[72rem]">
-            <div className="flex  h-full w-full max-w-[72rem] flex-col items-center gap-[1rem] ">
+            <form
+              className="flex  h-full w-full max-w-[72rem] flex-col items-center gap-[1rem]"
+              id={FORM_ID}
+              onSubmit={onSubmit}
+            >
               {dcapBtlsEvaluations.map((dcapBtlsEvaluation, index) => {
                 return (
                   <DcapBtlsInfoCard
@@ -133,11 +240,12 @@ export const DcapBtlsEvaluaionContainer = () => {
                 <button
                   className="flex h-[3.6rem] w-[6rem] items-center justify-center rounded-full bg-main text-white opacity-30"
                   onClick={addHandler}
+                  type="button"
                 >
                   <Plus width={24} />
                 </button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
         <ProgressTracker

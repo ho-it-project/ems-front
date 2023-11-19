@@ -1,6 +1,11 @@
 "use client";
 import { Form, FormField } from "@/components/ui/form";
+import { useToast } from "@/components/ui/use-toast";
+import { usePatient } from "@/hooks/api/usePatient";
+import { useEvaluationStep } from "@/hooks/useEvaluationStep";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -91,6 +96,12 @@ interface OpqrstEvaluationFormProps {
 }
 
 export const OpqrstEvaluationForm = ({ formId }: OpqrstEvaluationFormProps) => {
+  const { toast } = useToast();
+  const { patient } = usePatient();
+  const router = useRouter();
+
+  const { nextPage, steps } = useEvaluationStep();
+
   const form = useForm<z.infer<typeof opqrstEvaluationSchema>>({
     resolver: zodResolver(opqrstEvaluationSchema),
     defaultValues: {
@@ -104,12 +115,76 @@ export const OpqrstEvaluationForm = ({ formId }: OpqrstEvaluationFormProps) => {
       minute: 0,
     },
   });
-  function onSubmit(values: z.infer<typeof opqrstEvaluationSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  const onSubmit = async () => {
+    const opqrstEvaluation = form.getValues();
+    const { onset, provoke, quality, radiation, severity, date, hour, minute } =
+      opqrstEvaluation;
+
+    if (onset.length === 0) {
+      toast({ description: "Onset을 입력해주세요" });
+      return;
+    }
+    if (provoke.length === 0) {
+      toast({ description: "Provoke를 입력해주세요" });
+      return;
+    }
+    if (quality.length === 0) {
+      toast({ description: "Quality를 입력해주세요" });
+      return;
+    }
+    if (radiation.length === 0) {
+      toast({ description: "Radiation을 입력해주세요" });
+      return;
+    }
+    if (date === null) {
+      toast({ description: "시간을 입력해주세요" });
+      return;
+    }
+
+    const body = JSON.stringify({
+      onset,
+      provocation: provoke,
+      quality,
+      radiation,
+      severity: Number(severity),
+      time: new Date(
+        `${date.getFullYear()}-${
+          date.getMonth() + 1
+        }-${date.getDate()} ${hour}:${minute}`
+      ).toISOString(),
+    });
+    console.log(body);
+    if (!patient) return;
+    fetch(`/api/ems/patients/${patient.patient_id}/opqrst`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body,
+    })
+      .then((res) => res.json())
+      .then((res: { is_success: boolean }) => {
+        if (res.is_success) {
+          if (steps.length) {
+            toast({ description: "OPQRST 평가가 완료되었습니다." });
+            nextPage();
+            return;
+          }
+          router.push("/request");
+          return;
+        }
+
+        toast({ description: "OPQRST 평가에 실패하였습니다." });
+      });
     // 로직 작성 필요
-  }
+  };
+
+  useEffect(() => {
+    if (patient && !patient.patient_id) {
+      router.push("/patient/rapid-evaluation");
+    }
+  }, [patient, router]);
+
   return (
     <div className="w-full max-w-[63.4rem]">
       <Form {...form}>

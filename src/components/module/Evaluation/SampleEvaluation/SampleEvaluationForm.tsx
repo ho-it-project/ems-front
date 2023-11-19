@@ -1,6 +1,11 @@
 "use client";
 import { Form } from "@/components/ui/form";
+import { useToast } from "@/components/ui/use-toast";
+import { usePatient } from "@/hooks/api/usePatient";
+import { useEvaluationStep } from "@/hooks/useEvaluationStep";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { EvaluationQuestionType, Question } from "./Question";
@@ -80,6 +85,11 @@ interface OpqrstEvaluationFormProps {
 }
 
 export const SampleEvaluationForm = ({ formId }: OpqrstEvaluationFormProps) => {
+  const { toast } = useToast();
+  const { nextPage, steps } = useEvaluationStep();
+  const router = useRouter();
+  const { patient } = usePatient();
+
   const form = useForm<z.infer<typeof opqrstEvaluationSchema>>({
     resolver: zodResolver(opqrstEvaluationSchema),
     defaultValues: {
@@ -95,17 +105,93 @@ export const SampleEvaluationForm = ({ formId }: OpqrstEvaluationFormProps) => {
       },
     },
   });
-  function onSubmit(values: z.infer<typeof opqrstEvaluationSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-    // 로직 작성 필요
-  }
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const {
+      symptoms,
+      allergies,
+      medications,
+      pastHistory,
+      lastOralIntake,
+      events,
+    } = form.getValues();
+
+    if (!symptoms.length) {
+      toast({ description: "Symptoms를 입력해주세요" });
+      return;
+    }
+    if (!allergies.length) {
+      toast({ description: "Allergies를 입력해주세요" });
+      return;
+    }
+    if (!medications.length) {
+      toast({ description: "Medications를 입력해주세요" });
+      return;
+    }
+    if (!pastHistory.length) {
+      toast({ description: "Past Medical History를 입력해주세요" });
+      return;
+    }
+    if (!events.length) {
+      toast({ description: "Events preceding the incident를 입력해주세요" });
+      return;
+    }
+    if (!lastOralIntake.date) {
+      toast({ description: "Last Oral Intake를 입력해주세요" });
+      return;
+    }
+
+    const body = JSON.stringify({
+      signs_symptoms: symptoms,
+      allergies,
+      medications,
+      past_medical_history: pastHistory,
+      last_oral_intake: new Date(
+        `${lastOralIntake.date.getFullYear()}-${
+          lastOralIntake.date.getMonth() + 1
+        }-${lastOralIntake.date.getDate()} ${lastOralIntake.hour}:${
+          lastOralIntake.minute
+        }`
+      ).toISOString(),
+      events_leading_to_illness: events,
+    });
+    if (!patient) {
+      return;
+    }
+
+    fetch(`/api/ems/patients/${patient.patient_id}/sample`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body,
+    })
+      .then((res) => res.json())
+      .then((res: { is_success: boolean }) => {
+        if (res.is_success) {
+          if (steps.length) {
+            nextPage();
+            return;
+          }
+          router.push("/request");
+          return;
+        }
+
+        toast({ description: "sample 평가에 실패했습니다." });
+      });
+  };
+
+  useEffect(() => {
+    if (patient && !patient.patient_id) {
+      router.push("/patient/rapid-evaluation");
+    }
+  }, [patient, router]);
+
   return (
     <div className="w-full max-w-[63.4rem]">
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={onSubmit}
           aria-controls="opqrst_evaluation_form"
           id={formId}
           className="flex flex-col gap-[2rem]"
@@ -113,7 +199,6 @@ export const SampleEvaluationForm = ({ formId }: OpqrstEvaluationFormProps) => {
           {evaluationQuestionInputList.map((question, index) => {
             return <Question question={question} form={form} key={index} />;
           })}
-
         </form>
       </Form>
     </div>
