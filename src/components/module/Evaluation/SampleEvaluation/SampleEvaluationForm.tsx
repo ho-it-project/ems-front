@@ -105,7 +105,8 @@ export const SampleEvaluationForm = ({ formId }: OpqrstEvaluationFormProps) => {
       },
     },
   });
-  const onSubmit = async () => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const {
       symptoms,
       allergies,
@@ -190,7 +191,7 @@ export const SampleEvaluationForm = ({ formId }: OpqrstEvaluationFormProps) => {
     <div className="w-full max-w-[63.4rem]">
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={onSubmit}
           aria-controls="opqrst_evaluation_form"
           id={formId}
           className="flex flex-col gap-[2rem]"

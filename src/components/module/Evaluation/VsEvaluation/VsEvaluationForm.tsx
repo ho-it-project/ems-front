@@ -1,6 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
+import { usePatient } from "@/hooks/api/usePatient";
+import { useEvaluationStep } from "@/hooks/useEvaluationStep";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { SymptomLabel } from "../../common/SymptomLabeledInput";
 import { Steper } from "../../common/Tapper";
 
@@ -9,6 +13,11 @@ interface VsEvalutaionFormProps {
 }
 
 export const VsEvalutaionForm = ({ formId }: VsEvalutaionFormProps) => {
+  const { patient } = usePatient();
+  const router = useRouter();
+  const { toast } = useToast();
+  const { nextPage, steps } = useEvaluationStep();
+
   const [temperature, setTemperature] = useState<string>("36.5");
   const [heartRate, setHeartRate] = useState<number>(80);
   const [respiration, setRespiration] = useState<number>(12);
@@ -19,6 +28,58 @@ export const VsEvalutaionForm = ({ formId }: VsEvalutaionFormProps) => {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (temperature === "" || temperature === "-") {
+      toast({ description: "체온을 입력해주세요" });
+      return;
+    }
+    if (heartRate === 0) {
+      toast({ description: "맥박을 입력해주세요" });
+      return;
+    }
+    if (respiration === 0) {
+      toast({ description: "호흡수를 입력해주세요" });
+      return;
+    }
+    if (systolicBloodPressure === 0) {
+      toast({ description: "수축기 혈압을 입력해주세요" });
+      return;
+    }
+    if (diastolicBloodPressure === 0) {
+      toast({ description: "이완기 혈압을 입력해주세요" });
+      return;
+    }
+    if (!patient) {
+      return;
+    }
+    const body = JSON.stringify({
+      heart_rate: heartRate,
+      respiratory_rate: respiration,
+      systolic_blood_pressure: systolicBloodPressure,
+      diastolic_blood_pressure: diastolicBloodPressure,
+      temperature: Number(temperature),
+    });
+    fetch(`/api/ems/patients/${patient.patient_id}/vs`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body,
+    })
+      .then((res) => res.json())
+      .then((res: { is_success: boolean }) => {
+        if (res.is_success) {
+          toast({ description: "vs평가가 저장되었습니다." });
+          if (steps.length) {
+            nextPage();
+            return;
+          }
+          router.push("/request");
+        }
+
+        toast({ description: "vs평가에 실패했습니다." });
+      });
+
     //로직 추가
     console.log("submit");
   };
@@ -85,6 +146,12 @@ export const VsEvalutaionForm = ({ formId }: VsEvalutaionFormProps) => {
   const diastolicBloodPressureClickHandler = (num: number) => () => {
     setDiastolicBloodPressure((prev) => prev + num);
   };
+
+  useEffect(() => {
+    if (patient && !patient.patient_id) {
+      router.push("/patient/rapid-evaluation");
+    }
+  }, [patient, router]);
 
   return (
     <form
