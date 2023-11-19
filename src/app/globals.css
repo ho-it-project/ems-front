@@ -117,5 +117,18 @@
   }
 }
 
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.blink-cursor {
+  animation: blink 1s step-start infinite;
+}
 @import "./_spinner.css";
 @import "./_fontSize.css";

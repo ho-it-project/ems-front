@@ -1,6 +1,7 @@
 import { Input } from "@/components/elements/Input";
 import { cn } from "@/lib/utils";
 import { Minus, Plus } from "lucide-react";
+import { useState } from "react";
 
 interface SteperProps {
   className?: string;
@@ -21,6 +22,15 @@ export const Steper = ({
   rightButtonOnClick,
   onChageHandler,
 }: SteperProps) => {
+  const [isFocused, setIsFocused] = useState(false);
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
   return (
     <div
       className={cn(
@@ -36,7 +46,7 @@ export const Steper = ({
       <div
         className={cn("flex h-full w-full justify-between rounded-lg bg-white")}
       >
-        <div className="flex flex-[0.5] items-center justify-center">
+        <div className="z-10 flex flex-[0.5] items-center justify-center">
           <button onClick={leftButtonOnClick} type="button">
             <Minus width={24} />
           </button>
@@ -46,15 +56,26 @@ export const Steper = ({
           border-lgrey
         "
         >
-          <div className="absolute opacity-0">
-            <Input value={value} onChange={onChageHandler} type="text" />
+          <div className="absolute opacity-0 ">
+            <Input
+              value={value}
+              onChange={onChageHandler}
+              type="text"
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+            />
           </div>
-          {value}
+          <span className="flex items-center">
+            {value}
+            {isFocused && (
+              <span className="blink-cursor h-[2rem] w-[1px] bg-black " />
+            )}
+          </span>
           {unit && <span>{unit}</span>}
         </div>
 
-        <div className="flex flex-[0.5] items-center justify-center">
-          <button onClick={rightButtonOnClick}>
+        <div className="z-10 flex flex-[0.5] items-center justify-center">
+          <button onClick={rightButtonOnClick} type="button">
             <Plus width={24} />
           </button>
         </div>

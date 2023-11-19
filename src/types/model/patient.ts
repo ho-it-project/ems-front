@@ -1,4 +1,5 @@
 export interface Patient {
+  patient_id: string;
   patient_name: string;
   patient_birth: string;
   patient_identity_number: string;
@@ -14,7 +15,7 @@ export interface Patient {
     | "CRIMINAL"
     | "DISASTER"
     | "DISEASE"
-    | "OTHERS";
+    | "OTHER";
 }
 
 export interface Guardian {
@@ -22,7 +23,7 @@ export interface Guardian {
   guardian_phone: string;
   guardian_address: string;
   guardian_relation:
-    | "OTHERS"
+    | "OTHER"
     | "PARENT"
     | "SPOUSE"
     | "CHILD"
