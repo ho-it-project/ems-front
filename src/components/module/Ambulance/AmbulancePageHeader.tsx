@@ -1,8 +1,23 @@
+import { Input } from "@/components/elements/Input";
 import { PageHeader } from "@/components/elements/PageHeader";
 import Image from "next/image";
+import { Dispatch, SetStateAction, useState } from "react";
 import { AmbulanceInfoPopUpButton } from "./AmbulanceInfoPopUpButton";
+import { searchTypes } from "./AmbulanceTable";
 
-export const AmbulancePageHeader = () => {
+export const AmbulancePageHeader = ({
+  setSearch,
+  setSearchType,
+}: {
+  setSearch: Dispatch<SetStateAction<string>>;
+  setSearchType: Dispatch<
+    SetStateAction<"차량번호" | "차종" | "유형" | "담당기사" | "팀원">
+  >;
+}) => {
+  const [searchInternal, setSearchInternal] = useState<string>("");
+  const [searchTypeInternal, setSearchTypeInternal] =
+    useState<keyof typeof searchTypes>("차량번호");
+
   return (
     <PageHeader
       title="회사 정보"
@@ -20,17 +35,48 @@ export const AmbulancePageHeader = () => {
       }
     >
       <div className="flex gap-[1rem]">
-        <button className="fontSize-small rounded-lg border-[0.2rem] border-main px-[1.2rem] py-[0.8rem] text-main">
+        <div className="fontSize-small rounded-lg border-[0.2rem] border-main px-[1.2rem]  text-main">
           <div className="flex items-center gap-[0.6rem]">
-            <Image
-              src="/icon/icon-search.png"
-              width={24}
-              height={24}
-              alt="search"
+            <select
+              name="role"
+              onChange={(e) =>
+                setSearchTypeInternal(
+                  e.currentTarget.value as keyof typeof searchTypes
+                )
+              }
+              value={searchTypeInternal}
+              className="bg-white  text-center text-main"
+            >
+              {Object.entries(searchTypes).map((searchType) => (
+                <option value={searchType[0]} key={searchType[0]}>
+                  {searchType[0]}
+                </option>
+              ))}
+            </select>
+            <div className="h-6 self-center border-r-2 border-gray-300" />
+            <Input
+              value={searchInternal}
+              onChange={({ currentTarget }) =>
+                setSearchInternal(currentTarget.value)
+              }
+              border="none"
             />
-            검색하기
+            <button
+              className="fontSize-small px-[1.2rem] py-[0.8rem] text-main"
+              onClick={() => {
+                setSearch(searchInternal);
+                setSearchType(searchTypeInternal);
+              }}
+            >
+              <Image
+                src="/icon/icon-search.png"
+                width={24}
+                height={24}
+                alt="search"
+              />
+            </button>
           </div>
-        </button>{" "}
+        </div>
         <AmbulanceInfoPopUpButton title="차량 추가하기" />
       </div>
     </PageHeader>

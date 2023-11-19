@@ -41,12 +41,25 @@ interface IAuthContext {
 
 export const AuthContext = createContext<IAuthContext | null>(null);
 
-export function useAuth() {
+type IAuthContextWithUser = Omit<IAuthContext, "user"> & {
+  user: NonNullable<IAuthContext["user"]>;
+};
+
+export function useAuth(options?: { isLogin?: true }): IAuthContextWithUser;
+export function useAuth(options?: { isLogin?: false }): IAuthContext;
+export function useAuth(options?: {
+  isLogin?: boolean;
+}): IAuthContext | IAuthContextWithUser {
   const result = useContext(AuthContext);
+  const router = useRouter();
+  const pathname = usePathname();
   if (!result?.initialized) {
     throw new Error("Auth context must be used within a AuthProvider!");
   }
-  // console.log(result);
+  if (options?.isLogin) {
+    if (result.user === null) router.push(`/login?callbackURL=${pathname}`);
+    return result;
+  }
   return result;
 }
 
