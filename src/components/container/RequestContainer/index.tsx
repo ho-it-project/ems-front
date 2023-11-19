@@ -1,3 +1,4 @@
+"use client";
 import { Tag } from "@/components/elements/Tag";
 import { ProgressTracker } from "@/components/module/common/ProgressTracker";
 function coordinateOnCircle(
@@ -32,6 +33,15 @@ export const RequestContainer = () => {
   const radius = 8.2; // Half of 16.4rem
 
   const adjustedRadius = radius; // Adjust for dot size
+
+  const requestOnClick = () => {
+    fetch("/api/requests/ems-to-er", {
+      method: "POST",
+    })
+      .then((res) => res.json())
+      .then((res) => console.log(res));
+  };
+
   return (
     <>
       <div className=" h-full w-full">
@@ -71,7 +81,14 @@ export const RequestContainer = () => {
                 />
               </div>
             </div>
-            <div className="absolute top-[50%] z-[1] h-[12rem] w-[12rem] -translate-y-[50%] rounded-full bg-main"></div>
+            <div className="absolute top-[50%] z-[1] z-[400] h-[12rem] w-[12rem] -translate-y-[50%] rounded-full bg-main">
+              <button
+                className=" h-full w-full text-center"
+                onClick={requestOnClick}
+              >
+                요청
+              </button>
+            </div>
             <div className="absolute top-[50%] z-[1] h-[16.4rem] w-[16.4rem] -translate-y-[50%] rounded-full  border-[0.2rem] bg-transparent">
               {Array.from({ length: numberOfDots }, (_, index) => {
                 const angle = (360 / numberOfDots) * index;
