@@ -22,7 +22,7 @@ export const EmergencyCenterContainer = () => {
         // 나중에 스피너 컴포넌트로 바꾸기
         isLoading && <Spinner />
       }
-      <div className=" h-full w-full px-[2rem] py-[1.6rem]">
+      <div className=" h-full w-full px-[0.4rem] py-[1.6rem]">
         <div className="flex h-full w-full flex-col overflow-hidden">
           <div className="mb-[1rem]  pr-[4rem]">
             <EmergencyCenterPageHeader />

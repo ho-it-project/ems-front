@@ -11,6 +11,7 @@ export const useEvaluationStep = () => {
     if (_next === "VS") router.push("/patient/vs");
     if (_next === "SAMPLE") router.push("/patient/sample");
     if (_next === "OPQRST") router.push("/patient/opqrst");
+    if (!_next) router.push("/request");
     nextStep();
   };
   return { nextPage, steps, next };
