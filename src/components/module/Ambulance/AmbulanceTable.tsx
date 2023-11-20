@@ -10,7 +10,7 @@ interface Ambulance {
   team: string[];
 }
 
-const mock: Ambulance[] = new Array(20).fill(0).map((_, i) => {
+const mock: Ambulance[] = new Array(40).fill(0).map((_, i) => {
   return {
     id: i.toString(),
     car_num: "78구1500",

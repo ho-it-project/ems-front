@@ -1,9 +1,29 @@
 "use client";
 import { useWindowSize } from "@/hooks";
 import { cn } from "@/lib/utils";
+import { useRequestStore } from "@/store/request.store";
+import { useEffect, useState } from "react";
 
 export const RequestInfoPageHeader = () => {
   const { width } = useWindowSize();
+  const [status, setStatus] = useState<"ALL" | "REQUESTED" | "REJECTED">("ALL");
+  const { setQueryStatus } = useRequestStore();
+  useEffect(() => {}, [status]);
+  const typeHandler = (status: "ALL" | "REQUESTED" | "REJECTED") => () => {
+    setStatus(status);
+    if (status === "ALL") {
+      setQueryStatus([]);
+      return;
+    }
+    if (status === "REQUESTED") {
+      setQueryStatus(["REQUESTED", "VIEWED"]);
+      return;
+    }
+    if (status === "REJECTED") {
+      setQueryStatus(["REJECTED"]);
+      return;
+    }
+  };
 
   return (
     <div
@@ -14,22 +34,22 @@ export const RequestInfoPageHeader = () => {
     >
       <div className="flex  items-center gap-[1rem]">
         <div
-        //   onClick={typeHandler()}
-        //   className={cn(emergency_center_type.length === 0 && "text-main")}
+          onClick={typeHandler("ALL")}
+          className={cn(status === "ALL" && "text-main")}
         >
           전체
         </div>
         <div className="h-[2rem] w-[0.2rem] bg-main " />
         <div
-        //   onClick={typeHandler("REGIONAL_EMERGENCY_MEDICAL_CENTER")}
-        //   className={cn(selectHandler("REGIONAL_EMERGENCY_MEDICAL_CENTER"))}
+          onClick={typeHandler("REQUESTED")}
+          className={cn(status === "REQUESTED" && "text-main")}
         >
           요청중
         </div>
         <div className="h-[2rem] w-[0.2rem] bg-main" />
         <div
-        //   onClick={typeHandler("LOCAL_EMERGENCY_MEDICAL_INSTITUTION")}
-        //   className={cn(selectHandler("LOCAL_EMERGENCY_MEDICAL_INSTITUTION"))}
+          onClick={typeHandler("REJECTED")}
+          className={cn(status === "REJECTED" && "text-main")}
         >
           요청거절
         </div>

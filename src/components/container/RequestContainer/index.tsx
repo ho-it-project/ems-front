@@ -81,7 +81,7 @@ export const RequestContainer = () => {
                 />
               </div>
             </div>
-            <div className="absolute top-[50%] z-[1] z-[400] h-[12rem] w-[12rem] -translate-y-[50%] rounded-full bg-main">
+            <div className="absolute top-[50%] z-[400] h-[12rem] w-[12rem] -translate-y-[50%] rounded-full bg-main">
               <button
                 className=" h-full w-full text-center"
                 onClick={requestOnClick}
@@ -89,7 +89,7 @@ export const RequestContainer = () => {
                 요청
               </button>
             </div>
-            <div className="absolute top-[50%] z-[1] h-[16.4rem] w-[16.4rem] -translate-y-[50%] rounded-full  border-[0.2rem] bg-transparent">
+            <div className="absolute top-[50%]  h-[16.4rem] w-[16.4rem] -translate-y-[50%] rounded-full  border-[0.2rem] bg-transparent">
               {Array.from({ length: numberOfDots }, (_, index) => {
                 const angle = (360 / numberOfDots) * index;
                 const [x, y] = coordinateOnCircle(adjustedRadius, angle);
