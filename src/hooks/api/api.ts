@@ -1,38 +1,51 @@
+import { client } from "@/lib/api";
+import { env } from "@/lib/constants";
 import { Init, MethodPaths, Response } from "@/types/api";
+import { paths } from "@/types/api/api.d";
 import {
-  ApiResponse,
   ErrorResponse,
   PathMethod,
   SuccessResponse,
+  UnhandledExeption,
 } from "@/types/api/openapi-type";
 import { Expand } from "@/types/util";
-import { env } from "process";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { useLoading } from "../useLoading";
-import { client } from "./../../lib/api";
-import { paths } from "./../../types/api/api.d";
+
+function isNotUnknown<P extends keyof paths, M extends PathMethod<P>>(
+  error: unknown
+): error is ErrorResponse<P, M> | UnhandledExeption {
+  if (typeof error === "undefined") return true;
+  if (typeof error !== "object") return false;
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    !("statusCode" in error) &&
+    !("is_success" in error)
+  )
+    return false;
+  return true;
+}
 
 function commonLogic<P extends keyof paths, M extends PathMethod<P>>(
-  data: ApiResponse<P, M>,
+  data: SuccessResponse<P, M> | undefined,
   error: unknown
 ): Expand<Response<P, M>> {
-  if (data && "statusCode" in data) {
-    if (env.NEXT_PUBLIC_NODE_ENV == "dev") throw new Error(data.message);
-    else return { data: undefined, error: undefined };
+  if (isNotUnknown<P, M>(error)) {
+    //error is ErrorResponse, UnhandledException
+    if (error && "statusCode" in error) {
+      if (env.NEXT_PUBLIC_NODE_ENV == "dev")
+        throw new Error(`${error.statusCode} ${error.error}: ${error.message}`);
+      else return { data: undefined, error: undefined };
+    }
+    return { data, error };
   }
-  if (env.NEXT_PUBLIC_NODE_ENV == "dev" && error)
-    throw new Error(error as string);
-
-  if (!data) return { data: undefined, error: undefined };
-  if (data.is_success == false)
-    return {
-      data: undefined,
-      error: data as ErrorResponse<P, M>,
-    };
-
-  return { data: data as SuccessResponse<P, M>, error: undefined };
+  //error is unknown("Internal server error" as string)
+  if (env.NEXT_PUBLIC_NODE_ENV == "dev") throw new Error(error as string);
+  else return { data: undefined, error: undefined };
 }
+
 export function useGetApi<P extends MethodPaths<"get">>(
   url: P,
   { useLoader = true }: { useLoader?: boolean },
@@ -43,24 +56,25 @@ export function useGetApi<P extends MethodPaths<"get">>(
   const loader = useLoading();
 
   const {
-    data: data_,
-    error,
+    data: getData,
+    error: _error,
     isLoading: isLoadingSWR,
     mutate,
   } = useSWR({ url, init }, async (obj: { url: P; init: Init<"get", P> }) => {
     const { data, error } = await client.GET(obj.url, ...init);
-    if (error) throw new Error(error as string);
+    if (error) throw error;
     return data;
   });
+  const _data = getData as SuccessResponse<P, "get">;
+  // console.log("getApi", url, loader.id, _data, _error, isLoadingSWR);
 
   useEffect(() => {
-    if (!isLoadingSWR && data_)
-      setData(commonLogic<P, "get">(data_ as ApiResponse<P, "get">, error));
+    if (!isLoadingSWR && (_data || _error))
+      setData(commonLogic<P, "get">(_data, _error));
     if (useLoader) isLoadingSWR ? loader.on() : loader.off();
     setIsLoading(isLoadingSWR);
-  }, [isLoadingSWR, data_]);
+  }, [isLoadingSWR, _data, _error, useLoader, loader]);
 
-  // const data = data_ as ApiResponse<P, "get">; //모든 response는 Success | Fail정보를 따름
   return { isLoading, refetch: mutate, ...data };
 }
 
@@ -77,8 +91,12 @@ export function usePostApi<P extends MethodPaths<"post">>(
     if (options?.useLoader) loader.on();
     setIsLoading(true);
 
-    const { data: data_, error } = await client.POST(url, ...body);
-    const data = data_ as ApiResponse<P, "post">; //모든 response는 Success | Fail정보를 따름
+    const { data: _data, error: _error } = await client.POST(url, ...body);
+    const data = _data as SuccessResponse<P, "post">; //모든 response는 Success | Fail정보를 따름
+    const error = _error as
+      | ErrorResponse<P, "post">
+      | UnhandledExeption
+      | unknown;
 
     const result = commonLogic<P, "post">(data, error);
     setData(result);
@@ -103,8 +121,12 @@ export function usePatchApi<P extends MethodPaths<"patch">>(
     if (options?.useLoader) loader.on();
     setIsLoading(true);
 
-    const { data: data_, error } = await client.PATCH(url, ...body);
-    const data = data_ as ApiResponse<P, "patch">; //모든 response는 Success | Fail정보를 따름
+    const { data: _data, error: _error } = await client.PATCH(url, ...body);
+    const data = _data as SuccessResponse<P, "patch">;
+    const error = _error as
+      | ErrorResponse<P, "patch">
+      | UnhandledExeption
+      | unknown;
 
     const result = commonLogic<P, "patch">(data, error);
     setData(result);
@@ -129,9 +151,12 @@ export function usePutApi<P extends MethodPaths<"put">>(
     if (options?.useLoader) loader.on();
     setIsLoading(true);
 
-    const { data: data_, error } = await client.PUT(url, ...body);
-    const data = data_ as ApiResponse<P, "put">; //모든 response는 Success | Fail정보를 따름
-
+    const { data: _data, error: _error } = await client.PUT(url, ...body);
+    const data = _data as SuccessResponse<P, "put">;
+    const error = _error as
+      | ErrorResponse<P, "put">
+      | UnhandledExeption
+      | unknown;
     const result = commonLogic<P, "put">(data, error);
     setData(result);
 
@@ -149,17 +174,3 @@ export const delayTest = (ms: number) => {
     }, ms)
   );
 };
-
-/*
-  backup: 1117
-export const usePatchApi =
-  <P extends MethodPaths<"patch">>(url: P) =>
-  async (...body: Init<"patch", P>) => {
-    const { data: data_, error } = await client.PATCH(url, ...body);
-    if (error) throw new Error(error as string);
-
-    const data = data_ as ApiResponse<P, "patch">; //모든 response는 Success | Fail정보를 따름
-
-    return commonLogic<P, "patch">(data, error);
-  };
-  */

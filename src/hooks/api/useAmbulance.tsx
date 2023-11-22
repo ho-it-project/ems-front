@@ -1,11 +1,6 @@
 import { useAuth } from "@/providers/AuthProvider";
-import { PathQuery } from "@/types/api";
 import { useGetApi } from ".";
 
-export type AmbulanceQuery = PathQuery<
-  "/ems/ambulance-companies/{ems_ambulance_company_id}",
-  "get"
->;
 export const useAbmulance = () => {
   const { user } = useAuth({ isLogin: true });
 
@@ -31,13 +26,18 @@ export const useAbmulance = () => {
 };
 
 export const useAmbulanceDetail = (ambulance_id: string) => {
-  const { data, error: errorOnDetail } = useGetApi(
+  const {
+    data,
+    error: errorOnDetail,
+    refetch: _refetch,
+  } = useGetApi(
     "/ems/ambulances/{ambulance_id}",
     { useLoader: true },
     { params: { path: { ambulance_id } } }
   );
 
   const detail = data?.result;
+  const refetch = async () => (await _refetch())?.result;
 
-  return { detail, errorOnDetail };
+  return { detail, errorOnDetail, refetch };
 };

@@ -19,13 +19,14 @@ export function useLoading() {
   return useMemo(
     () => ({
       on: () => {
-        // console.log('on:', id);
+        // console.log("on:", id);
         context.on(id);
       },
       off: () => {
-        // console.log('off:', id);
+        // console.log("off:", id);
         context.off(id);
       },
+      // id,
     }),
     [context, id]
   );
