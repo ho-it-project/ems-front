@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
 import { useEvaluationStep } from "@/hooks/useEvaluationStep";
+import { useEveluationStepStore } from "@/store/evaluationStep.store";
 import { usePatientStore } from "@/store/patient.store";
 import {
   CreatePatientErrorResponse,
@@ -36,6 +37,7 @@ const guardianSchema = z.object({
 export const GuardianInfoForm = () => {
   const { toast } = useToast();
   const { nextPage } = useEvaluationStep();
+  const { rapidEvaluation, check } = useEveluationStepStore();
   const { patient, setGuardian, setPatient } = usePatientStore();
   const form = useForm<z.infer<typeof guardianSchema>>({
     resolver: zodResolver(guardianSchema),
@@ -85,12 +87,21 @@ export const GuardianInfoForm = () => {
       toast({ description: "환자와의 관계를 선택해주세요." });
       return;
     }
+
+    const { trauma, clear, conscious } = rapidEvaluation;
+    const rapid_evaluation = {
+      trauma: trauma ? "TRUE" : "FALSE",
+      clear: clear ? "TRUE" : "FALSE",
+      conscious: conscious ? "TRUE" : "FALSE",
+    };
+
     const body = {
       ..._.omit(patient, ["patient_id"]),
       patient_guardian: {
         ...guardian_info,
         guardian_relation,
       },
+      rapid_evaluation: check ? rapid_evaluation : undefined,
     };
     fetch("/api/ems/patients", {
       method: "POST",

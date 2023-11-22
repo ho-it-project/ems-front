@@ -57,7 +57,7 @@ export const EmployeeContainer = () => {
           })
         }
       />
-      <div className="mt-[2.5rem] h-full overflow-scroll">
+      <div className="mt-[2.5rem] h-full">
         {data && <EmployeeTable data={data} refetch={refetch} />}
       </div>
     </div>

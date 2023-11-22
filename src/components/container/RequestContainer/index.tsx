@@ -1,6 +1,7 @@
 "use client";
 import { Tag } from "@/components/elements/Tag";
 import { ProgressTracker } from "@/components/module/common/ProgressTracker";
+import { useToast } from "@/components/ui/use-toast";
 function coordinateOnCircle(
   radius: number,
   angleDegrees: number
@@ -33,13 +34,24 @@ export const RequestContainer = () => {
   const radius = 8.2; // Half of 16.4rem
 
   const adjustedRadius = radius; // Adjust for dot size
-
+  const { toast } = useToast();
   const requestOnClick = () => {
     fetch("/api/requests/ems-to-er", {
       method: "POST",
     })
       .then((res) => res.json())
-      .then((res) => console.log(res));
+      .then((res: { is_success: boolean; message: string }) => {
+        if (res.is_success) {
+          toast({ description: "요청이 완료되었습니다." });
+          return;
+        }
+        console.log(res.message);
+        if (res.message === "REQUEST_ALREADY_PROCESSED") {
+          toast({ description: "이미 요청을 진행중인 환자입니다." });
+          return;
+        }
+        toast({ description: "요청에 실패하였습니다." });
+      });
   };
 
   return (
@@ -81,7 +93,7 @@ export const RequestContainer = () => {
                 />
               </div>
             </div>
-            <div className="absolute top-[50%] z-[1] z-[400] h-[12rem] w-[12rem] -translate-y-[50%] rounded-full bg-main">
+            <div className="absolute top-[50%] z-[400] h-[12rem] w-[12rem] -translate-y-[50%] rounded-full bg-main">
               <button
                 className=" h-full w-full text-center"
                 onClick={requestOnClick}
@@ -89,7 +101,7 @@ export const RequestContainer = () => {
                 요청
               </button>
             </div>
-            <div className="absolute top-[50%] z-[1] h-[16.4rem] w-[16.4rem] -translate-y-[50%] rounded-full  border-[0.2rem] bg-transparent">
+            <div className="absolute top-[50%]  h-[16.4rem] w-[16.4rem] -translate-y-[50%] rounded-full  border-[0.2rem] bg-transparent">
               {Array.from({ length: numberOfDots }, (_, index) => {
                 const angle = (360 / numberOfDots) * index;
                 const [x, y] = coordinateOnCircle(adjustedRadius, angle);

@@ -42,7 +42,18 @@ export const useEmergencyCenterList = () => {
   useEffect(() => {
     if (data) {
       const { emergency_center_list, count } = data.result;
-      setEmergencyCenters((prev) => [...prev, ...emergency_center_list]);
+      setEmergencyCenters((prev) => {
+        if (
+          prev.find(
+            (item) =>
+              item.emergency_center_id ===
+              emergency_center_list[0].emergency_center_id
+          )
+        ) {
+          return prev;
+        }
+        return [...prev, ...emergency_center_list];
+      });
       setPageLimit({
         total_count: count,
         total_page: Math.ceil(count / query.limit),

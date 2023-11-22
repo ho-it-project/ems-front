@@ -9,7 +9,7 @@ interface RapidEvaluationFormProps {
 }
 
 export const RapidEvaluationForm = ({ formId }: RapidEvaluationFormProps) => {
-  const { setRapidEvaluation, setSteps, rapidEvaluation } =
+  const { setRapidEvaluation, setSteps, rapidEvaluation, setCheck } =
     useEveluationStepStore();
   const { nextPage } = useEvaluationStep();
   const handleTrauma = (isTrauma: boolean) => {
@@ -35,6 +35,7 @@ export const RapidEvaluationForm = ({ formId }: RapidEvaluationFormProps) => {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setCheck(true);
     nextPage();
     // 로직 작성 필요
   };
