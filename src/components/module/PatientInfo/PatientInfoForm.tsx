@@ -53,6 +53,7 @@ interface PatientInfoFormProps {
 export const PatientInfoForm = ({ changeForm }: PatientInfoFormProps) => {
   const { toast } = useToast();
   const location = useGeoLocation();
+  const { rapidEvaluation, check } = useEveluationStepStore();
   const [patient_latitude, patient_longitude] = location ?? [0, 0];
   const { guardian } = useEveluationStepStore();
   const { nextPage } = useEvaluationStep();
@@ -139,7 +140,11 @@ export const PatientInfoForm = ({ changeForm }: PatientInfoFormProps) => {
       toast({ description: "발생원인을 선택해주세요." });
       return;
     }
-
+    const rapid = check && {
+      trauma: rapidEvaluation.trauma ? "TRUE" : "FALSE",
+      clear: rapidEvaluation.clear ? "TRUE" : "FALSE",
+      conscious: rapidEvaluation.conscious ? "TRUE" : "FALSE",
+    };
     const body = {
       ..._.omit(patient_info, ["patient_id"]),
       patient_phone: patient_phone.replace(/-/g, ""),
@@ -147,6 +152,7 @@ export const PatientInfoForm = ({ changeForm }: PatientInfoFormProps) => {
         patient_identity_number[0] === "1" || patient_identity_number[0] === "2"
           ? "19" + patient_birth
           : "20" + patient_birth,
+      rapid_evaluation: rapid ? rapid : undefined,
     };
     if (guardian) {
       setPatient({

@@ -10,6 +10,7 @@ type EvalutaionStep =
 
 interface EvaluationStepStore {
   next: number;
+  check: boolean;
   steps: EvalutaionStep[];
   rapidEvaluation: {
     trauma: boolean;
@@ -22,11 +23,13 @@ interface EvaluationStepStore {
     rapidEvaluation: EvaluationStepStore["rapidEvaluation"]
   ) => void;
   nextStep: () => void;
+  setCheck: (check: boolean) => void;
 }
 
 export const useEveluationStepStore = create<EvaluationStepStore>((set) => ({
   next: 0,
   steps: [],
+  check: false,
   rapidEvaluation: {
     trauma: false,
     clear: false,
@@ -80,4 +83,5 @@ export const useEveluationStepStore = create<EvaluationStepStore>((set) => ({
     set((state) => {
       return { ...state, next: state.next + 1 };
     }),
+  setCheck: (check: boolean) => set((state) => ({ ...state, check })),
 }));
