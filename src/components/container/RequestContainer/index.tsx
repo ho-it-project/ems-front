@@ -1,6 +1,7 @@
 "use client";
 import { Tag } from "@/components/elements/Tag";
 import { ProgressTracker } from "@/components/module/common/ProgressTracker";
+import { useToast } from "@/components/ui/use-toast";
 function coordinateOnCircle(
   radius: number,
   angleDegrees: number
@@ -33,13 +34,24 @@ export const RequestContainer = () => {
   const radius = 8.2; // Half of 16.4rem
 
   const adjustedRadius = radius; // Adjust for dot size
-
+  const { toast } = useToast();
   const requestOnClick = () => {
     fetch("/api/requests/ems-to-er", {
       method: "POST",
     })
       .then((res) => res.json())
-      .then((res) => console.log(res));
+      .then((res: { is_success: boolean; message: string }) => {
+        if (res.is_success) {
+          toast({ description: "요청이 완료되었습니다." });
+          return;
+        }
+        console.log(res.message);
+        if (res.message === "REQUEST_ALREADY_PROCESSED") {
+          toast({ description: "이미 요청을 진행중인 환자입니다." });
+          return;
+        }
+        toast({ description: "요청에 실패하였습니다." });
+      });
   };
 
   return (
