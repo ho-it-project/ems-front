@@ -1,29 +1,37 @@
 "use client";
+import { Toggle } from "@/components/elements/Toggle";
 import { useWindowSize } from "@/hooks";
+import { useRequest } from "@/hooks/api/useRequest";
 import { cn } from "@/lib/utils";
-import { useRequestStore } from "@/store/request.store";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export const RequestInfoPageHeader = () => {
   const { width } = useWindowSize();
-  const [status, setStatus] = useState<"ALL" | "REQUESTED" | "REJECTED">("ALL");
-  const { setQueryStatus } = useRequestStore();
-  useEffect(() => {}, [status]);
+  const {
+    pageStatus,
+    setPageStatus,
+    order,
+    setOrder,
+    orderby,
+    setOrderBy,
+    sort,
+  } = useRequest();
   const typeHandler = (status: "ALL" | "REQUESTED" | "REJECTED") => () => {
-    setStatus(status);
-    if (status === "ALL") {
-      setQueryStatus([]);
-      return;
-    }
-    if (status === "REQUESTED") {
-      setQueryStatus(["REQUESTED", "VIEWED"]);
-      return;
-    }
-    if (status === "REJECTED") {
-      setQueryStatus(["REJECTED"]);
-      return;
-    }
+    setPageStatus(status);
   };
+
+  const onClickOrder = () => {
+    setOrder(!order);
+  };
+  const onClickOrderBy = () => {
+    setOrderBy(orderby === "DISTANCE" ? "TIME" : "DISTANCE");
+  };
+  const onChageHandler = () => {
+    console.log(order, orderby);
+  };
+  useEffect(() => {
+    sort();
+  }, [order, orderby, sort]);
 
   return (
     <div
@@ -35,24 +43,42 @@ export const RequestInfoPageHeader = () => {
       <div className="flex  items-center gap-[1rem]">
         <div
           onClick={typeHandler("ALL")}
-          className={cn(status === "ALL" && "text-main")}
+          className={cn(pageStatus === "ALL" && "text-main")}
         >
           전체
         </div>
         <div className="h-[2rem] w-[0.2rem] bg-main " />
         <div
           onClick={typeHandler("REQUESTED")}
-          className={cn(status === "REQUESTED" && "text-main")}
+          className={cn(pageStatus === "REQUESTED" && "text-main")}
         >
           요청중
         </div>
         <div className="h-[2rem] w-[0.2rem] bg-main" />
         <div
           onClick={typeHandler("REJECTED")}
-          className={cn(status === "REJECTED" && "text-main")}
+          className={cn(pageStatus === "REJECTED" && "text-main")}
         >
           요청거절
         </div>
+      </div>
+      <div
+        className="fontSize-small flex items-center gap-[0.4rem]"
+        onClick={onClickOrder}
+      >
+        오름차순
+        <Toggle size="small" checked={order} onChange={onChageHandler} />
+      </div>
+      <div
+        className="fontSize-small flex items-center gap-[0.4rem]"
+        onClick={onClickOrderBy}
+      >
+        거리/시간
+        <Toggle
+          size="small"
+          checked={orderby === "TIME"}
+          onChange={onChageHandler}
+        />
       </div>
     </div>
   );

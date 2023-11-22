@@ -32,7 +32,6 @@ function coordinateOnCircle(
 export const RequestContainer = () => {
   const numberOfDots = 12;
   const radius = 8.2; // Half of 16.4rem
-
   const adjustedRadius = radius; // Adjust for dot size
   const { toast } = useToast();
   const requestOnClick = () => {

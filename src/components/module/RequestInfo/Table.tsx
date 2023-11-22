@@ -1,48 +1,29 @@
 import { Tag } from "@/components/elements/Tag";
-import { useWindowSize } from "@/hooks";
+import { useRequest } from "@/hooks/api/useRequest";
 import { useRequestStore } from "@/store/request.store";
 import { RequestInfo, reqeustStatueKorMap } from "@/types/model/request";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
-interface RequestTableProps {
-  request_list: RequestInfo[];
-}
-
-export const RequestTable = ({ request_list }: RequestTableProps) => {
-  const { height } = useWindowSize();
-
+export const RequestTable = () => {
   const ref = useRef<HTMLDivElement>(null);
-  const { pageLimit, query, setQueryPage, setQueryLimit } = useRequestStore();
+  const { requests, rejectedRequests, requestedRequests } = useRequest();
+  const { pageStatus } = useRequestStore();
+  const [request_list, setRequestList] = useState<RequestInfo[]>([]);
   useEffect(() => {
-    if (height && height > 1340) {
-      setQueryLimit(30);
+    if (pageStatus === "ALL") {
+      setRequestList(requests);
     }
-  }, [height, setQueryLimit]);
-  useEffect(() => {
-    if (ref.current) {
-      console.log(ref.current.scrollHeight);
+    if (pageStatus === "REQUESTED") {
+      setRequestList(requestedRequests);
     }
-  }, [ref, setQueryPage]);
-
-  const onScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
-    if (
-      e.currentTarget?.scrollHeight -
-        e.currentTarget?.scrollTop -
-        e.currentTarget?.clientHeight <
-      1
-    ) {
-      if (query.page < pageLimit.total_page) {
-        request_list.length && setQueryPage(query.page + 1);
-        console.log("fetch");
-      }
+    if (pageStatus === "REJECTED") {
+      setRequestList(rejectedRequests);
     }
-  };
-  useEffect(() => {
     if (ref.current) {
       ref.current.scrollTo(0, 0);
     }
-  }, [query.request_status]);
+  }, [pageStatus, requests, rejectedRequests, requestedRequests, ref]);
 
   return (
     <div className="flex h-full flex-col">
@@ -51,7 +32,7 @@ export const RequestTable = ({ request_list }: RequestTableProps) => {
         <div className="flex-1">거리</div>
         <div className="flex-1">상태</div>
       </div>
-      <div className="h-full overflow-scroll" ref={ref} onScroll={onScroll}>
+      <div className="h-full overflow-scroll" ref={ref}>
         {request_list.length > 0 &&
           request_list.map((request, i) => {
             return (
