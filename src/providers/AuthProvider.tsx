@@ -11,7 +11,7 @@ interface IAuthProviderProps {}
 
 import Spinner from "@/components/Spinner";
 import { api } from "@/lib/api";
-import { env } from "@/lib/constants";
+import { env } from "@/lib/utils/envValidation";
 import { Loader2 } from "lucide-react";
 import useSWR from "swr";
 import { LoginResponse } from "../types/api";
