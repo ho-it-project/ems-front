@@ -1,5 +1,6 @@
 import { TabWrapper } from "@/components/layout/TabWrapper";
 import { EmergencyCenterDetailPrototype } from "@/components/prototypes/EmergencyCenter/Detail";
+import { API_SERVER } from "@/constant";
 import { GetEmergencyCenterDetailResponse } from "@/types/emergencyCenter.type";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
@@ -20,14 +21,11 @@ interface GetEmergencyCenterDetailResponseFailDto {
 
 export default async function Page({ params }: { params: Params }) {
   const { emergency_center_id } = params;
-  const domain = process.env.NEXT_PUBLIC_ROOT_DOMAIN;
-  const protocol = process.env.NEXT_PUBLIC_PROTOCOL;
-  const apiPrefix = process.env.NEXT_PUBLIC_API_PREFIX;
-  const url = `${protocol}://api.${domain}/${apiPrefix}/`;
+
   const data:
     | GetEmergencyCenterDetailResponseSuccessDto
     | GetEmergencyCenterDetailResponseFailDto = await fetch(
-    `${url}/er/emergency-centers/${emergency_center_id}`,
+    `${API_SERVER}/er/emergency-centers/${emergency_center_id}`,
     {
       next: {
         revalidate: 10,
