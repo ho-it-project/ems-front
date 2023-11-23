@@ -1,4 +1,5 @@
 import { TabWrapper } from "@/components/layout/TabWrapper";
+import { AmbulanceEmployeePrototype } from "@/components/prototypes/Ambulance/Employee";
 
 type Params = {
   ambulance_id: string;
@@ -6,6 +7,14 @@ type Params = {
 
 export default async function Page({ params }: { params: Params }) {
   const { ambulance_id } = params;
-  ambulance_id;
-  return <TabWrapper contents={[{ title: "팀원 배치하기", content: "" }]} />;
+  return (
+    <TabWrapper
+      contents={[
+        {
+          title: "팀원 배치하기",
+          content: <AmbulanceEmployeePrototype ambulance_id={ambulance_id} />,
+        },
+      ]}
+    />
+  );
 }

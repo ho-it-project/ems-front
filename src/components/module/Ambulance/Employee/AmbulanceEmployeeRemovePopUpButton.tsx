@@ -1,4 +1,3 @@
-"use clinet";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { X } from "lucide-react";
 import React from "react";
@@ -13,7 +12,7 @@ interface EmployeeDeletePopUpButtonProps {
   };
 }
 
-export const AmbulanceDriverRemovePopUpButton = ({
+export const AmbulanceEmployeeRemovePopUpButton = ({
   onSubmit,
 }: EmployeeDeletePopUpButtonProps) => {
   const [open, setOpen] = React.useState(false);
@@ -27,7 +26,7 @@ export const AmbulanceDriverRemovePopUpButton = ({
   return (
     <Dialog open={open}>
       <DialogTrigger
-        className="fontSize-small rounded-full bg-bg  text-lgrey"
+        className="fontSize-small rounded-full text-grey"
         onClick={onClickTrigger}
       >
         <div className="flex h-[2.4rem] w-[2.4rem] items-center justify-center">
@@ -43,7 +42,7 @@ export const AmbulanceDriverRemovePopUpButton = ({
               </button>
             </div>
             <div className="flex justify-center">
-              <p>삭제하시겠습니까?</p>
+              <p>직원 등록을 해제하겠습니까?</p>
             </div>
             <div className="flex justify-center">
               <button
@@ -53,7 +52,7 @@ export const AmbulanceDriverRemovePopUpButton = ({
                   onClickClose();
                 }}
               >
-                삭제
+                해제
               </button>
             </div>
           </div>

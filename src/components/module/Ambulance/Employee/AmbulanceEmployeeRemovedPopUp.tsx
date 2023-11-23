@@ -8,15 +8,11 @@ interface EmployeeDeletedPopUp {
   onClose: () => void;
 }
 
-export const AmbulanceDriverRemovedPopUp = ({
+export const AmbulanceEmployeeRemovedPopUp = ({
   data,
   onClose,
 }: EmployeeDeletedPopUp) => {
-  //   const result = data ? (data.data ? true : false) : false;
   const [open, setOpen] = React.useState(false);
-  //   const onClickTrigger = () => {
-  //     setOpen(true);
-  //   };
   useEffect(() => {
     setOpen(data ? true : false);
   }, [data]);
@@ -39,7 +35,7 @@ export const AmbulanceDriverRemovedPopUp = ({
             {data?.data && (
               <>
                 <div className="flex justify-center">
-                  <p>삭제 완료</p>
+                  <p>해제 완료</p>
                 </div>
                 <div className="flex justify-center">
                   <button
@@ -54,7 +50,7 @@ export const AmbulanceDriverRemovedPopUp = ({
             {data?.error && (
               <>
                 <div className="flex justify-center">
-                  <p>삭제 실패</p>
+                  <p>해제 실패</p>
                 </div>
                 <div className="flex justify-center">
                   <button

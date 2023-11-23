@@ -13,16 +13,12 @@ import { PathQuery } from "@/types/api";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 
-export const AmbulanceDriverPrototype = ({
+export const AmbulanceEmployeePrototype = ({
   ambulance_id,
 }: {
   ambulance_id: string;
 }) => {
-  const {
-    detail: detail,
-    errorOnDetail,
-    refetch,
-  } = useAmbulanceDetail(ambulance_id);
+  const { detail, errorOnDetail, refetch } = useAmbulanceDetail(ambulance_id);
   const { setAmbulance, setRefetch } = useAmbulanceEmployeeStore(
     useShallow((state) => ({
       setAmbulance: state.setAmbulance,
@@ -33,11 +29,11 @@ export const AmbulanceDriverPrototype = ({
   const [query, setQuery] = useState<PathQuery<"/ems/employees", "get">>({});
   const { data: _employees } = useEmployeeTableQuery(query);
   const employees = _employees?.filter(
-    (employee) => employee.role === "DRIVER"
+    (employee) => employee.role !== "DRIVER"
   );
 
   useEffect(() => {
-    if (detail) setAmbulance({ ...detail, employee_type: "DRIVER" });
+    if (detail) setAmbulance({ ...detail, employee_type: "OTHER_EMPLOYEE" });
     if (refetch) setRefetch(refetch);
   }, [detail, errorOnDetail, refetch]);
 

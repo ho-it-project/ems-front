@@ -1,6 +1,6 @@
 import { usePostApi } from "@/hooks/api";
 import { env } from "@/lib/utils/envValidation";
-import { useAmbulanceDriverStore } from "@/store/ambulanceDriver.store";
+import { useAmbulanceEmployeeStore } from "@/store/ambulanceEmployee.store";
 import { Employee } from "@/types/model/employee";
 import { Plus } from "lucide-react";
 
@@ -18,17 +18,19 @@ export const AmbulanceEmployeeTableContainer = ({
 }: {
   data: Employee[];
 }) => {
-  const drivers = useAmbulanceDriverStore((store) => store.employees)?.map(
+  const drivers = useAmbulanceEmployeeStore((store) => store.employees)?.map(
     (driver) => driver.employee_id
   );
   data = data.filter((driver) => !drivers?.includes(driver.employee_id));
   const { mutate } = usePostApi("/ems/ambulances/{ambulance_id}", {
     useLoader: true,
   });
-  const { ambulance_id, refetchDriver } = useAmbulanceDriverStore((store) => ({
-    ambulance_id: store.ambulance_id,
-    refetchDriver: store.refetch,
-  }));
+  const { ambulance_id, refetchEmployee } = useAmbulanceEmployeeStore(
+    (store) => ({
+      ambulance_id: store.ambulance_id,
+      refetchEmployee: store.refetch,
+    })
+  );
   const onPlus = async (item: Employee) => {
     await mutate({
       params: { path: { ambulance_id: ambulance_id ?? "" } },
@@ -36,7 +38,7 @@ export const AmbulanceEmployeeTableContainer = ({
         employee_list: [{ action: "ADD", employee_id: item.employee_id }],
       },
     });
-    refetchDriver?.();
+    refetchEmployee?.();
   };
 
   //for dev mode
