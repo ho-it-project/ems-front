@@ -3,6 +3,7 @@
 import { useToast } from "@/components/ui/use-toast";
 import { usePatient } from "@/hooks/api/usePatient";
 import { useEvaluationStep } from "@/hooks/useEvaluationStep";
+import { useAuth } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SymptomLabel } from "../../common/SymptomLabeledInput";
@@ -17,7 +18,7 @@ export const VsEvalutaionForm = ({ formId }: VsEvalutaionFormProps) => {
   const router = useRouter();
   const { toast } = useToast();
   const { nextPage, steps } = useEvaluationStep();
-
+  const { accessToken } = useAuth();
   const [temperature, setTemperature] = useState<string>("36.5");
   const [heartRate, setHeartRate] = useState<number>(80);
   const [respiration, setRespiration] = useState<number>(12);
@@ -63,6 +64,7 @@ export const VsEvalutaionForm = ({ formId }: VsEvalutaionFormProps) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
       body,
     })

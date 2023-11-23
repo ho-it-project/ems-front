@@ -1,3 +1,4 @@
+import { useAuth } from "@/providers/AuthProvider";
 import { Init, MethodPaths, Response } from "@/types/api";
 import {
   ApiResponse,
@@ -41,17 +42,27 @@ export function useGetApi<P extends MethodPaths<"get">>(
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<Expand<Response<P, "get">>>();
   const loader = useLoading();
-
+  const { accessToken } = useAuth();
   const {
     data: data_,
     error,
     isLoading: isLoadingSWR,
     mutate,
-  } = useSWR({ url, init }, async (obj: { url: P; init: Init<"get", P> }) => {
-    const { data, error } = await client.GET(obj.url, ...init);
-    if (error) throw new Error(error as string);
-    return data;
-  });
+  } = useSWR(
+    {
+      url,
+      init,
+    },
+    async (obj: { url: P; init: Init<"get", P> }) => {
+      const { data, error } = await client({
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }).GET(obj.url, ...init);
+      if (error) throw new Error(error as string);
+      return data;
+    }
+  );
 
   useEffect(() => {
     if (!isLoadingSWR && data_)
@@ -72,12 +83,17 @@ export function usePostApi<P extends MethodPaths<"post">>(
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<Expand<Response<P, "post">>>();
+  const { accessToken } = useAuth();
   const loader = useLoading();
   const mutate = async (...body: Init<"post", P>) => {
     if (options?.useLoader) loader.on();
     setIsLoading(true);
 
-    const { data: data_, error } = await client.POST(url, ...body);
+    const { data: data_, error } = await client({
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).POST(url, ...body);
     const data = data_ as ApiResponse<P, "post">; //모든 response는 Success | Fail정보를 따름
 
     const result = commonLogic<P, "post">(data, error);
@@ -97,13 +113,18 @@ export function usePatchApi<P extends MethodPaths<"patch">>(
   if (options?.useLoader === undefined) options = { useLoader: true };
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { accessToken } = useAuth();
   const [data, setData] = useState<Expand<Response<P, "patch">>>();
   const loader = useLoading();
   const mutate = async (...body: Init<"patch", P>) => {
     if (options?.useLoader) loader.on();
     setIsLoading(true);
 
-    const { data: data_, error } = await client.PATCH(url, ...body);
+    const { data: data_, error } = await client({
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).PATCH(url, ...body);
     const data = data_ as ApiResponse<P, "patch">; //모든 response는 Success | Fail정보를 따름
 
     const result = commonLogic<P, "patch">(data, error);
@@ -123,13 +144,18 @@ export function usePutApi<P extends MethodPaths<"put">>(
   if (options?.useLoader === undefined) options = { useLoader: true };
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { accessToken } = useAuth();
   const [data, setData] = useState<Expand<Response<P, "put">>>();
   const loader = useLoading();
   const mutate = async (...body: Init<"put", P>) => {
     if (options?.useLoader) loader.on();
     setIsLoading(true);
 
-    const { data: data_, error } = await client.PUT(url, ...body);
+    const { data: data_, error } = await client({
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).PUT(url, ...body);
     const data = data_ as ApiResponse<P, "put">; //모든 response는 Success | Fail정보를 따름
 
     const result = commonLogic<P, "put">(data, error);

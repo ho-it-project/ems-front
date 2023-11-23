@@ -8,6 +8,7 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/providers/AuthProvider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -34,13 +35,14 @@ export const ChangePasswordForm = ({
       password: "",
     },
   });
-
+  const { accessToken } = useAuth();
   const onSubmitHandler = (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
     fetch("api/ems/employees", {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(form.getValues()),
     })
