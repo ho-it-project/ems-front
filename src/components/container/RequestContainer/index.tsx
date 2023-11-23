@@ -2,6 +2,7 @@
 import { Tag } from "@/components/elements/Tag";
 import { ProgressTracker } from "@/components/module/common/ProgressTracker";
 import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/providers/AuthProvider";
 function coordinateOnCircle(
   radius: number,
   angleDegrees: number
@@ -30,6 +31,7 @@ function coordinateOnCircle(
  *
  */
 export const RequestContainer = () => {
+  const { accessToken } = useAuth();
   const numberOfDots = 12;
   const radius = 8.2; // Half of 16.4rem
   const adjustedRadius = radius; // Adjust for dot size
@@ -37,6 +39,9 @@ export const RequestContainer = () => {
   const requestOnClick = () => {
     fetch("/api/requests/ems-to-er", {
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     })
       .then((res) => res.json())
       .then((res: { is_success: boolean; message: string }) => {

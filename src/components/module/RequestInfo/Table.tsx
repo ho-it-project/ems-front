@@ -1,3 +1,4 @@
+"use client";
 import { Tag } from "@/components/elements/Tag";
 import { useRequest } from "@/hooks/api/useRequest";
 import { useRequestStore } from "@/store/request.store";
@@ -7,6 +8,12 @@ import { useEffect, useRef, useState } from "react";
 
 export const RequestTable = () => {
   const ref = useRef<HTMLDivElement>(null);
+  const [componentMounted, setComponentMounted] = useState(false);
+
+  // 컴포넌트가 마운트되면 useRequestSocket 훅을 호출
+  useEffect(() => {
+    setComponentMounted(true);
+  }, []);
   const { requests, rejectedRequests, requestedRequests } = useRequest();
   const { pageStatus } = useRequestStore();
   const [request_list, setRequestList] = useState<RequestInfo[]>([]);
@@ -24,6 +31,7 @@ export const RequestTable = () => {
       ref.current.scrollTo(0, 0);
     }
   }, [pageStatus, requests, rejectedRequests, requestedRequests, ref]);
+  if (!componentMounted) return null;
 
   return (
     <div className="flex h-full flex-col">

@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
 import { useEvaluationStep } from "@/hooks/useEvaluationStep";
+import { useAuth } from "@/providers/AuthProvider";
 import { useEveluationStepStore } from "@/store/evaluationStep.store";
 import { usePatientStore } from "@/store/patient.store";
 import {
@@ -39,6 +40,7 @@ export const GuardianInfoForm = () => {
   const { nextPage } = useEvaluationStep();
   const { rapidEvaluation, check } = useEveluationStepStore();
   const { patient, setGuardian, setPatient } = usePatientStore();
+  const { accessToken } = useAuth();
   const form = useForm<z.infer<typeof guardianSchema>>({
     resolver: zodResolver(guardianSchema),
     defaultValues: {
@@ -107,6 +109,7 @@ export const GuardianInfoForm = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(body),
     })
