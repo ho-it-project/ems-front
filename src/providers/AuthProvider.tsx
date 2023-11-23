@@ -11,7 +11,7 @@ interface IAuthProviderProps {}
 
 import Spinner from "@/components/Spinner";
 import { api } from "@/lib/api";
-import { env } from "@/lib/constants";
+import { env } from "@/lib/utils/envValidation";
 import { Loader2 } from "lucide-react";
 import useSWR from "swr";
 import { LoginResponse } from "../types/api";
@@ -35,6 +35,7 @@ interface IAuthContext {
     role: "ADMIN" | "DRIVER" | "EMERGENCY_MEDICAL_TECHNICIAN" | "DISPATCHER";
     employee_name: string;
   } | null;
+  accessToken: string | null;
   signIn: (loginParam: LoginParam) => Promise<boolean>;
   signOut: () => void;
 }
@@ -78,10 +79,12 @@ function useProvideAuth() {
   const fetcher = async (input: RequestInfo | URL, init?: RequestInit) => {
     const res = await api<LoginResponse>(input, init);
     if (!res.is_success || !res.result.is_login) return false;
-    return res.result.employee;
+    return res.result;
   };
 
   const [user, setUser] = useState<IAuthContext["user"] | null>(null);
+  const [accessToken, setAccessToken] =
+    useState<IAuthContext["accessToken"]>(null);
   const { data, error } = useSWR("/api/ems/auth", fetcher);
   const [status, setStatus] = useState("loading");
 
@@ -90,7 +93,9 @@ function useProvideAuth() {
       setStatus("success");
     }
     if (data) {
-      setUser({ ...data });
+      const { employee, access_token } = data;
+      setUser({ ...employee });
+      setAccessToken(access_token);
       setStatus("success");
     }
     if (error) {
@@ -100,14 +105,15 @@ function useProvideAuth() {
   }, [data, status, error]);
 
   const signIn = async (loginParam: LoginParam) => {
-    const result = await loginApi(loginParam);
-    if (!result.is_success || !result.result.is_login) return false;
-    const user = result.result.employee;
-    setUser({ ...user });
+    const res = await loginApi(loginParam);
+    if (!res.is_success || !res.result.is_login) return false;
+    const { employee, access_token } = res.result;
+    setUser({ ...employee });
+    setAccessToken(access_token);
     return true;
   };
   const signOut = () => {
-    fetch("api/ems/auth/logout", { method: "GET" });
+    fetch("api/ems/auth/logout", { method: "POST" });
     setUser(null);
   };
 
@@ -116,6 +122,7 @@ function useProvideAuth() {
     signIn,
     signOut,
     status,
+    accessToken,
   };
 }
 const publicPageList = ["/login"];
@@ -127,7 +134,7 @@ const isDevPage = (pathname: string) =>
 const AuthProvider = ({ children }: PropsWithChildren<IAuthProviderProps>) => {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, signIn, signOut, status } = useProvideAuth();
+  const { user, signIn, signOut, status, accessToken } = useProvideAuth();
   const [isLoading, setIsLoading] = useState<boolean>(
     status ? status === "loading" : true
   );
@@ -162,7 +169,7 @@ const AuthProvider = ({ children }: PropsWithChildren<IAuthProviderProps>) => {
   if (isPublicPage(pathname))
     return (
       <AuthContext.Provider
-        value={{ initialized: true, user, signIn, signOut }}
+        value={{ initialized: true, user, signIn, signOut, accessToken }}
       >
         {children}
       </AuthContext.Provider>
@@ -171,7 +178,9 @@ const AuthProvider = ({ children }: PropsWithChildren<IAuthProviderProps>) => {
   if (!user) router.push(`/login?callbackURL=${pathname}`);
 
   return (
-    <AuthContext.Provider value={{ initialized: true, user, signIn, signOut }}>
+    <AuthContext.Provider
+      value={{ initialized: true, user, signIn, signOut, accessToken }}
+    >
       {children}
     </AuthContext.Provider>
   );

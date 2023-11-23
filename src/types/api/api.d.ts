@@ -1343,7 +1343,7 @@ export interface paths {
     patch: {
       requestBody: {
         content: {
-          "application/json": components["schemas"]["__type.o24"][];
+          "application/json": components["schemas"]["__type.o25"][];
         };
       };
       responses: {
@@ -1432,7 +1432,7 @@ export interface paths {
     patch: {
       requestBody: {
         content: {
-          "application/json": components["schemas"]["__type.o27"][];
+          "application/json": components["schemas"]["__type.o28"][];
         };
       };
       responses: {
@@ -2396,6 +2396,7 @@ export interface components {
        */
       patient_emergency_cause: "TRAFFIC_ACCIDENT" | "FIRE" | "CRIMINAL" | "DISASTER" | "DISEASE" | "OTHER";
       patient_guardian?: components["schemas"]["EmsPatientRequest.PatientGuardianDTO"];
+      rapid_evaluation?: components["schemas"]["__type.o3"];
     };
     "EmsPatientRequest.PatientGuardianDTO": {
       /**
@@ -2419,6 +2420,14 @@ export interface components {
        * @enum {string}
        */
       guardian_relation: "OTHER" | "PARENT" | "SPOUSE" | "CHILD" | "SIBLING" | "FRIEND";
+    };
+    "__type.o3": {
+      /** @enum {string} */
+      trauma: "TRUE" | "FALSE";
+      /** @enum {string} */
+      clear: "TRUE" | "FALSE";
+      /** @enum {string} */
+      conscious: "TRUE" | "FALSE";
     };
     "EMS_PATIENT_ERROR.INCHARGED_PATIENT_ALREADY_EXIST": {
       /** @enum {string} */
@@ -2516,12 +2525,12 @@ export interface components {
       message: string;
     };
     "EmsPatientResponse.GetPatientDetail": {
-      guardian: components["schemas"]["__type.o3.Nullable"];
-      abcde: components["schemas"]["__type.o4"][];
-      dcap_btls: components["schemas"]["__type.o5"][];
-      vs: components["schemas"]["__type.o6"][];
-      sample: components["schemas"]["__type.o7"][];
-      opqrst: components["schemas"]["__type.o8"][];
+      guardian: components["schemas"]["__type.o4.Nullable"];
+      abcde: components["schemas"]["__type.o5"][];
+      dcap_btls: components["schemas"]["__type.o6"][];
+      vs: components["schemas"]["__type.o7"][];
+      sample: components["schemas"]["__type.o8"][];
+      opqrst: components["schemas"]["__type.o9"][];
       patient_id: string;
       /** @description 익명으로 기본값 */
       patient_name: string;
@@ -2553,7 +2562,7 @@ export interface components {
       updated_at: string;
       status: components["schemas"]["Status"];
     };
-    "__type.o3.Nullable": {
+    "__type.o4.Nullable": {
       guardian_id: string;
       guardian_name: string;
       guardian_phone: string;
@@ -2570,7 +2579,7 @@ export interface components {
     } | null;
     /** @enum {string} */
     ems_GuardianRelation: "OTHER" | "PARENT" | "SPOUSE" | "CHILD" | "SIBLING" | "FRIEND";
-    "__type.o4": {
+    "__type.o5": {
       patient_id: string;
       airway_status: components["schemas"]["ems_AirwayStatus"];
       /** @description 호흡수 //단위 횟수/분 */
@@ -2599,7 +2608,7 @@ export interface components {
     ems_BreathingQuality: "NORMAL" | "SHALLOW" | "DEEP" | "LABORED" | "IRREGULAR" | "RAPID" | "SLOW" | "AGONAL";
     /** @enum {string} */
     ems_DisabilityAVPU: "ALERT" | "VERBAL_STIMULI" | "PAIN_STIMULI" | "UNRESPONSIVE";
-    "__type.o5": {
+    "__type.o6": {
       patient_id: string;
       affected_area: components["schemas"]["ems_AffectedArea"];
       deformity: string;
@@ -2621,7 +2630,7 @@ export interface components {
     };
     /** @enum {string} */
     ems_AffectedArea: "UNKNOWN" | "HEAD" | "NECK" | "CHEST" | "ABDOMEN" | "LEFT_ARM" | "RIGHT_ARM" | "LEFT_LEG" | "RIGHT_LEG" | "BACK" | "PELVIS";
-    "__type.o6": {
+    "__type.o7": {
       patient_id: string;
       /** @description 심박수 맥박 //단위 횟수/분 */
       heart_rate: number;
@@ -2642,7 +2651,7 @@ export interface components {
       updated_at: string;
       status: components["schemas"]["Status"];
     };
-    "__type.o7": {
+    "__type.o8": {
       patient_id: string;
       /** @description 증상 및 증후 */
       signs_symptoms: string;
@@ -2668,7 +2677,7 @@ export interface components {
       updated_at: string;
       status: components["schemas"]["Status"];
     };
-    "__type.o8": {
+    "__type.o9": {
       patient_id: string;
       /** @description 발병상황 - 증상이 시작되었을 때 와 무엇을 하고있었고, 통증은 언제부터 시작됬는지 */
       onset: string;
@@ -2741,7 +2750,7 @@ export interface components {
       http_status_code: 403;
     };
     ResponseDTO_lt___type_gt_: {
-      result: components["schemas"]["__type.o4"];
+      result: components["schemas"]["__type.o5"];
       /** @enum {boolean} */
       is_success: true;
       request_to_response?: number;
@@ -2796,7 +2805,7 @@ export interface components {
       swelling: string;
     };
     "ResponseDTO_lt___type_gt_.o1": {
-      result: components["schemas"]["__type.o5"];
+      result: components["schemas"]["__type.o6"];
       /** @enum {boolean} */
       is_success: true;
       request_to_response?: number;
@@ -2830,7 +2839,7 @@ export interface components {
       temperature: number;
     };
     "ResponseDTO_lt___type_gt_.o2": {
-      result: components["schemas"]["__type.o6"];
+      result: components["schemas"]["__type.o7"];
       /** @enum {boolean} */
       is_success: true;
       request_to_response?: number;
@@ -2870,7 +2879,7 @@ export interface components {
       events_leading_to_illness: string;
     };
     "ResponseDTO_lt___type_gt_.o3": {
-      result: components["schemas"]["__type.o7"];
+      result: components["schemas"]["__type.o8"];
       /** @enum {boolean} */
       is_success: true;
       request_to_response?: number;
@@ -2911,7 +2920,7 @@ export interface components {
       time: string;
     };
     "ResponseDTO_lt___type_gt_.o4": {
-      result: components["schemas"]["__type.o8"];
+      result: components["schemas"]["__type.o9"];
       /** @enum {boolean} */
       is_success: true;
       request_to_response?: number;
@@ -2939,7 +2948,7 @@ export interface components {
       message: string;
     };
     "_blt__space_doctor_specializations:_space__blt__space_doctor_specialization_id:_space_string;_space_doctor_specialization_name:_space_string;_space_department_id:_space_number;_space_created_at:_space_Date;_space_updated_at:_space_Date;_space_status:_space_Status;_space__bgt__alt__agt_;_space__bgt__space__and__space__blt__space_department_id:_space_number;_space_department_name:_space_string;_space_parent_department_id:_space_number_space__or__space_null;_space_created_at:_space_Date;_space_updated_at:_space_Date;_space_status:_space_Status;_space__bgt_": {
-      doctor_specializations: components["schemas"]["__type.o9"][];
+      doctor_specializations: components["schemas"]["__type.o10"][];
       department_id: number;
       department_name: string;
       parent_department_id: number | null;
@@ -2952,7 +2961,7 @@ export interface components {
       updated_at: string;
       status: components["schemas"]["Status"];
     };
-    "__type.o9": {
+    "__type.o10": {
       doctor_specialization_id: string;
       doctor_specialization_name: string;
       department_id: number;
@@ -2995,12 +3004,12 @@ export interface components {
       /** Format: date-time */
       updated_at: string;
       status: components["schemas"]["Status"];
-      parent_department?: components["schemas"]["__type.o10.Nullable"];
-      sub_departments?: components["schemas"]["__type.o10"][];
-      doctor_specializations?: components["schemas"]["__type.o9"][];
+      parent_department?: components["schemas"]["__type.o11.Nullable"];
+      sub_departments?: components["schemas"]["__type.o11"][];
+      doctor_specializations?: components["schemas"]["__type.o10"][];
       hospital_departments?: components["schemas"]["_blt__space_hospital_id:_space_string;_space_department_id:_space_number;_space_created_at:_space_Date;_space_updated_at:_space_Date;_space_status:_space_Status;_space__bgt__space__and__space__blt__space_hospital?:_space__blt__space_hospital_id:_space_string;_space_hospital_name:_space_string;_space_hospital_address:_space_string;_space_hospital_type:_space_er_MedicalFacilityType;_space_hospital_phone:_space_string_space__or__space_null;_space_hospital_city:_space_string;_space_hospital_district:_space_string;_space_latitude:_space_number_space__or__space_null;_space_longitude:_space_number_space__or__space_null;_space_created_at:_space_Date;_space_updated_at:_space_Date;_space_status:_space_Status;_space__bgt__space__or__space_undefined;_space__bgt_"][];
     };
-    "__type.o10.Nullable": ({
+    "__type.o11.Nullable": ({
       department_id: number;
       department_name: string;
       parent_department_id: number | null;
@@ -3013,7 +3022,7 @@ export interface components {
       updated_at: string;
       status: components["schemas"]["Status"];
     }) | null;
-    "__type.o10": {
+    "__type.o11": {
       department_id: number;
       department_name: string;
       parent_department_id: number | null;
@@ -3037,9 +3046,9 @@ export interface components {
       /** Format: date-time */
       updated_at: string;
       status: components["schemas"]["Status"];
-      hospital?: components["schemas"]["__type.o11"];
+      hospital?: components["schemas"]["__type.o12"];
     };
-    "__type.o11": {
+    "__type.o12": {
       hospital_id: string;
       hospital_name: string;
       hospital_address: string;
@@ -3079,21 +3088,21 @@ export interface components {
       request_to_response?: number;
       message: string;
     };
-    "ErDepartment.GetHospitalDepartmentList": components["schemas"]["__type.o12"][];
-    "__type.o12": {
+    "ErDepartment.GetHospitalDepartmentList": components["schemas"]["__type.o13"][];
+    "__type.o13": {
       department_id: number;
       status: components["schemas"]["Status"];
-      department: components["schemas"]["__type.o13"];
+      department: components["schemas"]["__type.o14"];
     };
-    "__type.o13": {
+    "__type.o14": {
       department_id: number;
       department_name: string;
       parent_department_id: number | null;
     };
     "ErDepartmentRequest.UpdateHospitalDepartmentDto": {
-      update_department_list: components["schemas"]["__type.o14"][];
+      update_department_list: components["schemas"]["__type.o15"][];
     };
-    "__type.o14": {
+    "__type.o15": {
       /**
        * 진료과 id
        * @description 변경할 진료과 id
@@ -3225,7 +3234,7 @@ export interface components {
       message: string;
     };
     "ErEmergencyCenter.GetEmergencyRoomByIdReturn": {
-      emergency_room_beds: components["schemas"]["__type.o15"][];
+      emergency_room_beds: components["schemas"]["__type.o16"][];
       emergency_room_id: string;
       emergency_center_id: string;
       emergency_room_type: components["schemas"]["er_EmergencyRoomType"];
@@ -3236,8 +3245,8 @@ export interface components {
       updated_at: string;
       status: components["schemas"]["Status"];
     };
-    "__type.o15": {
-      emergency_room_bed_patient: components["schemas"]["__type.o16.Nullable"];
+    "__type.o16": {
+      emergency_room_bed_patient: components["schemas"]["__type.o17.Nullable"];
       emergency_room_id: string;
       emergency_room_bed_num: number;
       emergency_room_bed_status: components["schemas"]["er_EmergencyRoomBedStatus"];
@@ -3247,8 +3256,8 @@ export interface components {
       updated_at: string;
       status: components["schemas"]["Status"];
     };
-    "__type.o16.Nullable": {
-      patient: components["schemas"]["__type.o17"];
+    "__type.o17.Nullable": {
+      patient: components["schemas"]["__type.o18"];
       emergency_room_id: string;
       emergency_room_bed_num: number;
       emergency_room_bed_status: components["schemas"]["er_EmergencyRoomBedStatus"];
@@ -3261,7 +3270,7 @@ export interface components {
       updated_at: string;
       status: components["schemas"]["Status"];
     } | null;
-    "__type.o17": {
+    "__type.o18": {
       patient_name: string;
       patient_id: string;
       patient_birth: string;
@@ -3349,7 +3358,7 @@ export interface components {
       /** Format: date-time */
       updated_at: string;
       status: components["schemas"]["Status"];
-      department: components["schemas"]["__type.o10"];
+      department: components["schemas"]["__type.o11"];
     };
     "_blt__space_hospital_id:_space_string;_space_medical_equipment_id:_space_number;_space_medical_equipment_count:_space_number;_space_created_at:_space_Date;_space_updated_at:_space_Date;_space_status:_space_Status;_space__bgt__space__and__space__blt__space_medical_equipment:_space__blt__space_medical_equipment_id:_space_number;_space_medical_equipment_name:_space_string;_space_created_at:_space_Date;_space_updated_at:_space_Date;_space_status:_space_Status;_space__bgt_;_space__bgt_": {
       hospital_id: string;
@@ -3363,9 +3372,9 @@ export interface components {
       /** Format: date-time */
       updated_at: string;
       status: components["schemas"]["Status"];
-      medical_equipment: components["schemas"]["__type.o18"];
+      medical_equipment: components["schemas"]["__type.o19"];
     };
-    "__type.o18": {
+    "__type.o19": {
       medical_equipment_id: number;
       medical_equipment_name: string;
       /**
@@ -3388,9 +3397,9 @@ export interface components {
       /** Format: date-time */
       updated_at: string;
       status: components["schemas"]["Status"];
-      servere_illness: components["schemas"]["__type.o19"];
+      servere_illness: components["schemas"]["__type.o20"];
     };
-    "__type.o19": {
+    "__type.o20": {
       servere_illness_id: string;
       servere_illness_name: string;
       /**
@@ -3415,10 +3424,10 @@ export interface components {
       /** Format: date-time */
       updated_at: string;
       status: components["schemas"]["Status"];
-      emergency_room_beds: components["schemas"]["__type.o20"][];
-      _count: components["schemas"]["__type.o21"];
+      emergency_room_beds: components["schemas"]["__type.o21"][];
+      _count: components["schemas"]["__type.o22"];
     };
-    "__type.o20": {
+    "__type.o21": {
       emergency_room_id: string;
       emergency_room_bed_num: number;
       emergency_room_bed_status: components["schemas"]["er_EmergencyRoomBedStatus"];
@@ -3431,7 +3440,7 @@ export interface components {
       updated_at: string;
       status: components["schemas"]["Status"];
     };
-    "__type.o21": {
+    "__type.o22": {
       emergency_room_beds: number;
     };
     "ErEmergencyCenterRequest.AssignPatientToBedDto": {
@@ -3625,7 +3634,7 @@ export interface components {
       hospital_id: string;
       employee_doctor_specializations?: components["schemas"]["_blt__space_employee_id:_space_string;_space_doctor_specialization_id:_space_string;_space_created_at:_space_Date;_space_status:_space_Status;_space__bgt__space__and__space__blt__space_doctor_specialization:_space__blt__space_doctor_specialization_id:_space_string;_space_doctor_specialization_name:_space_string;_space_department_id:_space_number;_space_created_at:_space_Date;_space_updated_at:_space_Date;_space_status:_space_Status;_space__bgt_;_space__bgt_"][];
       employee_nurse_specializations?: components["schemas"]["_blt__space_employee_id:_space_string;_space_nurse_specialization_id:_space_string;_space_created_at:_space_Date;_space_status:_space_Status;_space__bgt__space__and__space__blt__space_nurse_specialization:_space__blt__space_nurse_specialization_id:_space_string;_space_nurse_specialization_name:_space_string;_space_created_at:_space_Date;_space_updated_at:_space_Date;_space_status:_space_Status;_space__bgt_;_space__bgt_"][];
-      department?: components["schemas"]["__type.o10.Nullable"];
+      department?: components["schemas"]["__type.o11.Nullable"];
     };
     /** @enum {string} */
     er_EmployeeRole: "ADMIN" | "SPECIALIST" | "RESIDENT" | "NURSE" | "EMT" | "RECEPTIONIST";
@@ -3638,7 +3647,7 @@ export interface components {
        */
       created_at: string;
       status: components["schemas"]["Status"];
-      doctor_specialization: components["schemas"]["__type.o9"];
+      doctor_specialization: components["schemas"]["__type.o10"];
     };
     "_blt__space_employee_id:_space_string;_space_nurse_specialization_id:_space_string;_space_created_at:_space_Date;_space_status:_space_Status;_space__bgt__space__and__space__blt__space_nurse_specialization:_space__blt__space_nurse_specialization_id:_space_string;_space_nurse_specialization_name:_space_string;_space_created_at:_space_Date;_space_updated_at:_space_Date;_space_status:_space_Status;_space__bgt_;_space__bgt_": {
       employee_id: string;
@@ -3649,9 +3658,9 @@ export interface components {
        */
       created_at: string;
       status: components["schemas"]["Status"];
-      nurse_specialization: components["schemas"]["__type.o22"];
+      nurse_specialization: components["schemas"]["__type.o23"];
     };
-    "__type.o22": {
+    "__type.o23": {
       nurse_specialization_id: string;
       nurse_specialization_name: string;
       /**
@@ -3670,7 +3679,7 @@ export interface components {
       request_to_response?: number;
       message: string;
     };
-    "ErEmployeeResponse.GetNurseSpecilizationList": components["schemas"]["__type.o22"][];
+    "ErEmployeeResponse.GetNurseSpecilizationList": components["schemas"]["__type.o23"][];
     "Try_lt_ErEquipment.GetEquipmentStatusByIdReturn_gt_": {
       result: components["schemas"]["ErEquipment.GetEquipmentStatusByIdReturn"];
       /** @enum {boolean} */
@@ -3678,8 +3687,8 @@ export interface components {
       request_to_response?: number;
       message: string;
     };
-    "ErEquipment.GetEquipmentStatusByIdReturn": components["schemas"]["__type.o23"][] | components["schemas"]["ER_EQUIPMENT_ERROR.HOSPITAL_INVALID"];
-    "__type.o23": {
+    "ErEquipment.GetEquipmentStatusByIdReturn": components["schemas"]["__type.o24"][] | components["schemas"]["ER_EQUIPMENT_ERROR.HOSPITAL_INVALID"];
+    "__type.o24": {
       equipment_id: number;
       equipment_name: string;
       equipment_count: number;
@@ -3693,13 +3702,13 @@ export interface components {
       http_status_code: 400;
     };
     Try_lt_Array_lt___type_gt__gt_: {
-      result: components["schemas"]["__type.o23"][];
+      result: components["schemas"]["__type.o24"][];
       /** @enum {boolean} */
       is_success: true;
       request_to_response?: number;
       message: string;
     };
-    "__type.o24": {
+    "__type.o25": {
       equipment_id: number;
       equipment_count: number;
     };
@@ -3718,8 +3727,8 @@ export interface components {
       request_to_response?: number;
       message: string;
     };
-    "ErIllness.GetIllnessesReturn": components["schemas"]["__type.o25"][];
-    "__type.o25": {
+    "ErIllness.GetIllnessesReturn": components["schemas"]["__type.o26"][];
+    "__type.o26": {
       illness_id: string;
       illness_name: string;
     };
@@ -3734,8 +3743,8 @@ export interface components {
       request_to_response?: number;
       message: string;
     };
-    "ErIllness.GetServableIllnessesStatusReturn": components["schemas"]["__type.o26"][] | components["schemas"]["ER_ILLNESS_ERROR.HOSPITAL_INVALID"];
-    "__type.o26": {
+    "ErIllness.GetServableIllnessesStatusReturn": components["schemas"]["__type.o27"][] | components["schemas"]["ER_ILLNESS_ERROR.HOSPITAL_INVALID"];
+    "__type.o27": {
       servable_illness_id: string;
       servable_illness_name: string;
       status: components["schemas"]["Status"];
@@ -3749,13 +3758,13 @@ export interface components {
       http_status_code: 400;
     };
     "Try_lt_Array_lt___type_gt__gt_.o1": {
-      result: components["schemas"]["__type.o26"][];
+      result: components["schemas"]["__type.o27"][];
       /** @enum {boolean} */
       is_success: true;
       request_to_response?: number;
       message: string;
     };
-    "__type.o27": {
+    "__type.o28": {
       illness_id: string;
       /** @enum {string} */
       illness_status: "ACTIVE" | "INACTIVE" | "DELETED";
@@ -3767,7 +3776,7 @@ export interface components {
       request_to_response?: number;
       message: string;
     };
-    "ErIllness.UpdateServableIllnessesStatusReturn": components["schemas"]["__type.o26"][] | components["schemas"]["ER_ILLNESS_ERROR.HOSPITAL_INVALID"] | components["schemas"]["ER_ILLNESS_ERROR.ILLNESS_NOT_EXIST"];
+    "ErIllness.UpdateServableIllnessesStatusReturn": components["schemas"]["__type.o27"][] | components["schemas"]["ER_ILLNESS_ERROR.HOSPITAL_INVALID"] | components["schemas"]["ER_ILLNESS_ERROR.ILLNESS_NOT_EXIST"];
     "ER_ILLNESS_ERROR.ILLNESS_NOT_EXIST": {
       /** @enum {string} */
       message: "Illness not exist: ";
@@ -3808,7 +3817,7 @@ export interface components {
        * @description 환자의 주소
        */
       patient_address: string;
-      guardian?: components["schemas"]["__type.o28"];
+      guardian?: components["schemas"]["__type.o29"];
       /**
        * 환자의 담당 의사 고유 아이디
        * @description 환자의 담당 의사 고유 아이디
@@ -3820,7 +3829,7 @@ export interface components {
        */
       nurse_id: string;
     };
-    "__type.o28": {
+    "__type.o29": {
       /**
        * 보호자의 이름
        * @description 보호자의 이름
@@ -3874,9 +3883,9 @@ export interface components {
       /** Format: date-time */
       updated_at: string;
       status: components["schemas"]["Status"];
-      guardian: components["schemas"]["__type.o29.Nullable"];
+      guardian: components["schemas"]["__type.o30.Nullable"];
     };
-    "__type.o29.Nullable": {
+    "__type.o30.Nullable": {
       guardian_id: string;
       guardian_name: string;
       guardian_phone: string;
@@ -3936,10 +3945,10 @@ export interface components {
       message: string;
     };
     "ReqEmsToErResponse.createEmsToErRequest": {
-      target_emergency_center_list: components["schemas"]["__type.o30"][];
-      patient: components["schemas"]["__type.o31"];
+      target_emergency_center_list: components["schemas"]["__type.o31"][];
+      patient: components["schemas"]["__type.o32"];
     };
-    "__type.o30": {
+    "__type.o31": {
       patient_id: string;
       emergency_center_id: string;
       request_status: components["schemas"]["RequestStatus"];
@@ -3964,7 +3973,7 @@ export interface components {
     };
     /** @enum {string} */
     RequestStatus: "REQUESTED" | "ACCEPTED" | "CANCELED" | "COMPLETED" | "VIEWED" | "REJECTED";
-    "__type.o31": {
+    "__type.o32": {
       patient_id: string;
       /** @description 익명으로 기본값 */
       patient_name: string;
@@ -4036,7 +4045,7 @@ export interface components {
       /** Format: date-time */
       updated_at: string;
       status: components["schemas"]["Status"];
-      patient: components["schemas"]["__type.o31"];
+      patient: components["schemas"]["__type.o32"];
     };
     "ReqEmsToErRequest.RespondEmsToErRequestDto": {
       /** @enum {string} */

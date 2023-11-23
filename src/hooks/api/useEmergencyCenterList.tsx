@@ -1,3 +1,4 @@
+import { useAuth } from "@/providers/AuthProvider";
 import {
   EmergencyCenter,
   useEmergencyCenterListStore,
@@ -15,13 +16,25 @@ interface GetEmergencyCenterListResponse {
   message: string;
 }
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcherWithToken = ({
+  url,
+  accessToken,
+}: {
+  url: string;
+  accessToken: string | null;
+}) =>
+  fetch(url, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  }).then((res) => res.json());
 export const useEmergencyCenterList = () => {
   const laction = useGeoLocation();
   const { emergencyCenters, query, setPageLimit, setEmergencyCenters } =
     useEmergencyCenterListStore();
   const latitude = laction?.[0].toString() || "0";
   const longitude = laction?.[1].toString() || "0";
+  const { accessToken } = useAuth();
 
   const queryParam = new URLSearchParams();
 
@@ -34,10 +47,15 @@ export const useEmergencyCenterList = () => {
     queryParam.append("emergency_center_type", type)
   );
 
+  // `/api/er/emergency-centers?${queryParam.toString()}`,
   const { data, error, isLoading } = useSWR<GetEmergencyCenterListResponse>(
     `/api/er/emergency-centers?${queryParam.toString()}`,
-    fetcher
+    (url: string) => fetcherWithToken({ url, accessToken })
   );
+  // const { data, error, isLoading } = useSWR<GetEmergencyCenterListResponse>(
+  //   `/api/er/emergency-centers?${queryParam.toString()}`,
+  //   fetcher
+  // );
 
   useEffect(() => {
     if (data) {

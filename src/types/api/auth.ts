@@ -8,6 +8,7 @@ export type LoginResponse = {
       id_card: string;
       role: "ADMIN" | "DRIVER" | "EMERGENCY_MEDICAL_TECHNICIAN" | "DISPATCHER";
     };
+    access_token: string;
   };
   request_to_response: number;
   http_status_code: number;

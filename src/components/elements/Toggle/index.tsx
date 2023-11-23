@@ -16,6 +16,7 @@ interface ToggleProps {
   checked: boolean;
   onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
   bgColor?: BrandColor;
+  onClick?: (e?: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 export const Toggle = ({

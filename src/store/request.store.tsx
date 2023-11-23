@@ -1,5 +1,4 @@
-import { arr_diff } from "@/lib/utils";
-import { RequestInfo, RequestStatus } from "@/types/model/request";
+import { RequestInfo } from "@/types/model/request";
 import { create } from "zustand";
 
 interface Query {
@@ -24,91 +23,54 @@ interface Query {
 }
 
 interface RequestStore {
-  request_list: RequestInfo[];
+  requests: RequestInfo[];
+  rejectedRequests: RequestInfo[];
+  requestedRequests: RequestInfo[];
+  pageStatus: "ALL" | "REQUESTED" | "REJECTED";
+  setPageStatus: (status: "ALL" | "REQUESTED" | "REJECTED") => void;
   query: Query;
-  pageLimit: {
-    total_count: number;
-    total_page: number;
-  };
-  setQueryStatus: (request_status?: RequestStatus[]) => void;
-  setQueryPage: (page: number) => void;
-  setQueryLimit: (limit: number) => void;
   setRequestList: (
-    request_list: RequestInfo[] | ((prevState: RequestInfo[]) => RequestInfo[])
+    requests: RequestInfo[] | ((prevState: RequestInfo[]) => RequestInfo[])
   ) => void;
-  setPageLimit: (pageLimit: {
-    total_count: number;
-    total_page: number;
-  }) => void;
+  // 정렬은 시간순과 거리순으로나누어짐 그에따른 상태는
+  //
+  order: boolean;
+  setOrder: (orderBy: boolean) => void;
+  orderby: "TIME" | "DISTANCE";
+  setOrderBy: (orderBy: "TIME" | "DISTANCE") => void;
+  // sort: () => void;
 }
 
 export const useRequestStore = create<RequestStore>((set) => ({
-  request_list: [],
+  requests: [],
+  rejectedRequests: [],
+  requestedRequests: [],
+  pageStatus: "ALL",
+  setPageStatus: (status) => set((state) => ({ ...state, pageStatus: status })),
   query: {
-    limit: 20,
+    limit: 1000,
     page: 1,
+    request_status: ["REQUESTED", "REJECTED", "VIEWED", "ACCEPTED"],
   },
-  pageLimit: {
-    total_count: 0,
-    total_page: 0,
-  },
-  setQueryStatus: (request_status?: RequestStatus[]) =>
+  setRequestList: (requests) =>
     set((state) => {
+      const newRequests =
+        typeof requests === "function" ? requests(state.requests) : requests;
       return {
         ...state,
-        query: {
-          ...state.query,
-          request_status,
-          page: 1,
-        },
-        request_list: arr_diff(
-          state.query?.request_status || [],
-          request_status || []
-        )
-          ? []
-          : state.request_list,
+        requests: newRequests,
+        rejectedRequests: newRequests.filter(
+          (request) => request.request_status === "REJECTED"
+        ),
+        requestedRequests: newRequests.filter(
+          (request) =>
+            request.request_status === "REQUESTED" ||
+            request.request_status === "VIEWED"
+        ),
       };
     }),
-
-  setRequestList: (
-    request_list: RequestInfo[] | ((prevState: RequestInfo[]) => RequestInfo[])
-  ) =>
-    set((state) => {
-      return {
-        ...state,
-        request_list:
-          typeof request_list === "function"
-            ? request_list(state.request_list)
-            : request_list,
-      };
-    }),
-
-  setQueryPage: (page: number) =>
-    set((state) => {
-      return {
-        ...state,
-        query: {
-          ...state.query,
-          page,
-        },
-      };
-    }),
-  setQueryLimit: (limit: number) =>
-    set((state) => {
-      return {
-        ...state,
-        query: {
-          ...state.query,
-          limit,
-        },
-        request_list: [],
-      };
-    }),
-  setPageLimit: (pageLimit: { total_count: number; total_page: number }) =>
-    set((state) => {
-      return {
-        ...state,
-        pageLimit,
-      };
-    }),
+  order: true,
+  setOrder: (orderBy) => set((state) => ({ ...state, order: orderBy })),
+  orderby: "DISTANCE",
+  setOrderBy: (orderBy) => set((state) => ({ ...state, orderby: orderBy })),
 }));

@@ -3,6 +3,7 @@ import { Form, FormField } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
 import { usePatient } from "@/hooks/api/usePatient";
 import { useEvaluationStep } from "@/hooks/useEvaluationStep";
+import { useAuth } from "@/providers/AuthProvider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -99,7 +100,7 @@ export const OpqrstEvaluationForm = ({ formId }: OpqrstEvaluationFormProps) => {
   const { toast } = useToast();
   const { patient } = usePatient();
   const router = useRouter();
-
+  const { accessToken } = useAuth();
   const { nextPage, steps } = useEvaluationStep();
 
   const form = useForm<z.infer<typeof opqrstEvaluationSchema>>({
@@ -159,6 +160,7 @@ export const OpqrstEvaluationForm = ({ formId }: OpqrstEvaluationFormProps) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
       body,
     })
