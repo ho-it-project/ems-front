@@ -29,7 +29,7 @@ export const EmployeeTable = ({
   });
 
   return (
-    <div className="flex h-full w-full flex-col">
+    <div className="flex h-full w-full flex-col overflow-auto">
       <div className="fontSize-small flex rounded-[1rem] border border-main bg-bg py-[0.6rem] pl-[3.2rem] text-main">
         <div className="flex-1">이름</div>
         <div className="flex-1">역할</div>

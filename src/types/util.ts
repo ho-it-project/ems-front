@@ -11,3 +11,11 @@ export type IsEmptyObject<Obj extends Record<PropertyKey, unknown>> = [
   : false;
 
 export type COmit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+
+export type WithUndefined<T extends object> = {
+  [key in keyof T]: T[key] | undefined;
+};
+
+export type Option<T extends object> = {
+  [key in keyof T]?: T[key];
+};

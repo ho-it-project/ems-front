@@ -59,6 +59,7 @@ export const EmployeePageHeader = ({
               onChange={(e) => setValue(e.currentTarget.value)}
               border="none"
               width="w-[80%]"
+              inputBoxClassName="h-[24px]"
             />
             <button onClick={onSearch(searchType, value)}>
               <Image

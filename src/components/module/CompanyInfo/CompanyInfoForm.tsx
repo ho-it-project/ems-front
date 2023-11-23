@@ -9,7 +9,7 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Company } from "@/types/model";
-import { Employee } from "@/types/model/employ.model";
+import { Employee } from "@/types/model/employee";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -34,7 +34,7 @@ interface CompnayInfoformProps {
     | "ambulance_company_address"
     | "ambulance_company_area"
     | "ambulance_company_phone"
-  > & { admin_name: Pick<Employee, "employee_name">["employee_name"] };
+  > & { admin_name: Employee["employee_name"] };
 }
 
 export const CompanyInfoForm = ({ companyDetail }: CompnayInfoformProps) => {

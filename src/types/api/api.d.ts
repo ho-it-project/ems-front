@@ -4070,6 +4070,7 @@ export interface components {
     "EmsAuthResponse.CheckAuthStatus": {
       is_login: boolean;
       employee: components["schemas"]["EmsAuth.AccessTokenSignPayload.Nullable"];
+      access_token: string | null;
     };
     "EmsAuth.AccessTokenSignPayload.Nullable": {
       ambulance_company_id: string;
@@ -4114,6 +4115,11 @@ export interface components {
        */
       is_login: boolean;
       employee: components["schemas"]["EmsAuth.AccessTokenSignPayload"];
+      /**
+       * access_token
+       * @description access_token
+       */
+      access_token: string;
     };
     "EmsAuth.AccessTokenSignPayload": {
       ambulance_company_id: string;
@@ -4143,6 +4149,7 @@ export interface components {
     "ErAuthResponse.CheckAuthStatus": {
       is_login: boolean;
       employee: components["schemas"]["ErAuth.AccessTokenSignPayload.Nullable"];
+      access_token: string | null;
     };
     "ErAuth.AccessTokenSignPayload.Nullable": {
       hospital_id: string;
@@ -4176,6 +4183,7 @@ export interface components {
     "ErAuthResponse.Login": {
       is_login: boolean;
       employee: components["schemas"]["ErAuth.AccessTokenSignPayload"];
+      access_token: string;
     };
     "ErAuth.AccessTokenSignPayload": {
       hospital_id: string;
