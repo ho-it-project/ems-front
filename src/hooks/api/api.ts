@@ -97,16 +97,12 @@ export function usePostApi<P extends MethodPaths<"post">>(
     if (options?.useLoader) loader.on();
     setIsLoading(true);
 
-    const { data: _data, error: _error } = await client({
+    const { data: _data, error } = await client({
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     }).POST(url, ...body);
     const data = _data as SuccessResponse<P, "post">; //모든 response는 Success | Fail정보를 따름
-    const error = _error as
-      | ErrorResponse<P, "post">
-      | UnhandledExeption
-      | unknown;
 
     const result = commonLogic<P, "post">(data, error);
     setData(result);
@@ -132,16 +128,12 @@ export function usePatchApi<P extends MethodPaths<"patch">>(
     if (options?.useLoader) loader.on();
     setIsLoading(true);
 
-    const { data: _data, error: _error } = await client({
+    const { data: _data, error } = await client({
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     }).PATCH(url, ...body);
     const data = _data as SuccessResponse<P, "patch">;
-    const error = _error as
-      | ErrorResponse<P, "patch">
-      | UnhandledExeption
-      | unknown;
 
     const result = commonLogic<P, "patch">(data, error);
     setData(result);
@@ -167,16 +159,13 @@ export function usePutApi<P extends MethodPaths<"put">>(
     if (options?.useLoader) loader.on();
     setIsLoading(true);
 
-    const { data: _data, error: _error } = await client({
+    const { data: _data, error } = await client({
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     }).PUT(url, ...body);
     const data = _data as SuccessResponse<P, "put">;
-    const error = _error as
-      | ErrorResponse<P, "put">
-      | UnhandledExeption
-      | unknown;
+
     const result = commonLogic<P, "put">(data, error);
     setData(result);
 
