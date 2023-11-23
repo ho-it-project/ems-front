@@ -154,7 +154,7 @@ const AuthProvider = ({ children }: PropsWithChildren<IAuthProviderProps>) => {
       return;
     }
     setIsLoading(false);
-  }, [router, user, status]);
+  }, [router, user, status, pathname]);
 
   if (isLoading)
     return (
