@@ -1,7 +1,12 @@
+"use client";
+
 import { Tag } from "@/components/elements/Tag";
 import { cn } from "@/lib/utils";
 import { EMERGENCY_CENTER_TYPE } from "@/store/emergencyCenter.store";
+import { useRequestStore } from "@/store/request.store";
 import { EmergencyCenter_ } from "@/types/emergencyCenter.type";
+import { ReqeustStatueKor, reqeustStatueKorMap } from "@/types/model/request";
+import { useEffect, useState } from "react";
 
 interface EmergencyInfoCardProps {
   emergencyCenter: EmergencyCenter_;
@@ -10,6 +15,19 @@ interface EmergencyInfoCardProps {
 export const EmergencyCenterInfoCard = ({
   emergencyCenter,
 }: EmergencyInfoCardProps) => {
+  const { requests } = useRequestStore();
+  const [tag, setTag] = useState<ReqeustStatueKor | "">("");
+
+  useEffect(() => {
+    const request = requests.find(
+      (request) =>
+        request.emergency_center_id === emergencyCenter.emergency_center_id
+    );
+    if (request) {
+      setTag(reqeustStatueKorMap[request.request_status]);
+    }
+  }, [requests, emergencyCenter]);
+
   return (
     <div className="flex h-fit gap-[5rem]">
       <div className="h-auto w-[24rem] rounded-lg bg-bg"></div>
@@ -26,13 +44,23 @@ export const EmergencyCenterInfoCard = ({
             {emergencyCenter.emergency_center_name}
           </p>
           <div>
-            <Tag
-              text="요청거절"
-              bgColor="grey"
-              color="white"
-              border="none"
-              className="w-fit grid-cols-1 whitespace-nowrap px-[1.4rem]"
-            />
+            {tag && (
+              <Tag
+                text={tag}
+                bgColor={
+                  tag === "수락"
+                    ? "main"
+                    : tag === "요청" || tag === "열람"
+                    ? "yellow"
+                    : tag === "거절"
+                    ? "grey"
+                    : "main"
+                }
+                color="white"
+                border="none"
+                className="w-fit grid-cols-1 whitespace-nowrap px-[1.4rem]"
+              />
+            )}
           </div>
         </div>
 

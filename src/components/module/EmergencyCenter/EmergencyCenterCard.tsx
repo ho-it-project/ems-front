@@ -1,8 +1,13 @@
+"use client";
 import { Tag } from "@/components/elements/Tag";
+import { cn } from "@/lib/utils";
 import {
   EMERGENCY_CENTER_TYPE,
   EmergencyCenter,
 } from "@/store/emergencyCenter.store";
+import { useRequestStore } from "@/store/request.store";
+import { ReqeustStatueKor, reqeustStatueKorMap } from "@/types/model/request";
+import { useEffect, useState } from "react";
 
 interface EmergencyCenterCardProps {
   emergencyCenter: EmergencyCenter;
@@ -18,8 +23,36 @@ export const EmergencyCenterCard = ({
     emergency_center_primary_phone,
     emergency_center_address,
   } = emergencyCenter;
+  const [tag, setTag] = useState<ReqeustStatueKor | "">("");
+
+  const { requests } = useRequestStore();
+
+  useEffect(() => {
+    const request = requests.find(
+      (request) =>
+        request.emergency_center_id === emergencyCenter.emergency_center_id
+    );
+    if (request) {
+      setTag(reqeustStatueKorMap[request.request_status]);
+    }
+  }, [requests, emergencyCenter]);
+
   return (
-    <div className="flex w-full gap-[4rem] rounded-lg border border-main px-[4rem] py-[2.4rem]">
+    <div className="relative flex w-full gap-[4rem] rounded-lg border border-main px-[4rem] py-[2.4rem]">
+      {tag && (
+        <div
+          className={cn(
+            "absolute left-[1rem] top-[1rem] h-[1rem] w-[1rem] rounded-full bg-black",
+            tag === "수락"
+              ? "bg-main"
+              : tag === "요청" || tag === "열람"
+              ? "bg-yellow"
+              : tag === "거절"
+              ? "bg-grey"
+              : "bg-main"
+          )}
+        />
+      )}
       <div className="flex max-w-[23rem] flex-[1]  flex-col gap-[0.6rem]">
         <h2 className="fontSize-xlarge flex-1">{emergency_center_name}</h2>
         <div className="fontSize-regular-l flex-1">
