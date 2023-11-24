@@ -1,21 +1,20 @@
 "use client";
 import { Toggle } from "@/components/elements/Toggle";
 import { useWindowSize } from "@/hooks";
-import { useRequest } from "@/hooks/api/useRequest";
 import { cn } from "@/lib/utils";
+import { useRequestStore } from "@/store/request.store";
 import { useEffect } from "react";
 
 export const RequestInfoPageHeader = () => {
   const { width } = useWindowSize();
-  const {
-    pageStatus,
-    setPageStatus,
-    order,
-    setOrder,
-    orderby,
-    setOrderBy,
-    sort,
-  } = useRequest();
+  const order = useRequestStore((state) => state.order);
+  const orderby = useRequestStore((state) => state.orderby);
+  const setOrder = useRequestStore((state) => state.setOrder);
+  const setOrderBy = useRequestStore((state) => state.setOrderBy);
+  const sort = useRequestStore((state) => state.sort);
+  const pageStatus = useRequestStore((state) => state.pageStatus);
+  const setPageStatus = useRequestStore((state) => state.setPageStatus);
+
   const typeHandler = (status: "ALL" | "REQUESTED" | "REJECTED") => () => {
     setPageStatus(status);
   };
@@ -27,7 +26,7 @@ export const RequestInfoPageHeader = () => {
     setOrderBy(orderby === "DISTANCE" ? "TIME" : "DISTANCE");
   };
   const onChageHandler = () => {
-    console.log(order, orderby);
+    ("");
   };
   useEffect(() => {
     sort();
@@ -62,23 +61,25 @@ export const RequestInfoPageHeader = () => {
           요청거절
         </div>
       </div>
-      <div
-        className="fontSize-small flex items-center gap-[0.4rem]"
-        onClick={onClickOrder}
-      >
-        오름차순
-        <Toggle size="small" checked={order} onChange={onChageHandler} />
-      </div>
-      <div
-        className="fontSize-small flex items-center gap-[0.4rem]"
-        onClick={onClickOrderBy}
-      >
-        거리/시간
-        <Toggle
-          size="small"
-          checked={orderby === "TIME"}
-          onChange={onChageHandler}
-        />
+      <div className="flex gap-[1rem]">
+        <div
+          className="fontSize-small flex items-center gap-[0.4rem]"
+          onClick={onClickOrder}
+        >
+          오름차순
+          <Toggle size="small" checked={order} onChange={onChageHandler} />
+        </div>
+        <div
+          className="fontSize-small flex items-center gap-[0.4rem]"
+          onClick={onClickOrderBy}
+        >
+          거리/시간
+          <Toggle
+            size="small"
+            checked={orderby === "TIME"}
+            onChange={onChageHandler}
+          />
+        </div>
       </div>
     </div>
   );
