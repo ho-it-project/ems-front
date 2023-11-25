@@ -1,6 +1,7 @@
 "use client";
 import { useProfile } from "@/hooks/api/useProfile";
 import { cn } from "@/lib/utils";
+import { useRequestStore } from "@/store/request.store";
 import Link from "next/link";
 import { useState } from "react";
 import { KakaoMap } from "../module/common/KakaoMap";
@@ -26,7 +27,7 @@ export const Nav = ({ shadow = "medium" }: NavProps) => {
   const onClickMapHandlerUnFocus = () => {
     setFocusMap(false);
   };
-
+  const { requests } = useRequestStore();
   return (
     <div className="flex h-full w-[18.3rem] min-w-[18.3rem] flex-col gap-[2rem] bg-transparent ">
       <div className={`${topSectionClass}`}>
@@ -89,16 +90,25 @@ export const Nav = ({ shadow = "medium" }: NavProps) => {
 
       <div className="relative">
         <div className="relative top-[1rem] z-[5] rounded-t-lg bg-lgrey bg-opacity-30 px-[1.2rem] py-[1rem] pb-[2rem]">
-          <NavResponseStatusCard />
+          {requests.length > 0 && <NavResponseStatusCard />}
         </div>
         <div className="relative z-[10]">
           <MenuCard shadow={shadow}>
-            <Link
-              href={"/response"}
-              className="flex h-full w-full items-center justify-center"
-            >
-              <div>수용 요청 확인하기</div>
-            </Link>
+            {requests.length > 0 ? (
+              <Link
+                href={"/response"}
+                className="flex h-full w-full items-center justify-center"
+              >
+                <div>수용 요청 확인하기</div>
+              </Link>
+            ) : (
+              <Link
+                href={"/request"}
+                className="flex h-full w-full items-center justify-center"
+              >
+                <div>수용 요청하기</div>
+              </Link>
+            )}
           </MenuCard>
         </div>
       </div>

@@ -6,6 +6,7 @@ import { ProgressTracker } from "@/components/module/common/ProgressTracker";
 import { useToast } from "@/components/ui/use-toast";
 import { usePatient } from "@/hooks/api/usePatient";
 import { useEvaluationStep } from "@/hooks/useEvaluationStep";
+import { useAuth } from "@/providers/AuthProvider";
 import { DCAP_BTLS_AFFECT, DCAP_BTLS_AffectArea } from "@/types/evaluation";
 import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -24,6 +25,7 @@ export const DcapBtlsEvaluaionContainer = () => {
   const { toast } = useToast();
   const router = useRouter();
   const { nextPage, steps } = useEvaluationStep();
+  const { accessToken } = useAuth();
   useEffect(() => {
     if (patient && !patient.patient_id) {
       router.push("/patient/rapid-evaluation");
@@ -167,6 +169,7 @@ export const DcapBtlsEvaluaionContainer = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
           },
           body,
         })

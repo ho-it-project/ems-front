@@ -2,7 +2,11 @@
 import { Tag } from "@/components/elements/Tag";
 import { ProgressTracker } from "@/components/module/common/ProgressTracker";
 import { useToast } from "@/components/ui/use-toast";
+import { usePatient } from "@/hooks/api/usePatient";
 import { useAuth } from "@/providers/AuthProvider";
+import { useRequestStore } from "@/store/request.store";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 function coordinateOnCircle(
   radius: number,
   angleDegrees: number
@@ -36,7 +40,16 @@ export const RequestContainer = () => {
   const radius = 8.2; // Half of 16.4rem
   const adjustedRadius = radius; // Adjust for dot size
   const { toast } = useToast();
+  const router = useRouter();
+  const { requests } = useRequestStore();
+  const { patient } = usePatient();
   const requestOnClick = () => {
+    if (!patient) {
+      toast({ description: "환자 정보가 없습니다." });
+      router.push("/patient/rapid-evaluation");
+      return;
+    }
+
     fetch("/api/requests/ems-to-er", {
       method: "POST",
       headers: {
@@ -57,6 +70,11 @@ export const RequestContainer = () => {
         toast({ description: "요청에 실패하였습니다." });
       });
   };
+  useEffect(() => {
+    if (requests.length > 0) {
+      router.push("/response");
+    }
+  }, [requests, router]);
 
   return (
     <>

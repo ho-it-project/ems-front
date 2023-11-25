@@ -14,6 +14,10 @@ export const PatientInfoContainer = () => {
   const router = useRouter();
   const { steps } = useEvaluationStep();
   useEffect(() => {
+    if (!patient?.patient_id && steps.length === 0) {
+      router.push("/patient/rapid-evaluation");
+      return;
+    }
     if (patient?.patient_id && steps.length === 0) {
       router.push("/request");
     }
