@@ -1,7 +1,7 @@
 import { useRequestStore } from "@/store/request.store";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
+import { useShallow } from "zustand/react/shallow";
 import { useGetApi } from ".";
-
 /**
  * 무한스크롤링으로 페이지네이션 할 경우
  * 소켓으로 실시간으로 데이터를 받아올때 중복데이터가 발생할 수 있음
@@ -11,16 +11,21 @@ import { useGetApi } from ".";
  *
  */
 export const useRequest = () => {
-  const {
-    query,
-    setRequestList,
-    rejectedRequests,
-    requestedRequests,
-    requests,
-    order,
-    orderby,
-    ...rest
-  } = useRequestStore();
+  const query = useRequestStore(useShallow((state) => state.query));
+  const order = useRequestStore(useShallow((state) => state.order));
+  const orderby = useRequestStore(useShallow((state) => state.orderby));
+  const setRequestList = useRequestStore(
+    useShallow((state) => state.setRequestList)
+  );
+  const requests = useRequestStore(useShallow((state) => state.requests));
+  const requestedRequests = useRequestStore(
+    useShallow((state) => state.requestedRequests)
+  );
+  const rejectedRequests = useRequestStore(
+    useShallow((state) => state.rejectedRequests)
+  );
+  const requestDate = useRequestStore(useShallow((state) => state.requestDate));
+  const sort = useRequestStore(useShallow((state) => state.sort));
 
   const { data, isLoading } = useGetApi(
     "/requests/ems-to-er/ems",
@@ -32,29 +37,6 @@ export const useRequest = () => {
     }
   );
 
-  const sort = useCallback(() => {
-    setRequestList((prev) => {
-      const sortedRequests = [...prev];
-      if (orderby === "DISTANCE") {
-        sortedRequests.sort((a, b) =>
-          order ? a.distance - b.distance : b.distance - a.distance
-        );
-      }
-      if (orderby === "TIME") {
-        sortedRequests.sort((a, b) =>
-          order
-            ? new Date(a.request_date).getTime() -
-              new Date(b.request_date).getTime()
-            : new Date(b.request_date).getTime() -
-              new Date(a.request_date).getTime()
-        );
-      }
-      return sortedRequests;
-    });
-  }, [orderby, order, setRequestList]);
-  useEffect(() => {
-    sort();
-  }, [sort]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -62,13 +44,16 @@ export const useRequest = () => {
       const { result } = data;
       const { request_list } = result;
       setRequestList((prev) => {
-        if (prev.length === 0) {
-          return request_list;
-        }
-        if (prev.length !== request_list.length) {
-          return request_list;
-        }
-        return prev;
+        return request_list.reduce((acc, cur) => {
+          const { emergency_center_id } = cur;
+          const isExist = acc.some(
+            (prevReq) => prevReq.emergency_center_id === emergency_center_id
+          );
+          if (!isExist) {
+            return [...acc, cur];
+          }
+          return acc;
+        }, prev);
       });
     }
   }, [data, setRequestList]);
@@ -81,7 +66,7 @@ export const useRequest = () => {
     isLoading,
     order,
     orderby,
+    requestDate,
     sort,
-    ...rest,
   };
 };

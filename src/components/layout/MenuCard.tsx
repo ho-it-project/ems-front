@@ -4,6 +4,7 @@ interface MenuCardProps {
   children: React.ReactNode;
   size?: "x-small" | "small" | "medium" | "large";
   shadow?: "large" | "medium";
+  link?: string;
 }
 
 export const MenuCard = ({
@@ -38,5 +39,9 @@ export const MenuCard = ({
   ${roundedClass}
   ${shadowClass}
   `);
-  return <div className={cardClass}>{children}</div>;
+  return (
+    <>
+      <div className={cardClass}>{children}</div>
+    </>
+  );
 };

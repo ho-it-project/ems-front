@@ -11,6 +11,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useEvaluationStep } from "@/hooks/useEvaluationStep";
 import { useGeoLocation } from "@/hooks/useGeoLocation";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/providers/AuthProvider";
 import { useEveluationStepStore } from "@/store/evaluationStep.store";
 import { usePatientStore } from "@/store/patient.store";
 import {
@@ -74,6 +75,8 @@ export const PatientInfoForm = ({ changeForm }: PatientInfoFormProps) => {
       patient_severity: "UNKNOWN",
     },
   });
+
+  const { accessToken } = useAuth();
 
   const onSubmit = (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
@@ -169,6 +172,7 @@ export const PatientInfoForm = ({ changeForm }: PatientInfoFormProps) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(body),
     })

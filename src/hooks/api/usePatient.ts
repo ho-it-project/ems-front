@@ -1,35 +1,41 @@
-import { useAuth } from "@/providers/AuthProvider";
 import { usePatientStore } from "@/store/patient.store";
-import { Patient } from "@/types/model/patient";
 import { useEffect } from "react";
-import useSWR from "swr";
+import { useGetApi } from ".";
 
-const fetcher = (url: string, accessToken: string | null) =>
-  fetch(url, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  })
-    .then((res) => res.json())
-    .catch((err) => console.log(err));
 export const usePatient = () => {
-  const { patient, setPatient } = usePatientStore();
-  const { accessToken } = useAuth();
-  const { data } = useSWR<{ result: { patient_list: Patient[] } }>(
-    `/api/ems/patients?patient_status=PENDING&patient_status=REQUESTED&patient_status=ACCEPTED`,
-    (url: string) => fetcher(url, accessToken)
+  const patient = usePatientStore((state) => state.patient);
+  const setPatient = usePatientStore((state) => state.setPatient);
+  // const { data, isLoading } = useSWR<{ result: { patient_list: Patient[] } }>(
+  //   `/api/ems/patients?patient_status=PENDING&patient_status=REQUESTED&patient_status=ACCEPTED`,
+  //   (url: string) => fetcher(url, accessToken)
+  // );
+  const { data, isLoading } = useGetApi(
+    "/ems/patients",
+    {
+      useLoader: true,
+    },
+    {
+      params: {
+        query: {
+          query: {
+            patient_status: ["PENDING", "REQUESTED", "ACCEPTED"],
+          },
+        },
+      },
+    }
   );
 
   useEffect(() => {
+    if (isLoading) return;
     if (!data) return;
-    if (!data.result) return;
     const { result } = data;
     const patient_list = result.patient_list;
     if (patient_list.length > 0)
       setPatient({ ...patient_list[0], patient_identity_number: "********" });
-  }, [data, setPatient]);
+  }, [data, setPatient, isLoading]);
   return {
-    patient,
+    patient: patient,
     error: undefined,
+    isLoading,
   };
 };

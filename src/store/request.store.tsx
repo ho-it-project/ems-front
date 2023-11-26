@@ -38,10 +38,11 @@ interface RequestStore {
   setOrder: (orderBy: boolean) => void;
   orderby: "TIME" | "DISTANCE";
   setOrderBy: (orderBy: "TIME" | "DISTANCE") => void;
-  // sort: () => void;
+  requestDate?: Date;
+  sort: () => void;
 }
 
-export const useRequestStore = create<RequestStore>((set) => ({
+export const useRequestStore = create<RequestStore>((set, get) => ({
   requests: [],
   rejectedRequests: [],
   requestedRequests: [],
@@ -56,6 +57,13 @@ export const useRequestStore = create<RequestStore>((set) => ({
     set((state) => {
       const newRequests =
         typeof requests === "function" ? requests(state.requests) : requests;
+      const requestDate = newRequests.reduce((prev, curr) => {
+        const currDate = new Date(curr.request_date);
+        if (!prev) return currDate;
+        if (prev.getTime() > currDate.getTime()) return currDate;
+        return prev;
+      }, new Date());
+
       return {
         ...state,
         requests: newRequests,
@@ -67,10 +75,36 @@ export const useRequestStore = create<RequestStore>((set) => ({
             request.request_status === "REQUESTED" ||
             request.request_status === "VIEWED"
         ),
+        requestDate,
       };
     }),
   order: true,
   setOrder: (orderBy) => set((state) => ({ ...state, order: orderBy })),
   orderby: "DISTANCE",
   setOrderBy: (orderBy) => set((state) => ({ ...state, orderby: orderBy })),
+  sort: () => {
+    const { requests, order, orderby } = get();
+    const sortedRequests = requests.sort((a, b) => {
+      if (orderby === "DISTANCE") {
+        if (a.distance > b.distance) return order ? 1 : -1;
+        if (a.distance < b.distance) return order ? -1 : 1;
+        return 0;
+      }
+      if (a.request_date > b.request_date) return order ? 1 : -1;
+      if (a.request_date < b.request_date) return order ? -1 : 1;
+      return 0;
+    });
+    set((state) => ({
+      ...state,
+      requests: sortedRequests,
+      rejectedRequests: sortedRequests.filter(
+        (request) => request.request_status === "REJECTED"
+      ),
+      requestedRequests: sortedRequests.filter(
+        (request) =>
+          request.request_status === "REQUESTED" ||
+          request.request_status === "VIEWED"
+      ),
+    }));
+  },
 }));

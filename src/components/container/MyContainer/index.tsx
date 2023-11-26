@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 export const MyContainer = () => {
   const FORM_ID = "my-profile-form";
   const { profile } = useProfile();
-  const [editMode, setEditMode] = useState<boolean>(true);
+  const [editMode, setEditMode] = useState<boolean>(false);
   useEffect(() => {
     console.log(profile);
   }, [profile]);
