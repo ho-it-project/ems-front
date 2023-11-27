@@ -50,8 +50,10 @@ export const EmergencyCenterInfoCard = ({
                 bgColor={
                   tag === "수락"
                     ? "main"
-                    : tag === "요청" || tag === "열람"
+                    : tag === "요청"
                     ? "yellow"
+                    : tag === "열람"
+                    ? "main30"
                     : tag === "거절"
                     ? "grey"
                     : "main"
