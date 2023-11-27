@@ -21,17 +21,22 @@ interface GetEmergencyCenterDetailResponseFailDto {
 
 export default async function Page({ params }: { params: Params }) {
   const { emergency_center_id } = params;
-
   const data:
     | GetEmergencyCenterDetailResponseSuccessDto
     | GetEmergencyCenterDetailResponseFailDto = await fetch(
     `${API_SERVER}/er/emergency-centers/${emergency_center_id}`,
     {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
       next: {
         revalidate: 10,
       },
     }
-  ).then((res) => res.json());
+  )
+    .then((res) => res.json())
+    .then((res) => res);
 
   return (
     <TabWrapper
