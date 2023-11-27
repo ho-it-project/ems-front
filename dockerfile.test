@@ -4,8 +4,6 @@ WORKDIR /usr/src/app
 
 COPY package*.json tsconfig.json tsconfig.spec.json ./
 
-ENV NODE_ENV=TEST
-
 RUN npm install 
 
 COPY ./ ./
