@@ -16,8 +16,6 @@ export const RequestTable = () => {
   }, []);
   const { requests, rejectedRequests, requestedRequests } = useRequest();
 
-
-
   const { pageStatus } = useRequestStore();
   const [request_list, setRequestList] = useState<RequestInfo[]>([]);
   useEffect(() => {
@@ -75,7 +73,7 @@ export const RequestTable = () => {
                         : request.request_status === "REQUESTED"
                         ? "yellow"
                         : request.request_status === "VIEWED"
-                        ? "yellow"
+                        ? "main30"
                         : request.request_status === "COMPLETED"
                         ? "main"
                         : "main"

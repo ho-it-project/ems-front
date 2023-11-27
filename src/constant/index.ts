@@ -9,4 +9,4 @@ export const EMS_REQUEST_ER_UPDATE = "ems-request-er-update";
 const domain = process.env.NEXT_PUBLIC_ROOT_DOMAIN;
 const protocol = process.env.NEXT_PUBLIC_PROTOCOL;
 const apiPrefix = process.env.NEXT_PUBLIC_API_PREFIX;
-export const API_SERVER = `${protocol}://api.${domain}/${apiPrefix}`;
+export const API_SERVER = `${protocol}://api.${domain}${apiPrefix}`;
