@@ -13,7 +13,7 @@ COPY ./ ./
 
 
 ENV NPM_CONFIG_LOGLEVEL warn
-ENV NODE_ENV=PRODUCTION
+ENV NODE_ENV = production
 
 
 # Install app dependencies
