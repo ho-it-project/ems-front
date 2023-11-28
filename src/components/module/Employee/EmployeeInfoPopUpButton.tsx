@@ -65,6 +65,7 @@ export const EmployeeInfoPopUpButton = <T extends "add" | "edit">({
     setOpen(true);
   };
   const onClickClose = () => {
+    setEmployeeInfo(getDefaultEmployee(type, _employee));
     setOpen(false);
   };
   const [employeeInfo, setEmployeeInfo] =
