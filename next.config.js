@@ -3,7 +3,18 @@
 const domain = process.env.NEXT_PUBLIC_ROOT_DOMAIN;
 const protocol = process.env.NEXT_PUBLIC_PROTOCOL;
 const apiPrefix = process.env.NEXT_PUBLIC_API_PREFIX;
-const nextConfig = {
+const prod = process.env.NODE_ENV === "production";
+
+const runtimeCaching = require("next-pwa/cache");
+const withPWA = require("next-pwa")({
+  dest: "public",
+  register: true,
+  skipWaiting: true,
+  runtimeCaching,
+  disable: prod ? false : true,
+});
+
+const nextConfig = withPWA({
   reactStrictMode: true,
   experimental: { instrumentationHook: true },
   images: {
@@ -33,6 +44,6 @@ const nextConfig = {
     );
     return config;
   },
-};
+});
 
 module.exports = nextConfig;
