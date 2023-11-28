@@ -15,6 +15,7 @@ export const useCompanyDetailQuery = () => {
       },
     }
   );
+
   const { data: employeeData, error: adminErr } = useGetApi(
     "/ems/employees",
     { useLoader: true },
@@ -23,11 +24,31 @@ export const useCompanyDetailQuery = () => {
     }
   );
 
-  if (!detailData || !employeeData)
-    return { data: undefined, error: { detailErr, adminErr } };
+  const { data: completedRequestData, error: completedRequestErr } = useGetApi(
+    "/requests/ems-to-er/ems",
+    { useLoader: true },
+    {
+      params: {
+        query: {
+          query: {
+            request_status: ["COMPLETED"],
+          },
+        },
+      },
+    }
+  );
 
-  if (detailErr || adminErr)
-    return { data: undefined, error: { detailErr, adminErr } };
+  if (!detailData || !employeeData || !completedRequestData)
+    return {
+      data: undefined,
+      error: { detailErr, adminErr, completedRequestErr },
+    };
+
+  if (detailErr || adminErr || completedRequestErr)
+    return {
+      data: undefined,
+      error: { detailErr, adminErr, completedRequestErr },
+    };
 
   const admin_employee_name = employeeData.result.employee_list.filter(
     (v) => v.role === "ADMIN"
@@ -39,6 +60,8 @@ export const useCompanyDetailQuery = () => {
       admin_name: admin_employee_name,
       employee_count: employeeData.result.employee_list.length.toString(),
       ambulance_count: detailData.result.ambulances.length.toString(),
+      completed_request_count:
+        completedRequestData.result.request_list.length.toString(),
     },
     error: undefined,
   };

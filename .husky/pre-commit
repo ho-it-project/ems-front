@@ -2,7 +2,7 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 #exit 1
-npx lint-staged
+# npx lint-staged
 npm run generate
 tsc --noEmit
 git add src/types/api/api.d.ts

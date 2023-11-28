@@ -1,6 +1,6 @@
 import { BrandColor, FontSize } from "@/types";
-import { ChevronRight } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { ChevronRightIcon } from "lucide-react";
+import Link from "next/link";
 
 interface CompanyStatusCardProps {
   title: string;
@@ -8,7 +8,7 @@ interface CompanyStatusCardProps {
   titleColor?: BrandColor;
   statusColor?: BrandColor;
   titleSize?: FontSize;
-  route: string;
+  link?: string;
 }
 export const CompanyStatusCard = ({
   title,
@@ -16,10 +16,8 @@ export const CompanyStatusCard = ({
   status,
   titleColor = "main",
   statusColor = "red",
-  route,
+  link,
 }: CompanyStatusCardProps) => {
-  const router = useRouter();
-
   //title
   const titleSizeClass = `fontSize-${titleSize}`;
   const titleColorClass = `text-${titleColor}`;
@@ -31,17 +29,9 @@ export const CompanyStatusCard = ({
     <div className="shadow-medium flex h-[15rem] w-[21rem] flex-col justify-between rounded-lg bg-white p-[1.6rem]">
       <div className="flex justify-between">
         <h2 className={`${titleSizeClass} ${titleColorClass}`}>{title}</h2>
-        <div className="h-[2.4rem] w-[2.4rem] bg-white">
-          <button onClick={() => router.push(route)}>
-            <ChevronRight color="#979797" />
-            {/* <Image
-              src="/icon/right-arrow.svg"
-              width={24}
-              height={24}
-              alt="back-arrow"
-            /> */}
-          </button>
-        </div>
+        <Link href={link || "/"}>
+          <ChevronRightIcon size={24} className="text-lgrey" />
+        </Link>
       </div>
       <div className="font-nanum flex justify-end text-[7rem] font-[100]">
         <div className={statusColorClass}>{status}</div>

@@ -86,6 +86,11 @@ export const Nav = ({ shadow = "medium" }: NavProps) => {
         <MenuCard shadow={shadow}>
           <div>환자 정보 수정하기</div>
         </MenuCard>
+        <MenuCard shadow={shadow}>
+          <Link href={"/"}>
+            <div>회사정보 보기</div>
+          </Link>
+        </MenuCard>
       </div>
 
       <div className="relative">

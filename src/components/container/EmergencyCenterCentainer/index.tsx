@@ -35,7 +35,8 @@ export const EmergencyCenterContainer = () => {
                 e.currentTarget?.scrollHeight -
                   e.currentTarget?.scrollTop -
                   e.currentTarget?.clientHeight <
-                1
+                  1 &&
+                isLoading === false
               ) {
                 if (query.page < pageLimit.total_page) {
                   setQueryPage(query.page + 1);
