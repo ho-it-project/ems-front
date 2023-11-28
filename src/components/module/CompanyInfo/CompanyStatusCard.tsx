@@ -1,4 +1,6 @@
 import { BrandColor, FontSize } from "@/types";
+import { ChevronRightIcon } from "lucide-react";
+import Link from "next/link";
 
 interface CompanyStatusCardProps {
   title: string;
@@ -6,6 +8,7 @@ interface CompanyStatusCardProps {
   titleColor?: BrandColor;
   statusColor?: BrandColor;
   titleSize?: FontSize;
+  link?: string;
 }
 export const CompanyStatusCard = ({
   title,
@@ -13,6 +16,7 @@ export const CompanyStatusCard = ({
   status,
   titleColor = "main",
   statusColor = "red",
+  link,
 }: CompanyStatusCardProps) => {
   //title
   const titleSizeClass = `fontSize-${titleSize}`;
@@ -25,7 +29,9 @@ export const CompanyStatusCard = ({
     <div className="shadow-medium flex h-[15rem] w-[21rem] flex-col justify-between rounded-lg bg-white p-[1.6rem]">
       <div className="flex justify-between">
         <h2 className={`${titleSizeClass} ${titleColorClass}`}>{title}</h2>
-        <div className="h-[2.4rem] w-[2.4rem] bg-bg" />
+        <Link href={link || "/"}>
+          <ChevronRightIcon size={24} className="text-lgrey" />
+        </Link>
       </div>
       <div className="font-nanum flex justify-end text-[7rem] font-[100]">
         <div className={statusColorClass}>{status}</div>
