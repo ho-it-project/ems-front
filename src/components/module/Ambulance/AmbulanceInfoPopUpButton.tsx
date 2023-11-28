@@ -11,10 +11,8 @@ interface AmbulanceInfoPopUpButtonProps {
   onSubmmit?: () => void;
   submitButtonName?: string;
   Ambulance?: {
-    name: string;
-    role: string;
-    id: string;
-    password: string;
+    ambulance_number: string;
+    ambulance_type: string;
   };
   type?: "add" | "edit";
 }
@@ -23,10 +21,8 @@ export const AmbulanceInfoPopUpButton = ({
   title,
   onSubmmit,
   Ambulance = {
-    name: "",
-    role: "",
-    id: "",
-    password: "",
+    ambulance_number: "",
+    ambulance_type: "",
   },
   submitButtonName = "추가하기",
   type = "add",
@@ -93,7 +89,7 @@ export const AmbulanceInfoPopUpButton = ({
                       </div>
                       <Input
                         placeholder="차량번호"
-                        value={AmbulanceInfo.name || ""}
+                        value={AmbulanceInfo.ambulance_number || ""}
                         name="name"
                         onChange={onChange}
                       />
@@ -105,7 +101,7 @@ export const AmbulanceInfoPopUpButton = ({
                       </div>
                       <Input
                         placeholder="차종"
-                        value={AmbulanceInfo.role || ""}
+                        value={AmbulanceInfo.ambulance_type || ""}
                         name="role"
                         onChange={onChange}
                       />
