@@ -2,7 +2,7 @@ import { useAuth } from "@/providers/AuthProvider";
 import { useGetApi } from "./api";
 
 export const useCompanyDetailQuery = () => {
-  const { user } = useAuth();
+  const { user } = useAuth({ isLogin: true });
 
   const { data: detailData, error: detailErr } = useGetApi(
     "/ems/ambulance-companies/{ems_ambulance_company_id}",
@@ -10,7 +10,7 @@ export const useCompanyDetailQuery = () => {
     {
       params: {
         path: {
-          ems_ambulance_company_id: user?.ambulance_company_id ?? "",
+          ems_ambulance_company_id: user.ambulance_company_id,
         },
       },
     }
