@@ -24,11 +24,13 @@ const Employee = ({
   // const [deletedData, setDeletedData] =
   //   useState<Response<"/ems/ambulances/{ambulance_id}", "post">>();
   return (
-    <div className="my-3 flex gap-36 rounded-[2.9rem] bg-white px-6 text-2xl font-medium">
-      <div className="w-24">{driver.employee.employee_name}</div>
-      <div className="w-24">{driver.employee.role}</div>
-      <div className="w-56">{driver.employee.id_card}</div>
-      {/* <div className="flex w-full flex-row-reverse"> */}
+    <div className="my-3 flex justify-between rounded-[2.9rem] bg-white px-6 text-2xl font-medium">
+      <div className="flex gap-36">
+        <div className="w-24">{driver.employee.employee_name}</div>
+        <div className="w-24">{driver.employee.role}</div>
+        <div className="w-56">{driver.employee.id_card}</div>
+        {/* <div className="flex w-full flex-row-reverse"> */}
+      </div>
       <div>
         <div className="flex h-[2.4rem] w-[2.4rem] items-center justify-center">
           <button onClick={() => removeEmployee(driver.employee_id)}>

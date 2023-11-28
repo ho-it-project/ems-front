@@ -22,8 +22,16 @@ export const CompanyInfoContainer = () => {
       {data && (
         <>
           <div className="mt-[2.4rem] flex justify-between gap-[2rem]">
-            <CompanyStatusCard title="차량/팀" status={data.ambulance_count} />
-            <CompanyStatusCard title="직원" status={data.employee_count} />
+            <CompanyStatusCard
+              title="차량/팀"
+              status={data.ambulance_count}
+              link="/ambulance"
+            />
+            <CompanyStatusCard
+              title="직원"
+              status={data.employee_count}
+              link="/employee"
+            />
             <CompanyStatusCard
               title="출동"
               status={data.completed_request_count}
