@@ -1,4 +1,5 @@
 import { useAuth } from "@/providers/AuthProvider";
+import { useCallback } from "react";
 import { useGetApi } from ".";
 
 export const useAbmulance = () => {
@@ -37,7 +38,10 @@ export const useAmbulanceDetail = (ambulance_id: string) => {
   );
 
   const detail = data?.result;
-  const refetch = async () => (await _refetch())?.result;
+  const refetch = useCallback(
+    async () => (await _refetch())?.result,
+    [_refetch]
+  );
 
   return { detail, errorOnDetail, refetch };
 };

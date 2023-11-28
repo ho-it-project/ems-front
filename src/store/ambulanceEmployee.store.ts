@@ -1,4 +1,5 @@
 import { Ambulance } from "@/types/model";
+import { Employee } from "@/types/model/employee";
 import {
   COmit,
   Expand,
@@ -24,15 +25,19 @@ type State = ExpandRecursively<
           >;
         })[];
       }
-  >
+  > & {
+    employee_modify_queue: Array<{
+      action: "ADD" | "REMOVE";
+      employee_id: string;
+    }>;
+  }
 >;
 
 type Action = {
   setAmbulance: (values: Expand<Option<State>>) => void;
-  refetch: undefined | (() => void);
-  setRefetch: (
-    refetch: () => Promise<COmit<State, "employee_type"> | undefined>
-  ) => void;
+  removeEmployee: (employee_id: string) => void;
+  appendEmployee: (employee: Employee) => void;
+  resetQueue: () => void;
 };
 
 export const useAmbulanceEmployeeStore = create<State & Action>((set) => ({
@@ -44,7 +49,36 @@ export const useAmbulanceEmployeeStore = create<State & Action>((set) => ({
   ambulance_type: undefined,
   employees: undefined,
   setAmbulance: (values) => set({ ...values }),
-  refetch: undefined,
-  setRefetch: (_refetch) =>
-    set({ refetch: async () => set({ ...(await _refetch()) }) }),
+  employee_modify_queue: [],
+  appendEmployee: (employee: Employee) =>
+    set(({ employee_modify_queue: q, employees }) => {
+      const queue = q.filter((v) => v.employee_id !== employee.employee_id);
+      queue.push({ action: "ADD", employee_id: employee.employee_id });
+      const _employees = employees ?? [];
+
+      _employees.push({
+        ambulance_id: employee.employee_id,
+        employee_id: employee.employee_id,
+        employee: {
+          employee_id: employee.employee_id,
+          employee_name: employee.employee_name,
+          id_card: employee.id_card,
+          role: employee.role,
+        },
+      });
+
+      return { employee_modify_queue: queue, employees: [..._employees] };
+    }),
+  removeEmployee: (employee_id: string) =>
+    set(({ employee_modify_queue: q, employees }) => {
+      const queue = q.filter((v) => v.employee_id !== employee_id);
+      queue.push({ action: "REMOVE", employee_id });
+
+      const _employees = employees?.filter(
+        (v) => v.employee_id !== employee_id
+      );
+
+      return { employee_modify_queue: queue, employees: _employees };
+    }),
+  resetQueue: () => set({ employee_modify_queue: [] }),
 }));

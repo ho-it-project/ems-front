@@ -1,6 +1,6 @@
 "use client";
 import {
-  AmbulanceDriverPageHeaderContainer,
+  AmbulanceEmployeePageHeaderContainer,
   AmbulanceEmployeeTableContainer,
   EmployeeSettingContainer,
   NotFoundPopUpContainer,
@@ -18,31 +18,29 @@ export const AmbulanceEmployeePrototype = ({
 }: {
   ambulance_id: string;
 }) => {
-  const { detail, errorOnDetail, refetch } = useAmbulanceDetail(ambulance_id);
-  const { setAmbulance, setRefetch } = useAmbulanceEmployeeStore(
+  const { detail, errorOnDetail } = useAmbulanceDetail(ambulance_id);
+  const { setAmbulance } = useAmbulanceEmployeeStore(
     useShallow((state) => ({
       setAmbulance: state.setAmbulance,
-      setRefetch: state.setRefetch,
     }))
   );
 
   const [query, setQuery] = useState<PathQuery<"/ems/employees", "get">>({});
-  const { data: _employees } = useEmployeeTableQuery(query);
-  const employees = _employees?.filter(
-    (employee) => employee.role !== "DRIVER"
-  );
+  const { data: employees } = useEmployeeTableQuery(query);
+  // const employees = _employees?.filter(
+  //   (employee) => employee.role !== "DRIVER"
+  // );
 
   useEffect(() => {
     if (detail) setAmbulance({ ...detail, employee_type: "OTHER_EMPLOYEE" });
-    if (refetch) setRefetch(refetch);
-  }, [detail, errorOnDetail, refetch]);
+  }, [detail, errorOnDetail, setAmbulance]);
 
   if (errorOnDetail?.http_status_code === 404)
     return <NotFoundPopUpContainer />;
 
   return (
     <div className="h-full w-full">
-      <AmbulanceDriverPageHeaderContainer />
+      <AmbulanceEmployeePageHeaderContainer />
       <div className="h-10" />
       <EmployeeSettingContainer />
       <div className="h-8" />

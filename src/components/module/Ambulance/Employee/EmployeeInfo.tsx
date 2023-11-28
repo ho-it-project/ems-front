@@ -1,12 +1,7 @@
-import { usePostApi } from "@/hooks/api";
 import { useAmbulanceEmployeeStore } from "@/store/ambulanceEmployee.store";
-import { Response } from "@/types/api";
 import { Ambulance } from "@/types/model";
-import { EmployeeRole } from "@/types/model/employee";
 import { COmit } from "@/types/util";
-import { useCallback, useState } from "react";
-import { AmbulanceEmployeeRemovePopUpButton } from "./AmbulanceEmployeeRemovePopUpButton";
-import { AmbulanceEmployeeRemovedPopUp } from "./AmbulanceEmployeeRemovedPopUp";
+import { X } from "lucide-react";
 
 const Employee = ({
   driver,
@@ -18,17 +13,16 @@ const Employee = ({
     >;
   };
 }) => {
-  const { mutate } = usePostApi("/ems/ambulances/{ambulance_id}", {
-    useLoader: true,
-  });
-  const { ambulance_id, refetchDriver } = useAmbulanceEmployeeStore(
-    (store) => ({
-      ambulance_id: store.ambulance_id,
-      refetchDriver: store.refetch,
-    })
-  );
-  const [deletedData, setDeletedData] =
-    useState<Response<"/ems/ambulances/{ambulance_id}", "post">>();
+  // const { mutate } = usePostApi("/ems/ambulances/{ambulance_id}", {
+  //   useLoader: true,
+  // });
+  const { removeEmployee } = useAmbulanceEmployeeStore((store) => ({
+    // ambulance_id: store.ambulance_id,
+    // refetchDriver: store.refetch,
+    removeEmployee: store.removeEmployee,
+  }));
+  // const [deletedData, setDeletedData] =
+  //   useState<Response<"/ems/ambulances/{ambulance_id}", "post">>();
   return (
     <div className="my-3 flex gap-36 rounded-[2.9rem] bg-white px-6 text-2xl font-medium">
       <div className="w-24">{driver.employee.employee_name}</div>
@@ -36,7 +30,13 @@ const Employee = ({
       <div className="w-56">{driver.employee.id_card}</div>
       {/* <div className="flex w-full flex-row-reverse"> */}
       <div>
-        <AmbulanceEmployeeRemovePopUpButton
+        <div className="flex h-[2.4rem] w-[2.4rem] items-center justify-center">
+          <button onClick={() => removeEmployee(driver.employee_id)}>
+            <X width={12} height={12} />
+          </button>
+        </div>
+
+        {/* <AmbulanceEmployeeRemovePopUpButton
           onSubmit={async () => {
             const result = await mutate({
               params: { path: { ambulance_id: ambulance_id ?? "" } },
@@ -55,7 +55,7 @@ const Employee = ({
             setDeletedData(undefined);
             refetchDriver?.();
           }}
-        />
+        /> */}
       </div>
     </div>
   );
@@ -66,15 +66,15 @@ export const EmployeeInfo = () => {
     (state) => state.employee_type
   );
 
-  const filter = useCallback(
-    (role: EmployeeRole) =>
-      employee_type === "DRIVER" ? role === "DRIVER" : role !== "DRIVER",
-    [employee_type]
-  );
+  // const filter = useCallback(
+  //   (role: EmployeeRole) =>
+  //     employee_type === "DRIVER" ? role === "DRIVER" : role !== "DRIVER",
+  //   [employee_type]
+  // );
 
-  const drivers = useAmbulanceEmployeeStore(
-    (store) =>
-      store.employees?.filter((employee) => filter(employee.employee.role))
+  const employees = useAmbulanceEmployeeStore(
+    (store) => store.employees
+    // store.employees?.filter((employee) => filter(employee.employee.role))
   );
 
   return (
@@ -90,7 +90,7 @@ export const EmployeeInfo = () => {
           <div className="w-24">ID</div>
         </div>
         <div className="h-5" />
-        {drivers?.map((v) => <Employee key={v.employee_id} driver={v} />)}
+        {employees?.map((v) => <Employee key={v.employee_id} driver={v} />)}
       </div>
     </div>
   );

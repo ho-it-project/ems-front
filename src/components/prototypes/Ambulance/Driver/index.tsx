@@ -1,6 +1,6 @@
 "use client";
 import {
-  AmbulanceDriverPageHeaderContainer,
+  AmbulanceEmployeePageHeaderContainer,
   AmbulanceEmployeeTableContainer,
   EmployeeSettingContainer,
   NotFoundPopUpContainer,
@@ -18,35 +18,31 @@ export const AmbulanceDriverPrototype = ({
 }: {
   ambulance_id: string;
 }) => {
-  const {
-    detail: detail,
-    errorOnDetail,
-    refetch,
-  } = useAmbulanceDetail(ambulance_id);
-  const { setAmbulance, setRefetch } = useAmbulanceEmployeeStore(
-    useShallow((state) => ({
-      setAmbulance: state.setAmbulance,
-      setRefetch: state.setRefetch,
-    }))
+  const { detail: detail, errorOnDetail } = useAmbulanceDetail(ambulance_id);
+  const setAmbulance = useAmbulanceEmployeeStore(
+    useShallow((state) => state.setAmbulance)
   );
 
   const [query, setQuery] = useState<PathQuery<"/ems/employees", "get">>({});
-  const { data: _employees } = useEmployeeTableQuery(query);
-  const employees = _employees?.filter(
-    (employee) => employee.role === "DRIVER"
-  );
+  const { data: employees } = useEmployeeTableQuery(query);
+  // const employees = _employees?.filter(
+  //   (employee) => employee.role === "DRIVER"
+  // );
 
-  useEffect(() => {
-    if (detail) setAmbulance({ ...detail, employee_type: "DRIVER" });
-    if (refetch) setRefetch(refetch);
-  }, [detail, errorOnDetail, refetch]);
+  useEffect(
+    () => {
+      if (detail) setAmbulance({ ...detail, employee_type: "DRIVER" });
+    },
+    [detail, errorOnDetail, setAmbulance]
+    // ["detail", "errondetail", "refetch", "setAmb", "setRefetch"]
+  );
 
   if (errorOnDetail?.http_status_code === 404)
     return <NotFoundPopUpContainer />;
 
   return (
     <div className="h-full w-full">
-      <AmbulanceDriverPageHeaderContainer />
+      <AmbulanceEmployeePageHeaderContainer />
       <div className="h-10" />
       <EmployeeSettingContainer />
       <div className="h-8" />

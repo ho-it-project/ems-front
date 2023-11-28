@@ -22,23 +22,23 @@ export const AmbulanceEmployeeTableContainer = ({
     (driver) => driver.employee_id
   );
   data = data.filter((driver) => !drivers?.includes(driver.employee_id));
-  const { mutate } = usePostApi("/ems/ambulances/{ambulance_id}", {
-    useLoader: true,
-  });
-  const { ambulance_id, refetchEmployee } = useAmbulanceEmployeeStore(
-    (store) => ({
-      ambulance_id: store.ambulance_id,
-      refetchEmployee: store.refetch,
-    })
-  );
+  // const { mutate } = usePostApi("/ems/ambulances/{ambulance_id}", {
+  //   useLoader: true,
+  // });
+  const { appendEmployee } = useAmbulanceEmployeeStore((store) => ({
+    // ambulance_id: store.ambulance_id,
+    // refetchEmployee: store.refetch,
+    appendEmployee: store.appendEmployee,
+  }));
   const onPlus = async (item: Employee) => {
-    await mutate({
-      params: { path: { ambulance_id: ambulance_id ?? "" } },
-      body: {
-        employee_list: [{ action: "ADD", employee_id: item.employee_id }],
-      },
-    });
-    refetchEmployee?.();
+    appendEmployee(item);
+    // await mutate({
+    //   params: { path: { ambulance_id: ambulance_id ?? "" } },
+    //   body: {
+    //     employee_list: [{ action: "ADD", employee_id: item.employee_id }],
+    //   },
+    // });
+    // refetchEmployee?.();
   };
 
   //for dev mode
