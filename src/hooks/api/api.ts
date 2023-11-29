@@ -47,9 +47,22 @@ function commonLogic<P extends keyof paths, M extends PathMethod<P>>(
   else return { data: undefined, error: undefined };
 }
 
+/**
+ *
+ * @param url 요청 보낼 url
+ * @param options options
+ * - useLoader: boolean, 로딩시 내장 spinner를 통한 로더 사용여부.
+ * - enabled: boolean api를 요청할 조건.
+ * @param params 들어갈 파라미터(query, path 등)
+ * - 파라미터에 chaining operator(?.)이 포함된다면, options의 enabled 설정 권장.
+ * @returns isLoading, refetch, {data, error}
+ */
 export function useGetApi<P extends MethodPaths<"get">>(
   url: P,
-  { useLoader = true }: { useLoader?: boolean },
+  {
+    useLoader = true,
+    enabled = true,
+  }: { useLoader?: boolean; enabled?: boolean },
   ...init: Init<"get", P>
 ) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -61,15 +74,18 @@ export function useGetApi<P extends MethodPaths<"get">>(
     error: _error,
     isLoading: isLoadingSWR,
     mutate,
-  } = useSWR({ url, init }, async (obj: { url: P; init: Init<"get", P> }) => {
-    const { data, error } = await client({
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }).GET(obj.url, ...init);
-    if (error) throw error;
-    return data;
-  });
+  } = useSWR(
+    () => (enabled ? { url, init } : false),
+    async (obj: { url: P; init: Init<"get", P> }) => {
+      const { data, error } = await client({
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }).GET(obj.url, ...init);
+      if (error) throw error;
+      return data;
+    }
+  );
   const _data = getData as SuccessResponse<P, "get">;
   // console.log("getApi", url, loader.id, _data, _error, isLoadingSWR);
 
