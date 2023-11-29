@@ -2,6 +2,7 @@
 import { useProfile } from "@/hooks/api/useProfile";
 import { useRequest } from "@/hooks/api/useRequest";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/providers/AuthProvider";
 import Link from "next/link";
 import { useState } from "react";
 import { KakaoMap } from "../module/common/KakaoMap";
@@ -28,6 +29,11 @@ export const Nav = ({ shadow = "medium" }: NavProps) => {
     setFocusMap(false);
   };
   const { requests } = useRequest();
+  const { signOut } = useAuth();
+  const onClickLogout = () => {
+    signOut();
+  };
+
   return (
     <div className="flex h-full w-[18.3rem] min-w-[18.3rem] flex-col gap-[2rem] bg-transparent ">
       <div className={`${topSectionClass}`}>
@@ -90,6 +96,9 @@ export const Nav = ({ shadow = "medium" }: NavProps) => {
           <Link href={"/"}>
             <div>회사정보 보기</div>
           </Link>
+        </MenuCard>
+        <MenuCard shadow={shadow}>
+          <div onClick={onClickLogout}>임시 로그아웃</div>
         </MenuCard>
       </div>
 

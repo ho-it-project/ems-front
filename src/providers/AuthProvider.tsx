@@ -115,6 +115,7 @@ function useProvideAuth() {
   const signOut = () => {
     fetch("api/ems/auth/logout", { method: "POST" });
     setUser(null);
+    setAccessToken(null);
   };
 
   return {
