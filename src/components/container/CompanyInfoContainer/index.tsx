@@ -1,4 +1,5 @@
 "use client";
+import Spinner from "@/components/Spinner";
 import { PageHeader } from "@/components/elements/PageHeader";
 import { CompanyInfoForm } from "@/components/module/CompanyInfo/CompanyInfoForm";
 import { CompanyStatusCard } from "@/components/module/CompanyInfo/CompanyStatusCard";
@@ -16,6 +17,13 @@ export const CompanyInfoContainer = () => {
       toast({ description: error.detailErr?.message });
     }
   }, [error, toast]);
+  if (error)
+    return (
+      <>
+        <Spinner />;
+      </>
+    );
+
   return (
     <div className={"flex h-full w-full max-w-[75rem] flex-col "}>
       <PageHeader title="회사 정보" fontSize="xlarge" />
