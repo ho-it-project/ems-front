@@ -81,7 +81,7 @@ function useProvideAuth() {
     if (!res.is_success || !res.result.is_login) return false;
     return res.result;
   };
-  const router = useRouter();
+  // const router = useRouter();
   const [user, setUser] = useState<IAuthContext["user"] | null>(null);
   const [accessToken, setAccessToken] =
     useState<IAuthContext["accessToken"]>(null);
@@ -113,11 +113,11 @@ function useProvideAuth() {
     return true;
   };
   const signOut = () => {
-    fetch("api/ems/auth/logout", { method: "POST" })
+    fetch("/api/ems/auth/logout", { method: "POST" })
       .then((res) => res.json())
       .then((res) => {
         if (res.is_success) {
-          router.push("/login");
+          // router.push("/login");
           setUser(null);
           setAccessToken(null);
         }
