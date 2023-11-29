@@ -3,7 +3,8 @@ import { useAmbulanceDetail } from "@/hooks/api/useAmbulance";
 import { AmbulanceEmployee, Ambulance as AmbulanceModel } from "@/types/model";
 import { Employee } from "@/types/model/employee";
 import { COmit } from "@/types/util";
-import { AmbulanceDeletePopUpButton } from "./AmbulanceDeletePopUpButton";
+import { useRouter } from "next/navigation";
+import { AmbulanceInfoPopUpButton } from "./AmbulanceInfoPopUpButton";
 
 // interface Ambulance {
 //   id: string;
@@ -76,7 +77,9 @@ export const Ambulance = ({
   searchType: keyof typeof searchTypes;
 }) => {
   const { detail, errorOnDetail } = useAmbulanceDetail(ambulance.ambulance_id);
+  const router = useRouter();
   errorOnDetail;
+  const drivers = detail?.employees.filter((v) => v.employee.role === "DRIVER");
   return (
     <>
       {detail && matchSearch(search, searchTypes[searchType], detail) && (
@@ -88,36 +91,65 @@ export const Ambulance = ({
           <div className="flex-[3]">{ambulance.ambulance_type}</div>
           <div className="flex-[2]">{ambulance.ambulance_type}</div>
           <div className="flex-[2]">
-            <Tag
-              text={
-                detail?.employees.filter(
-                  (employee) => employee.employee.role === "DRIVER"
-                )[0]?.employee.employee_name ?? ""
+            <button
+              className="fontSize-small-l flex items-center gap-[0.5rem]"
+              onClick={() =>
+                router.push(`/ambulance/${ambulance.ambulance_id}/driver`)
               }
-              border="none"
-              bgColor="bg"
-              color="black"
-            />
+            >
+              {drivers?.length === 0 ? (
+                <div className=" text-main">설정하기</div>
+              ) : (
+                <Tag
+                  text={
+                    detail?.employees.filter(
+                      (employee) => employee.employee.role === "DRIVER"
+                    )[0]?.employee.employee_name ?? "설정하기"
+                  }
+                  border="none"
+                  bgColor="bg"
+                  color="black"
+                />
+              )}
+            </button>
           </div>
 
           <div className="flex flex-[5] items-center justify-between">
-            <div className="fontSize-small-l flex items-center gap-[0.5rem]">
-              {detail?.employees.slice(0, 2).map((employee) => {
-                return (
-                  <Tag
-                    key={employee.employee.employee_name}
-                    text={employee.employee.employee_name}
-                    border="none"
-                    bgColor="bg"
-                    color="black"
-                  />
-                );
-              })}
+            <button
+              className="fontSize-small-l flex items-center gap-[0.5rem]"
+              onClick={() =>
+                router.push(`/ambulance/${ambulance.ambulance_id}/employee`)
+              }
+            >
+              {detail?.employees.length > 0 ? (
+                detail.employees.slice(0, 2).map((employee) => {
+                  return (
+                    <Tag
+                      key={employee.employee.employee_name}
+                      text={employee.employee.employee_name}
+                      border="none"
+                      bgColor="bg"
+                      color="black"
+                    />
+                  );
+                })
+              ) : (
+                <div className=" text-main">설정하기</div>
+              )}
               {(detail?.employees.length ?? 0) > 2 &&
                 `외 ${(detail?.employees.length ?? 0) - 2}명`}
-            </div>
+            </button>
             <div className="flex gap-[2rem]">
-              <AmbulanceDeletePopUpButton />
+              {/* <AmbulanceDeletePopUpButton /> */}
+              {/* api 없음 */}
+              <AmbulanceInfoPopUpButton
+                title="수정"
+                type="edit"
+                Ambulance={{
+                  ambulance_number: detail.ambulance_number,
+                  ambulance_type: detail.ambulance_type,
+                }}
+              />
             </div>
           </div>
         </div>

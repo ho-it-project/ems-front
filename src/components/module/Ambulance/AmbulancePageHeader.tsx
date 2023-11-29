@@ -1,6 +1,7 @@
 import { Input } from "@/components/elements/Input";
 import { PageHeader } from "@/components/elements/PageHeader";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
 import { AmbulanceInfoPopUpButton } from "./AmbulanceInfoPopUpButton";
 import { searchTypes } from "./AmbulanceTable";
@@ -18,13 +19,18 @@ export const AmbulancePageHeader = ({
   const [searchTypeInternal, setSearchTypeInternal] =
     useState<keyof typeof searchTypes>("차량번호");
 
+  const router = useRouter();
+
   return (
     <PageHeader
       title="회사 정보"
       fontSize="small-l"
       color="grey"
       button={
-        <button className="h-fit rounded-full text-[0.8rem] text-white">
+        <button
+          className="h-fit rounded-full text-[0.8rem] text-white"
+          onClick={() => router.push("/")}
+        >
           <Image
             src="/icon/back-arrow.svg"
             width={24}
@@ -77,6 +83,7 @@ export const AmbulancePageHeader = ({
             </button>
           </div>
         </div>
+        {/* api 없음 */}
         <AmbulanceInfoPopUpButton title="차량 추가하기" />
       </div>
     </PageHeader>

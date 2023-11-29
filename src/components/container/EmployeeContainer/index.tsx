@@ -5,44 +5,11 @@ import { useEmployeeTableQuery } from "@/hooks/api/useEmployee";
 import { PathQuery } from "@/types/api";
 import { useState } from "react";
 
-// const Action = ({
-//   item,
-//   refetch,
-// }: {
-//   item: Employee;
-//   refetch: () => unknown;
-// }) => {
-//   const { mutate } = usePutApi("/ems/employees/{employee_id}", {
-//     useLoader: true,
-//   });
-
-//   const [deletedData, setDeletedData] =
-//     useState<Response<"/ems/employees/{employee_id}", "put">>();
-//   return (
-//     <>
-//       <EmployeeDeletePopUpButton
-//         onSubmmit={async () => {
-//           const result = await mutate({
-//             params: { path: { employee_id: item.employee_id } },
-//           });
-//           setDeletedData(result);
-//         }}
-//       />
-//       <EmployeeDeletedPopUp
-//         data={deletedData}
-//         onClose={() => {
-//           setDeletedData(undefined);
-//           refetch();
-//         }}
-//       />
-//     </>
-//   );
-// };
-
 export const searchTypeObject = {
   이름: "employee_name",
   ID: "id_card",
 } as const;
+
 export const EmployeeContainer = () => {
   const [query, setQuery] = useState<PathQuery<"/ems/employees", "get">>({});
   const { data, refetch } = useEmployeeTableQuery(query);
@@ -56,6 +23,7 @@ export const EmployeeContainer = () => {
             search_type: searchTypeObject[searchType ?? "ID"],
           })
         }
+        refetch={refetch}
       />
       <div className="mt-[2.5rem] h-full">
         {data && <EmployeeTable data={data} refetch={refetch} />}

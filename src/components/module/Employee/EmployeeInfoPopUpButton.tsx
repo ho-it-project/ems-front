@@ -1,63 +1,86 @@
 "use clinet";
 import { Input } from "@/components/elements/Input";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { EmployeeRole } from "@/types/model/employee";
+import { Employee, EmployeeAdd, employeeRoles } from "@/types/model/employee";
 import Image from "next/image";
-import React, { useState } from "react";
+import { useState } from "react";
 import { TabModalWrapper } from "../common/TabModalWrapper";
 
-interface EmployeeInfoPopUpButtonProps {
-  title: string;
-  onSubmmit?: () => void;
-  submitButtonName?: string;
-  employee?: {
-    employee_name: string;
-    role: string;
-    id_card: string;
-  };
-  type?: "add" | "edit";
+type EmployeeEdit = Pick<
+  Employee,
+  "employee_id" | "id_card" | "employee_name" | "role"
+>;
+
+type PickType<T extends "add" | "edit"> = T extends "add"
+  ? EmployeeAdd
+  : EmployeeEdit;
+
+function getDefaultEmployee<T extends "add" | "edit">(
+  type: T,
+  _employee: undefined | (T extends "edit" ? EmployeeEdit : undefined)
+): T extends "add" ? EmployeeAdd : EmployeeEdit {
+  if (type === "add") {
+    return {
+      employee_name: "",
+      id_card: "",
+      role: "ADMIN",
+      password: "",
+    } as PickType<T>;
+  }
+  return {
+    employee_id: _employee?.employee_id ?? "",
+    employee_name: _employee?.employee_name ?? "",
+    id_card: _employee?.id_card ?? "",
+    role: _employee?.role ?? "ADMIN",
+  } as PickType<T>;
 }
 
-export const EmployeeInfoPopUpButton = ({
+interface EmployeeInfoPopUpButtonProps<T extends "add" | "edit"> {
+  title: string;
+  /**
+   * onSubmit
+   * @param props Employee Data
+   * @returns Promise<whether to close PopUp>
+   */
+  onSubmit: (
+    props: T extends "add" ? EmployeeAdd : EmployeeEdit
+  ) => Promise<boolean>;
+  submitButtonName: string;
+  employee?: T extends "edit" ? EmployeeEdit : undefined;
+  type: T;
+}
+
+export const EmployeeInfoPopUpButton = <T extends "add" | "edit">({
   title,
-  employee = {
-    employee_name: "",
-    role: "",
-    id_card: "",
-  },
-  submitButtonName = "수정하기",
-  type = "add",
-}: EmployeeInfoPopUpButtonProps) => {
-  const [open, setOpen] = React.useState(false);
+  onSubmit,
+  employee: _employee,
+  submitButtonName,
+  type,
+}: EmployeeInfoPopUpButtonProps<T>) => {
+  const employee: T extends "add" ? EmployeeAdd : EmployeeEdit =
+    getDefaultEmployee(type, _employee);
+
+  const [open, setOpen] = useState(false);
   const onClickAdd = () => {
     setOpen(true);
   };
   const onClickClose = () => {
-    setEmployeeInfo(employee);
+    setEmployeeInfo(getDefaultEmployee(type, _employee));
     setOpen(false);
   };
-  const [employeeInfo, setEmployeeInfo] = useState(employee);
-
-  const roles: Array<EmployeeRole> = [
-    "ADMIN",
-    "DISPATCHER",
-    "DRIVER",
-    "EMERGENCY_MEDICAL_TECHNICIAN",
-  ];
+  const [employeeInfo, setEmployeeInfo] =
+    useState<T extends "add" ? EmployeeAdd : EmployeeEdit>(employee);
 
   const onChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    console.log(name, value);
     setEmployeeInfo({
       ...employeeInfo,
       [name]: value,
     });
-    console.log(employeeInfo);
+    // console.log(employeeInfo);
   };
-
-  const onSubmit = () => {};
 
   const trigger =
     type === "add" ? (
@@ -113,7 +136,9 @@ export const EmployeeInfoPopUpButton = ({
                     <div className="flex items-start justify-end">
                       <button
                         className="fontSize-small rounded-lg bg-main px-[4rem] py-[1.2rem] text-white"
-                        onClick={onSubmit}
+                        onClick={async () => {
+                          if (await onSubmit(employeeInfo)) onClickClose();
+                        }}
                       >
                         {submitButtonName}
                       </button>
@@ -128,18 +153,12 @@ export const EmployeeInfoPopUpButton = ({
                         value={employeeInfo.role}
                         className="fontSize-medium gap-[1.6rem] rounded-[0.8rem] border border-main bg-white px-[1.6rem] py-[0.8rem] text-center text-black"
                       >
-                        {roles.map((item) => (
+                        {employeeRoles.map((item) => (
                           <option value={item} key={item}>
                             {item}
                           </option>
                         ))}
                       </select>
-                      {/* <Input
-                        placeholder="역할로 바꿔야함"
-                        value={employeeInfo.role || ""}
-                        name="role"
-                        onChange={onChange}
-                      /> */}
                     </div>
                     {/* <div className="mt-[2rem] flex items-center justify-between  gap-[0.8rem]"></div> */}
                     <div className="col-span-2 mt-[2rem] flex items-center gap-[0.8rem]">
@@ -153,17 +172,19 @@ export const EmployeeInfoPopUpButton = ({
                         onChange={onChange}
                       />
                     </div>
-                    {/* <div className="col-span-2 mt-[2rem] flex items-center justify-between  gap-[0.8rem]">
-                      <div className="fontSize-medium flex  min-w-[8rem] flex-1 ">
-                        비밀번호
+                    {type === "add" && (
+                      <div className="col-span-2 mt-[2rem] flex items-center justify-between  gap-[0.8rem]">
+                        <div className="fontSize-medium flex  min-w-[8rem] flex-1 ">
+                          비밀번호
+                        </div>
+                        <Input
+                          placeholder="비밀번호를 입력하세요"
+                          value={(employeeInfo as EmployeeAdd).password || ""}
+                          name="password"
+                          onChange={onChange}
+                        />
                       </div>
-                      <Input
-                        placeholder="비밀번호를 입력하세요"
-                        value={employeeInfo.password || ""}
-                        name="password"
-                        onChange={onChange}
-                      />
-                    </div> */}
+                    )}
                   </div>
                 </>
               ),

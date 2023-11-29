@@ -1,6 +1,6 @@
 import { usePutApi } from "@/hooks/api";
 import { Response } from "@/types/api";
-import { Employee } from "@/types/model/employee";
+import { Employee, EmployeeEdit } from "@/types/model/employee";
 import { useState } from "react";
 import { EmployeeDeletedPopUp } from "./EmployDeletedPopUp";
 import { EmployeeDeletePopUpButton } from "./EmployeeDeletePopUpButton";
@@ -27,6 +27,12 @@ export const EmployeeTable = ({
   const { mutate } = usePutApi("/ems/employees/{employee_id}", {
     useLoader: true,
   });
+
+  const onSubmit = async (EmployeeInfo: EmployeeEdit) => {
+    //api 없음. user page에서 수정할 사항
+    EmployeeInfo;
+    return true;
+  };
 
   return (
     <div className="flex h-full w-full flex-col overflow-auto">
@@ -56,6 +62,8 @@ export const EmployeeTable = ({
                     type="edit"
                     // employee={{ ...item, password: "" }}
                     employee={{ ...item }}
+                    onSubmit={onSubmit}
+                    submitButtonName="수정하기"
                   />
                   <EmployeeDeletePopUpButton
                     onSubmmit={async () => {
