@@ -10,7 +10,7 @@ export const useCompanyDetailQuery = () => {
     {
       params: {
         path: {
-          ems_ambulance_company_id: user.ambulance_company_id,
+          ems_ambulance_company_id: user.ambulance_company_id || "",
         },
       },
     }
