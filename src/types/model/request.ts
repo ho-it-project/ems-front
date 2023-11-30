@@ -28,7 +28,7 @@ export type ReqeustStatueKor =
   | "완료"
   | "열람"
   | "거절"
-  | "이송"
+  | "이송중"
   | "이송완료";
 
 export type ReqeustStatueKorMap = {
@@ -42,6 +42,6 @@ export const reqeustStatueKorMap: ReqeustStatueKorMap = {
   COMPLETED: "완료",
   VIEWED: "열람",
   REJECTED: "거절",
-  TRANSFER: "이송",
+  TRANSFER: "이송중",
   TRANSFER_COMPLETED: "이송완료",
 };

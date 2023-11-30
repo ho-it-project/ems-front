@@ -1,6 +1,7 @@
 "use client";
 
 import { useRequest } from "@/hooks/api/useRequest";
+import Link from "next/link";
 import { Timer } from "../module/common/Timer";
 
 export const NavResponseStatusCard = () => {
@@ -11,12 +12,38 @@ export const NavResponseStatusCard = () => {
   const requestedCount = requestedRequests.length;
 
   if (requests.length === 1 && requests[0].request_status === "ACCEPTED") {
-    const { emergency_center_name, distance } = requests[0];
     return (
-      <div className="fontSize-small breaks-word">
-        <div>이송 할 병원</div>
-        <div>{emergency_center_name}</div>
-        <div>거리: {(distance / 1000).toFixed(2)} KM </div>
+      <div className="fontSize-small flex w-full flex-col gap-[1rem]">
+        <div>
+          <Timer
+            startTime={requestDate}
+            className="fontSize-small-l text-grey"
+          />
+        </div>
+        <Link href={"/patient/transfer"}>
+          <div className="fontSize-medium flex w-full flex-col items-center rounded-lg bg-main py-[0.4rem] text-white">
+            <span>수락되었습니다!</span>
+            <span>이송처리하러가기</span>
+          </div>
+        </Link>
+      </div>
+    );
+  }
+
+  if (requests.length === 1 && requests[0].request_status === "TRANSFER") {
+    return (
+      <div className="fontSize-small flex w-full flex-col gap-[1rem]">
+        <div>
+          <Timer
+            startTime={requestDate}
+            className="fontSize-small-l text-grey"
+          />
+        </div>
+        <Link href={"/patient/transfer"}>
+          <div className="fontSize-medium flex w-full flex-col items-center rounded-lg bg-main py-[0.4rem] text-white">
+            <span>이송완료처리하러가기</span>
+          </div>
+        </Link>
       </div>
     );
   }

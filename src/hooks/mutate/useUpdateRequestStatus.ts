@@ -1,4 +1,7 @@
-// type RequestDto =
-//   paths["/requests/ems-to-er/{patient_id}"]["patch"]["requestBody"]["content"]["application/json"];
+import { usePatchApi } from "../api";
 
-export const useUpdateRequestStatus = () => {};
+export const useUpdateRequestStatus = () => {
+  return usePatchApi("/requests/ems-to-er/{patient_id}", {
+    useLoader: false,
+  });
+};
