@@ -4,7 +4,9 @@ export type RequestStatus =
   | "CANCELED"
   | "COMPLETED"
   | "VIEWED"
-  | "REJECTED";
+  | "REJECTED"
+  | "TRANSFER"
+  | "TRANSFER_COMPLETED";
 
 export interface RequestInfo {
   patient_id: string;
@@ -25,7 +27,9 @@ export type ReqeustStatueKor =
   | "취소"
   | "완료"
   | "열람"
-  | "거절";
+  | "거절"
+  | "이송"
+  | "이송완료";
 
 export type ReqeustStatueKorMap = {
   [key in RequestStatus]: ReqeustStatueKor;
@@ -38,4 +42,6 @@ export const reqeustStatueKorMap: ReqeustStatueKorMap = {
   COMPLETED: "완료",
   VIEWED: "열람",
   REJECTED: "거절",
+  TRANSFER: "이송",
+  TRANSFER_COMPLETED: "이송완료",
 };

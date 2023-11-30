@@ -16,6 +16,8 @@ interface Query {
     | "COMPLETED"
     | "VIEWED"
     | "REJECTED"
+    | "TRANSFER"
+    | "TRANSFER_COMPLETED"
   )[];
   patient_gender?: ("FEMALE" | "MALE")[];
   patient_severity?: ("UNKNOWN" | "SEVERE" | "MILD" | "NONE")[];
