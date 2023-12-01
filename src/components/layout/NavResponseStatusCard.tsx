@@ -47,6 +47,26 @@ export const NavResponseStatusCard = () => {
       </div>
     );
   }
+  if (
+    requests.length === 1 &&
+    requests[0].request_status === "TRANSFER_COMPLETED"
+  ) {
+    return (
+      <div className="fontSize-small flex w-full flex-col gap-[1rem]">
+        <div>
+          <Timer
+            startTime={requestDate}
+            className="fontSize-small-l text-grey"
+          />
+        </div>
+        <Link href={"/patient/handover"}>
+          <div className="fontSize-medium flex w-full flex-col items-center rounded-lg bg-main py-[0.4rem] text-white">
+            <span>인수인계 대기중</span>
+          </div>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="fontSize-small flex w-full flex-col gap-[1rem]">
