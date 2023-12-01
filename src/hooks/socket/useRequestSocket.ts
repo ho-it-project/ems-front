@@ -44,11 +44,10 @@ export const useRequestSocket = () => {
                     reqeustStatueKorMap[newReq.request_status]
                   } 응답하였습니다`,
                 });
-
                 return { ...prevReq, request_status };
               })
           );
-          router.push(`/emergency-center/${emergency_center_id}`);
+          router.push(`/patient/transfer`);
           return;
         }
         setRequestList((prev) => {
