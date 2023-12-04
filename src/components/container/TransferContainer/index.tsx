@@ -61,11 +61,11 @@ export const TransferContainer = () => {
       router.push("/patient/transfer/complete");
       return;
     }
-    if (request_status !== "ACCEPTED") {
-      router.push("/response");
-      return;
-    }
   }, [router, acceptedRequest]);
+
+  useEffect(() => {
+    mutate();
+  }, [mutate]);
 
   if (!rendered) return <></>;
 

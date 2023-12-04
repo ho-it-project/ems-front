@@ -5,12 +5,11 @@ import { DcapBtlsInfoCard } from "@/components/module/Evaluation/DcapBtlsEvaluat
 import { ProgressTracker } from "@/components/module/common/ProgressTracker";
 import { useToast } from "@/components/ui/use-toast";
 import { usePatient } from "@/hooks/api/usePatient";
-import { useEvaluationStep } from "@/hooks/useEvaluationStep";
 import { useAuth } from "@/providers/AuthProvider";
 import { DCAP_BTLS_AFFECT, DCAP_BTLS_AffectArea } from "@/types/evaluation";
 import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type DCAP_BTLS_Evaluation = {
   affected_area: DCAP_BTLS_AffectArea | "NONE";
@@ -24,13 +23,7 @@ export const DcapBtlsEvaluaionContainer = () => {
   const { patient } = usePatient();
   const { toast } = useToast();
   const router = useRouter();
-  const { nextPage, steps } = useEvaluationStep();
   const { accessToken } = useAuth();
-  useEffect(() => {
-    if (patient && !patient.patient_id) {
-      router.push("/patient/rapid-evaluation");
-    }
-  }, [router, patient]);
   const [dcapBtlsEvaluations, setDcapBtlsEvaluations] = useState<
     DCAP_BTLS_Evaluation[]
   >([]);
@@ -183,13 +176,14 @@ export const DcapBtlsEvaluaionContainer = () => {
     const isSuccess = responses.every((item) => item === true);
     const faildIndex = responses.findIndex((item) => item === false || !item);
     if (isSuccess) {
-      if (steps.length === 0) {
-        router.push("/request");
-      }
-      nextPage();
+      router.push("/patient/additional-evaluation");
     } else {
       toast({ description: `${faildIndex + 1}번째 평가를 실패하였습니다.` });
     }
+  };
+
+  const onSkip = () => {
+    router.push("/patient/additional-evaluation");
   };
 
   return (
@@ -200,6 +194,14 @@ export const DcapBtlsEvaluaionContainer = () => {
             <button className=" h-full w-[5rem] rounded-[1rem] bg-lgrey ">
               <div className="fontSize-regular flex items-center justify-between px-[1.4rem]  py-[1rem] text-white">
                 <ArrowLeft width={24} />
+              </div>
+            </button>
+            <button
+              className=" h-full rounded-[1rem] bg-lgrey"
+              onClick={onSkip}
+            >
+              <div className="fontSize-regular flex items-center justify-between px-[1.4rem]  py-[1rem] text-white">
+                건너뛰기
               </div>
             </button>
             <button

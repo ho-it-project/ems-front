@@ -8,16 +8,16 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
-import { useEvaluationStep } from "@/hooks/useEvaluationStep";
 import { useAuth } from "@/providers/AuthProvider";
-import { useEveluationStepStore } from "@/store/evaluationStep.store";
 import { usePatientStore } from "@/store/patient.store";
+import { useRapidEvaluationStore } from "@/store/rapidEvaluation.store.";
 import {
   CreatePatientErrorResponse,
   CreatePatientResponse,
 } from "@/types/api/patient";
 import { zodResolver } from "@hookform/resolvers/zod";
 import _ from "lodash";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 const guardianSchema = z.object({
@@ -37,8 +37,8 @@ const guardianSchema = z.object({
 
 export const GuardianInfoForm = () => {
   const { toast } = useToast();
-  const { nextPage } = useEvaluationStep();
-  const { rapidEvaluation, check } = useEveluationStepStore();
+  const router = useRouter();
+  const { check, rapidEvaluation } = useRapidEvaluationStore();
   const { patient, setGuardian, setPatient } = usePatientStore();
   const { accessToken } = useAuth();
   const form = useForm<z.infer<typeof guardianSchema>>({
@@ -126,7 +126,7 @@ export const GuardianInfoForm = () => {
             guardian_relation,
           });
           toast({ description: "환자 정보가 등록되었습니다." });
-          nextPage();
+          router.push("/patient/additional-evaluation");
           return;
         }
         toast({ description: "환자 정보 등록에 실패했습니다." });

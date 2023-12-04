@@ -12,5 +12,6 @@ export const useEmergencyCenterDetail = (emergency_center_id: string) => {
     `/api/er/emergency-centers/${emergency_center_id}`,
     fetcher
   );
+
   return { emergencyCenter: data?.result, isLoading, error };
 };

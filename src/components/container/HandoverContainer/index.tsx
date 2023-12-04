@@ -28,6 +28,7 @@ export const HandoverContainer = () => {
       setRendered(true);
     }
   }, [requests, router]);
+  
   useEffect(() => {
     if (!acceptedRequest) return;
     const { request_status } = acceptedRequest;
@@ -40,7 +41,6 @@ export const HandoverContainer = () => {
       router.push("/patient/transfer");
       return;
     }
-
     router.push("/response");
   }, [router, acceptedRequest]);
   if (!rendered) return <></>;

@@ -4,13 +4,20 @@ import { create } from "zustand";
 interface PatientStore {
   patient?: Patient;
   guardian?: Guardian;
-  setPatient: (patient: Patient) => void;
+  setPatient: (patient?: Patient) => void;
   setGuardian: (guardian: Guardian) => void;
+  init: () => void;
 }
 
 export const usePatientStore = create<PatientStore>((set) => ({
   patient: undefined,
   guardian: undefined,
-  setPatient: (patient: Patient) => set((state) => ({ ...state, patient })),
+  setPatient: (patient?: Patient) => set((state) => ({ ...state, patient })),
   setGuardian: (guardian: Guardian) => set((state) => ({ ...state, guardian })),
+  init: () =>
+    set((state) => ({
+      ...state,
+      patient: undefined,
+      guardian: undefined,
+    })),
 }));

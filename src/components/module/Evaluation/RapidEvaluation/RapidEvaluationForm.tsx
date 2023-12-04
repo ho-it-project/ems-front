@@ -1,6 +1,7 @@
 "use client";
-import { useEvaluationStep } from "@/hooks/useEvaluationStep";
-import { useEveluationStepStore } from "@/store/evaluationStep.store";
+import { usePatient } from "@/hooks/api/usePatient";
+import { useRapidEvaluationStore } from "@/store/rapidEvaluation.store.";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { DualChoiceButton } from "../../common/DualChoiceButton";
 
@@ -9,9 +10,15 @@ interface RapidEvaluationFormProps {
 }
 
 export const RapidEvaluationForm = ({ formId }: RapidEvaluationFormProps) => {
-  const { setRapidEvaluation, setSteps, rapidEvaluation, setCheck } =
-    useEveluationStepStore();
-  const { nextPage } = useEvaluationStep();
+  const router = useRouter();
+  const { patient } = usePatient();
+  const {
+    rapidEvaluation,
+    setRapidEvaluation,
+    setCheck,
+    setGuardian,
+    init: rapidEvaluationInit,
+  } = useRapidEvaluationStore();
   const handleTrauma = (isTrauma: boolean) => {
     setRapidEvaluation({
       ...rapidEvaluation,
@@ -36,14 +43,16 @@ export const RapidEvaluationForm = ({ formId }: RapidEvaluationFormProps) => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setCheck(true);
-    nextPage();
-    // 로직 작성 필요
+    if (!patient?.patient_id) router.push("/patient");
+    else router.push("/patient/additional-evaluation");
   };
+  useEffect(() => {
+    setGuardian(!rapidEvaluation.conscious);
+  }, [rapidEvaluation, setGuardian]);
 
   useEffect(() => {
-    setSteps();
-  }, [rapidEvaluation, setSteps]);
-
+    rapidEvaluationInit();
+  }, [rapidEvaluationInit]);
   return (
     <form
       className="justify flex flex-col items-center justify-center gap-[5rem]"
