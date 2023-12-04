@@ -1,6 +1,5 @@
 import { useAmbulanceEmployeeStore } from "@/store/ambulanceEmployee.store";
 import { Ambulance } from "@/types/model";
-import { Employee } from "@/types/model/employee";
 import { COmit } from "@/types/util";
 import { X } from "lucide-react";
 
