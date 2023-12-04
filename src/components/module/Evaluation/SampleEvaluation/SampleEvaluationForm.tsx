@@ -2,7 +2,6 @@
 import { Form } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
 import { usePatient } from "@/hooks/api/usePatient";
-import { useEvaluationStep } from "@/hooks/useEvaluationStep";
 import { useAuth } from "@/providers/AuthProvider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -87,7 +86,6 @@ interface OpqrstEvaluationFormProps {
 
 export const SampleEvaluationForm = ({ formId }: OpqrstEvaluationFormProps) => {
   const { toast } = useToast();
-  const { nextPage, steps } = useEvaluationStep();
   const router = useRouter();
   const { patient } = usePatient();
   const { accessToken } = useAuth();
@@ -171,11 +169,8 @@ export const SampleEvaluationForm = ({ formId }: OpqrstEvaluationFormProps) => {
       .then((res) => res.json())
       .then((res: { is_success: boolean }) => {
         if (res.is_success) {
-          if (steps.length) {
-            nextPage();
-            return;
-          }
-          router.push("/request");
+          toast({ description: "sample 평가에 성공하였습니다." });
+          router.push("/patient/additional-evaluation");
           return;
         }
 
@@ -185,7 +180,7 @@ export const SampleEvaluationForm = ({ formId }: OpqrstEvaluationFormProps) => {
 
   useEffect(() => {
     if (patient && !patient.patient_id) {
-      router.push("/patient/rapid-evaluation");
+      router.push("/patient/rapid");
     }
   }, [patient, router]);
 

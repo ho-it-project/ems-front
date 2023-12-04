@@ -2,7 +2,6 @@
 import { Form, FormField } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
 import { usePatient } from "@/hooks/api/usePatient";
-import { useEvaluationStep } from "@/hooks/useEvaluationStep";
 import { useAuth } from "@/providers/AuthProvider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -101,7 +100,6 @@ export const OpqrstEvaluationForm = ({ formId }: OpqrstEvaluationFormProps) => {
   const { patient } = usePatient();
   const router = useRouter();
   const { accessToken } = useAuth();
-  const { nextPage, steps } = useEvaluationStep();
 
   const form = useForm<z.infer<typeof opqrstEvaluationSchema>>({
     resolver: zodResolver(opqrstEvaluationSchema),
@@ -167,12 +165,7 @@ export const OpqrstEvaluationForm = ({ formId }: OpqrstEvaluationFormProps) => {
       .then((res) => res.json())
       .then((res: { is_success: boolean }) => {
         if (res.is_success) {
-          if (steps.length) {
-            toast({ description: "OPQRST 평가가 완료되었습니다." });
-            nextPage();
-            return;
-          }
-          router.push("/request");
+          router.push("/patient/additional-evaluation");
           return;
         }
 
@@ -183,7 +176,7 @@ export const OpqrstEvaluationForm = ({ formId }: OpqrstEvaluationFormProps) => {
 
   useEffect(() => {
     if (patient && !patient.patient_id) {
-      router.push("/patient/rapid-evaluation");
+      router.push("/patient/rapid");
     }
   }, [patient, router]);
 

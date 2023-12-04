@@ -4,7 +4,8 @@ import { GuardianInfoForm } from "@/components/module/PatientInfo/GuardianInfoFo
 import { PatientInfoForm } from "@/components/module/PatientInfo/PatientInfoForm";
 import { ProgressTracker } from "@/components/module/common/ProgressTracker";
 import { usePatient } from "@/hooks/api/usePatient";
-import { useEvaluationStep } from "@/hooks/useEvaluationStep";
+import { useRapidEvaluationStore } from "@/store/rapidEvaluation.store.";
+import { useRequestStore } from "@/store/request.store";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -12,16 +13,21 @@ export const PatientInfoFormContainer = () => {
   const { patient } = usePatient();
   const [form, setForm] = useState<"PATIENT" | "GUARDIAN">("PATIENT");
   const router = useRouter();
-  const { steps } = useEvaluationStep();
+  // const { steps } = useEvaluationStep();
+  const { requests } = useRequestStore();
+  const { check } = useRapidEvaluationStore();
   useEffect(() => {
-    if (!patient?.patient_id && steps.length === 0) {
-      router.push("/patient/rapid-evaluation");
+    if (!check) {
+      router.push("/patient/rapid");
       return;
     }
-    if (patient?.patient_id && steps.length === 0) {
-      router.push("/request");
+    if (patient && patient.patient_id) {
+      router.push("/patient/additional-evaluation");
     }
-  }, [patient, router, steps.length]);
+    if (patient?.patient_id && requests.length > 0) {
+      router.push("/patient/additional-evaluation");
+    }
+  }, [patient, router, requests, check]);
   const changeForm = () => {
     if (form === "PATIENT") {
       setForm("GUARDIAN");
@@ -41,7 +47,6 @@ export const PatientInfoFormContainer = () => {
             {form === "GUARDIAN" && <GuardianInfoForm />}
           </div>
         </div>
-
         <ProgressTracker
           steps={["증상 확인1", "증상 기록2", "증상 3", "증상 4", "증상 5"]}
           currentStep={0}

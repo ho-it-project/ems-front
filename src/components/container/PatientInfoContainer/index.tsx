@@ -1,8 +1,12 @@
 "use client";
 import { PageHeader } from "@/components/elements/PageHeader";
 import { Tag } from "@/components/elements/Tag";
+import { useToast } from "@/components/ui/use-toast";
+import { usePutApi } from "@/hooks/api";
 import { useEmployeeDetail } from "@/hooks/api/useEmployeeDetail";
+import { usePatient } from "@/hooks/api/usePatient";
 import { usePatientDetail } from "@/hooks/api/usePatinetDetail";
+import { usePatientStore } from "@/store/patient.store";
 import { useRequestStore } from "@/store/request.store";
 import {
   DCAP_BTLS_AFFECT,
@@ -13,12 +17,88 @@ import {
 import { EmployeeRoleLabel } from "@/types/model/employee";
 import { GuardianRelationKorMap } from "@/types/model/patient";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export const PatientInfoContainer = () => {
   const { patientInfo } = usePatientDetail();
   const { employeeDetail } = useEmployeeDetail(patientInfo?.ems_employee_id);
-  const { requests } = useRequestStore(); // TODO : request_id로 요청시간 가져오기
-  console.log(employeeDetail);
+  const { mutation } = usePatient();
+  const { requests, setRequestList } = useRequestStore(); // TODO : request_id로 요청시간 가져오기
+  const { mutate: cancelBeforeRequest } = usePutApi(
+    "/ems/patients/{patient_id}",
+    {
+      useLoader: true,
+    }
+  );
+  const { mutate: cancleAfterRequest } = usePutApi(
+    "/requests/ems-to-er/{patient_id}",
+    {
+      useLoader: true,
+    }
+  );
+  const router = useRouter();
+  const { toast } = useToast();
+  const patientInit = usePatientStore((state) => state.init);
+  const onCancelPatient = () => {
+    if (requests.length === 0)
+      cancelBeforeRequest({
+        params: {
+          path: { patient_id: patientInfo?.patient_id || "" },
+        },
+      }).then((res) => {
+        console.log(res);
+        const { error } = res;
+        if (error) {
+          toast({
+            title: "환자 취소 실패",
+            description: "환자 취소에 실패했습니다.",
+          });
+          return;
+        }
+        toast({
+          title: "환자 취소 성공",
+          description: "환자 취소에 성공했습니다.",
+        });
+        patientInit();
+        mutation();
+        router.replace("/");
+      });
+
+    if (requests.length > 0)
+      cancleAfterRequest({
+        params: {
+          path: { patient_id: patientInfo?.patient_id || "" },
+        },
+      }).then((res) => {
+        console.log("requests.length > 0", res);
+        const { error } = res;
+        if (error) {
+          toast({
+            title: "환자 취소 실패",
+            description: "환자 취소에 실패했습니다.",
+          });
+          return;
+        }
+        toast({
+          title: "환자 취소 성공",
+          description: "환자 취소에 성공했습니다.",
+        });
+        patientInit();
+        mutation();
+        setRequestList([]);
+        router.replace("/");
+      });
+  };
+
+  useEffect(() => {
+    if (!patientInfo) return;
+    if (patientInfo.patient_status === "CANCELED") {
+      router.push("/");
+      patientInit();
+    }
+  }, [patientInfo, router, patientInit]);
+
   if (!patientInfo) return <></>;
   if (!employeeDetail) return <></>;
   if (!requests) return <></>;
@@ -26,7 +106,15 @@ export const PatientInfoContainer = () => {
   return (
     <div className="h-full w-full">
       <div className="flex h-full flex-col gap-[2rem] rounded-lg p-[1.6rem]">
-        <div className="flex w-full justify-end">
+        <div className="flex w-full justify-end gap-[1rem]">
+          <div>
+            <button
+              className="fontSize-small flex h-[4rem] w-[12.8rem] items-center justify-center rounded-lg bg-lgrey text-white"
+              onClick={onCancelPatient}
+            >
+              환자 취소하기
+            </button>
+          </div>
           <Link href={"/patient/additional-evaluation"}>
             <div className="fontSize-small flex h-[4rem] w-[12.8rem] items-center justify-center rounded-lg bg-main text-white">
               추가 평가하기
@@ -243,9 +331,7 @@ export const PatientInfoContainer = () => {
                         <span>{opqrst.severity}</span>
                       </div>
                       <div className="flex">
-                        <span className="fontSize-small-l min-w-[12.8rem] text-main">
-                          Time
-                        </span>
+                        <span className="min-w-[12.8rem] text-main">Time</span>
                         <span>{new Date(opqrst.time).toLocaleString()}</span>
                       </div>
                     </div>
@@ -374,15 +460,15 @@ export const PatientInfoContainer = () => {
                       (dcap) =>
                         dcap.affected_area === (area as DCAP_BTLS_AffectArea)
                     );
-                    if (filtered.length === 0) return <></>;
+                    if (filtered.length === 0) return;
 
                     return (
-                      <div className="flex gap-[1rem]" key={i}>
+                      <div className="flex gap-[1rem]" key={`${area}${i}`}>
                         <span className="min-w-[12.8rem] text-main">
                           {areaKor}
                         </span>
                         <div>
-                          {filtered.map((dcap, i) => {
+                          {filtered.map((dcap, j) => {
                             const {
                               deformity,
                               contusion,
@@ -409,7 +495,7 @@ export const PatientInfoContainer = () => {
                             );
                             return (
                               <div
-                                key={`${dcap.affected_area}${i}`}
+                                key={`${dcap.affected_area}${i}${j}`}
                                 className="flex flex-col gap-[1rem]"
                               >
                                 <div>
@@ -419,15 +505,18 @@ export const PatientInfoContainer = () => {
                                   </span>
                                 </div>
                                 <div className="flex flex-wrap">
-                                  {filteredSymptoms.map(([key, value], j) => {
-                                    return value === "true" ? (
-                                      <div className="flex gap-[1rem]" key={j}>
-                                        <span className="min-w-[12.8rem] text-black">
-                                          {DCAP_BTLS_AFFECT_KOR[key]}
-                                        </span>
-                                      </div>
-                                    ) : (
-                                      <></>
+                                  {filteredSymptoms.map(([key, value], k) => {
+                                    return (
+                                      value === "true" && (
+                                        <div
+                                          className="flex gap-[1rem]"
+                                          key={`${dcap.affected_area}-${i}-${j}${k}`}
+                                        >
+                                          <span className="min-w-[12.8rem] text-black">
+                                            {DCAP_BTLS_AFFECT_KOR[key]}
+                                          </span>
+                                        </div>
+                                      )
                                     );
                                   })}
                                 </div>

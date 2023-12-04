@@ -13,7 +13,7 @@ export const usePatientDetail = () => {
     {
       params: {
         path: {
-          patient_id: patientId,
+          patient_id: patientId || "undefined",
         },
       },
     }
@@ -27,6 +27,7 @@ export const usePatientDetail = () => {
 
   return {
     patientInfo,
+    setPatientInfo,
     isLoading,
   };
 };
