@@ -11,6 +11,7 @@ import { RequestInfo, reqeustStatueKorMap } from "@/types/model/request";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
+import { useRequest } from "../api/useRequest";
 
 // 소켓 핸들링 훅
 export const useRequestSocket = () => {
@@ -22,6 +23,7 @@ export const useRequestSocket = () => {
   const requestSocket = useSocketStore(
     useShallow((state) => state.requestSocket)
   );
+  const { mutate } = useRequest();
   useEffect(() => {
     if (!requestSocket) return;
 
@@ -95,12 +97,13 @@ export const useRequestSocket = () => {
           title: `환자 이송 완료`,
           description: `환자 이송이 완료되었습니다`,
         });
-        setRequestList([]);
+        // setRequestList([]);
+        mutate();
         setPatient(undefined);
         router.push("/");
         return;
       }
     });
-  }, [requestSocket, router, setRequestList, setPatient]);
+  }, [requestSocket, router, setRequestList, setPatient, mutate]);
   return { requestSocket };
 };
