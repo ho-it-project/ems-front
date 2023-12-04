@@ -36,3 +36,31 @@ export interface Guardian {
 export interface CreatePatientRequest extends Patient {
   patient_guardian?: Guardian;
 }
+
+export type GuardianRelation =
+  | "OTHER"
+  | "PARENT"
+  | "SPOUSE"
+  | "CHILD"
+  | "SIBLING"
+  | "FRIEND";
+
+export type GuardianRelationKor =
+  | "기타"
+  | "부모"
+  | "배우자"
+  | "자녀"
+  | "형제"
+  | "친구";
+
+export const GuardianRelationKorMap: Record<
+  GuardianRelation,
+  GuardianRelationKor
+> = {
+  OTHER: "기타",
+  PARENT: "부모",
+  SPOUSE: "배우자",
+  CHILD: "자녀",
+  SIBLING: "형제",
+  FRIEND: "친구",
+};

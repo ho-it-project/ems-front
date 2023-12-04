@@ -50,6 +50,16 @@ export const useRequestSocket = () => {
           router.push(`/patient/transfer`);
           return;
         }
+        if (request_status === "COMPLETED") {
+          toast({
+            title: `환자 이송 완료`,
+            description: `환자 이송이 완료되었습니다`,
+          });
+          setRequestList([]);
+          router.push("/");
+          return;
+        }
+
         setRequestList((prev) => {
           return prev.map((prevReq) => {
             if (prevReq.emergency_center_id === newReq.emergency_center_id) {

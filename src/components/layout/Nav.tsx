@@ -4,7 +4,7 @@ import { useRequest } from "@/hooks/api/useRequest";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/AuthProvider";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { KakaoMap } from "../module/common/KakaoMap";
 import { MenuCard } from "./MenuCard";
 import { NavResponseStatusCard } from "./NavResponseStatusCard";
@@ -14,6 +14,7 @@ interface NavProps {
 }
 
 export const Nav = ({ shadow = "medium" }: NavProps) => {
+  const [patientId, setPatientId] = useState<string>("");
   const { profile } = useProfile();
   const topSectionClass = cn(`
     flex-1
@@ -33,6 +34,12 @@ export const Nav = ({ shadow = "medium" }: NavProps) => {
   const onClickLogout = () => {
     signOut();
   };
+
+  useEffect(() => {
+    if (requests.length > 0) {
+      setPatientId(requests[0].patient_id);
+    }
+  }, [requests]);
 
   return (
     <div className="flex h-full w-[18.3rem] min-w-[18.3rem] flex-col gap-[2rem] bg-transparent ">
@@ -89,9 +96,16 @@ export const Nav = ({ shadow = "medium" }: NavProps) => {
             <div>주변 응급실 찾기</div>
           </Link>
         </MenuCard>
-        <MenuCard shadow={shadow}>
-          <div>환자 정보 수정하기</div>
-        </MenuCard>
+        {patientId && (
+          <MenuCard shadow={shadow}>
+            <Link
+              href={`/patient/${patientId}`}
+              className="flex h-full w-full items-center justify-center"
+            >
+              <div>환자 정보 수정하기</div>
+            </Link>
+          </MenuCard>
+        )}
         <MenuCard shadow={shadow}>
           <Link href={"/"}>
             <div>회사정보 보기</div>
