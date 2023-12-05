@@ -14,7 +14,8 @@ export const RequestTable = () => {
   useEffect(() => {
     setComponentMounted(true);
   }, []);
-  const { requests, rejectedRequests, requestedRequests } = useRequest();
+  const { requests, rejectedRequests, requestedRequests, mutate } =
+    useRequest();
 
   const { pageStatus } = useRequestStore();
   const [request_list, setRequestList] = useState<RequestInfo[]>([]);
@@ -32,6 +33,10 @@ export const RequestTable = () => {
       ref.current.scrollTo(0, 0);
     }
   }, [pageStatus, requests, rejectedRequests, requestedRequests, ref]);
+
+  useEffect(() => {
+    mutate();
+  }, [mutate]);
   if (!componentMounted) return null;
 
   return (

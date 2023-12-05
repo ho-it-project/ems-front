@@ -1,3 +1,4 @@
+"use client";
 import { PageHeader } from "@/components/elements/PageHeader";
 import { RapidEvaluationForm } from "@/components/module/Evaluation/RapidEvaluation/RapidEvaluationForm";
 import { ProgressTracker } from "@/components/module/common/ProgressTracker";
@@ -5,6 +6,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 export const RapidEvaluationContainer = () => {
   const FORM_ID = "rapid-evaluation-form";
+
   return (
     <>
       <div className="h-full w-full">

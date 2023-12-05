@@ -2,7 +2,6 @@
 
 import { useToast } from "@/components/ui/use-toast";
 import { usePatient } from "@/hooks/api/usePatient";
-import { useEvaluationStep } from "@/hooks/useEvaluationStep";
 import { useAuth } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -17,7 +16,6 @@ export const VsEvalutaionForm = ({ formId }: VsEvalutaionFormProps) => {
   const { patient } = usePatient();
   const router = useRouter();
   const { toast } = useToast();
-  const { nextPage, steps } = useEvaluationStep();
   const { accessToken } = useAuth();
   const [temperature, setTemperature] = useState<string>("36.5");
   const [heartRate, setHeartRate] = useState<number>(80);
@@ -72,13 +70,9 @@ export const VsEvalutaionForm = ({ formId }: VsEvalutaionFormProps) => {
       .then((res: { is_success: boolean }) => {
         if (res.is_success) {
           toast({ description: "vs평가가 저장되었습니다." });
-          if (steps.length) {
-            nextPage();
-            return;
-          }
-          router.push("/request");
+          router.push("/patient/additional-evaluation");
+          return;
         }
-
         toast({ description: "vs평가에 실패했습니다." });
       });
 
@@ -151,7 +145,7 @@ export const VsEvalutaionForm = ({ formId }: VsEvalutaionFormProps) => {
 
   useEffect(() => {
     if (patient && !patient.patient_id) {
-      router.push("/patient/rapid-evaluation");
+      router.push("/patient/rapid");
     }
   }, [patient, router]);
 

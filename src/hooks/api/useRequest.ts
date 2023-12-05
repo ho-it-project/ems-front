@@ -1,5 +1,5 @@
 import { useRequestStore } from "@/store/request.store";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { useGetApi } from ".";
 /**
@@ -27,7 +27,7 @@ export const useRequest = () => {
   const requestDate = useRequestStore(useShallow((state) => state.requestDate));
   const sort = useRequestStore(useShallow((state) => state.sort));
 
-  const { data, isLoading } = useGetApi(
+  const { data, isLoading, refetch } = useGetApi(
     "/requests/ems-to-er/ems",
     { useLoader: true },
     {
@@ -37,27 +37,39 @@ export const useRequest = () => {
     }
   );
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-
   useEffect(() => {
     if (data) {
-      const { result } = data;
-      const { request_list } = result;
-      setRequestList((prev) => {
-        return request_list.reduce((acc, cur) => {
-          const { emergency_center_id } = cur;
-          const isExist = acc.some(
-            (prevReq) => prevReq.emergency_center_id === emergency_center_id
-          );
-          if (!isExist) {
-            return [...acc, cur];
-          }
-          return acc;
-        }, prev);
-      });
+      const { is_success } = data;
+      if (is_success) {
+        const { result } = data;
+        const { request_list } = result;
+        setRequestList((prev) => {
+          return request_list.reduce((acc, cur) => {
+            const { emergency_center_id } = cur;
+            const isExist = acc.some(
+              (prevReq) => prevReq.emergency_center_id === emergency_center_id
+            );
+            if (!isExist) {
+              return [...acc, cur];
+            }
+            return acc;
+          }, prev);
+        });
+      }
     }
   }, [data, setRequestList]);
-
+  const mutate = useCallback(async () => {
+    refetch().then((data) => {
+      if (data) {
+        const { is_success } = data;
+        if (is_success) {
+          const { result } = data;
+          const { request_list } = result;
+          setRequestList(request_list);
+        }
+      }
+    });
+  }, [refetch, setRequestList]);
   return {
     rejectedRequests,
     requestedRequests,
@@ -68,5 +80,6 @@ export const useRequest = () => {
     orderby,
     requestDate,
     sort,
+    mutate,
   };
 };

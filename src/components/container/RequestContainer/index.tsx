@@ -46,7 +46,7 @@ export const RequestContainer = () => {
   const requestOnClick = () => {
     if (!patient) {
       toast({ description: "환자 정보가 없습니다." });
-      router.push("/patient/rapid-evaluation");
+      router.push("/patient/rapid");
       return;
     }
 

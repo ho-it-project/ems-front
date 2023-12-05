@@ -9,7 +9,7 @@ export const usePatient = () => {
   //   `/api/ems/patients?patient_status=PENDING&patient_status=REQUESTED&patient_status=ACCEPTED`,
   //   (url: string) => fetcher(url, accessToken)
   // );
-  const { data, isLoading } = useGetApi(
+  const { data, isLoading, refetch } = useGetApi(
     "/ems/patients",
     {
       useLoader: true,
@@ -29,13 +29,27 @@ export const usePatient = () => {
     if (isLoading) return;
     if (!data) return;
     const { result } = data;
+    console.log("result", result);
     const patient_list = result.patient_list;
     if (patient_list.length > 0)
       setPatient({ ...patient_list[0], patient_identity_number: "********" });
   }, [data, setPatient, isLoading]);
+
+  const mutation = () => {
+    refetch().then((res) => {
+      if (!res) return;
+      const { is_success } = res;
+      if (!is_success) return;
+      const { result } = res;
+      const patient_list = result.patient_list;
+      if (patient_list.length > 0)
+        setPatient({ ...patient_list[0], patient_identity_number: "********" });
+    });
+  };
   return {
     patient: patient,
     error: undefined,
     isLoading,
+    mutation,
   };
 };

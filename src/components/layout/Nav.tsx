@@ -1,10 +1,10 @@
 "use client";
+import { usePatient } from "@/hooks/api/usePatient";
 import { useProfile } from "@/hooks/api/useProfile";
 import { useRequest } from "@/hooks/api/useRequest";
 import { cn } from "@/lib/utils";
-import { useAuth } from "@/providers/AuthProvider";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { KakaoMap } from "../module/common/KakaoMap";
 import { MenuCard } from "./MenuCard";
 import { NavResponseStatusCard } from "./NavResponseStatusCard";
@@ -14,6 +14,7 @@ interface NavProps {
 }
 
 export const Nav = ({ shadow = "medium" }: NavProps) => {
+  const [patientId, setPatientId] = useState<string>("");
   const { profile } = useProfile();
   const topSectionClass = cn(`
     flex-1
@@ -29,10 +30,13 @@ export const Nav = ({ shadow = "medium" }: NavProps) => {
     setFocusMap(false);
   };
   const { requests } = useRequest();
-  const { signOut } = useAuth();
-  const onClickLogout = () => {
-    signOut();
-  };
+
+  const { patient } = usePatient();
+
+  useEffect(() => {
+    if (patient) setPatientId(patient.patient_id);
+    if (!patient) setPatientId("");
+  }, [patient]);
 
   return (
     <div className="flex h-full w-[18.3rem] min-w-[18.3rem] flex-col gap-[2rem] bg-transparent ">
@@ -89,16 +93,20 @@ export const Nav = ({ shadow = "medium" }: NavProps) => {
             <div>주변 응급실 찾기</div>
           </Link>
         </MenuCard>
-        <MenuCard shadow={shadow}>
-          <div>환자 정보 수정하기</div>
-        </MenuCard>
+        {patientId && (
+          <MenuCard shadow={shadow}>
+            <Link
+              href={`/patient/${patientId}`}
+              className="flex h-full w-full items-center justify-center"
+            >
+              <div>환자 정보 수정하기</div>
+            </Link>
+          </MenuCard>
+        )}
         <MenuCard shadow={shadow}>
           <Link href={"/"}>
             <div>회사정보 보기</div>
           </Link>
-        </MenuCard>
-        <MenuCard shadow={shadow}>
-          <div onClick={onClickLogout}>임시 로그아웃</div>
         </MenuCard>
       </div>
 
@@ -108,7 +116,14 @@ export const Nav = ({ shadow = "medium" }: NavProps) => {
         </div>
         <div className="relative z-[10]">
           <MenuCard shadow={shadow}>
-            {requests.length > 0 ? (
+            {!patient || !patient.patient_id ? (
+              <Link
+                href={"/patient/rapid"}
+                className="flex h-full w-full items-center justify-center"
+              >
+                <div>환자생성하기</div>
+              </Link>
+            ) : requests.length > 0 ? (
               <Link
                 href={"/response"}
                 className="flex h-full w-full items-center justify-center"

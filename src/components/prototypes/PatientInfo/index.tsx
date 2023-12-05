@@ -1,5 +1,7 @@
 import { PatientInfoContainer } from "@/components/container/PatientInfoContainer";
 
-export const PatientInfoPrototypes = () => {
+
+
+export const PatientInfoPrototype = () => {
   return <PatientInfoContainer />;
 };

@@ -16,6 +16,8 @@ interface Query {
     | "COMPLETED"
     | "VIEWED"
     | "REJECTED"
+    | "TRANSFER"
+    | "TRANSFER_COMPLETED"
   )[];
   patient_gender?: ("FEMALE" | "MALE")[];
   patient_severity?: ("UNKNOWN" | "SEVERE" | "MILD" | "NONE")[];
@@ -51,7 +53,14 @@ export const useRequestStore = create<RequestStore>((set, get) => ({
   query: {
     limit: 1000,
     page: 1,
-    request_status: ["REQUESTED", "REJECTED", "VIEWED", "ACCEPTED"],
+    request_status: [
+      "REQUESTED",
+      "REJECTED",
+      "VIEWED",
+      "ACCEPTED",
+      "TRANSFER",
+      "TRANSFER_COMPLETED",
+    ],
   },
   setRequestList: (requests) =>
     set((state) => {

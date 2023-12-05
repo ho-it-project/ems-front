@@ -1,11 +1,17 @@
 import { toast } from "@/components/ui/use-toast";
-import { EMS_REQUEST_ER, EMS_REQUEST_ER_RESPONSE } from "@/constant";
+import {
+  EMS_REQUEST_ER,
+  EMS_REQUEST_ER_RESPONSE,
+  EMS_REQUEST_ER_UPDATE,
+} from "@/constant";
+import { usePatientStore } from "@/store/patient.store";
 import { useRequestStore } from "@/store/request.store";
 import { useSocketStore } from "@/store/socket.store";
 import { RequestInfo, reqeustStatueKorMap } from "@/types/model/request";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
+import { useRequest } from "../api/useRequest";
 
 // 소켓 핸들링 훅
 export const useRequestSocket = () => {
@@ -13,10 +19,11 @@ export const useRequestSocket = () => {
   const setRequestList = useRequestStore(
     useShallow((state) => state.setRequestList)
   );
-
+  const setPatient = usePatientStore((state) => state.setPatient);
   const requestSocket = useSocketStore(
     useShallow((state) => state.requestSocket)
   );
+  const { mutate } = useRequest();
   useEffect(() => {
     if (!requestSocket) return;
 
@@ -44,13 +51,13 @@ export const useRequestSocket = () => {
                     reqeustStatueKorMap[newReq.request_status]
                   } 응답하였습니다`,
                 });
-
                 return { ...prevReq, request_status };
               })
           );
-          router.push(`/emergency-center/${emergency_center_id}`);
+          router.push(`/patient/transfer`);
           return;
         }
+
         setRequestList((prev) => {
           return prev.map((prevReq) => {
             if (prevReq.emergency_center_id === newReq.emergency_center_id) {
@@ -83,6 +90,20 @@ export const useRequestSocket = () => {
         return [...prev, data];
       });
     });
-  }, [requestSocket, router, setRequestList]);
+    requestSocket.on(EMS_REQUEST_ER_UPDATE, (data: RequestInfo) => {
+      const { request_status } = data;
+      if (request_status === "COMPLETED") {
+        toast({
+          title: `환자 이송 완료`,
+          description: `환자 이송이 완료되었습니다`,
+        });
+        // setRequestList([]);
+        mutate();
+        setPatient(undefined);
+        router.push("/");
+        return;
+      }
+    });
+  }, [requestSocket, router, setRequestList, setPatient, mutate]);
   return { requestSocket };
 };

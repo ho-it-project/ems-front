@@ -7,6 +7,7 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
+import { useAuth } from "@/providers/AuthProvider";
 import { Company } from "@/types/model";
 import { Employee, EmployeeRoleLabel } from "@/types/model/employee";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,6 +39,7 @@ export const MyProfileForm = ({
   company,
   onSubmit,
 }: MyProfileFormProps) => {
+  const { signOut } = useAuth();
   const form = useForm<z.infer<typeof myProfileSchema>>({
     resolver: zodResolver(myProfileSchema),
     defaultValues: {
@@ -161,6 +163,17 @@ export const MyProfileForm = ({
                   </FormItem>
                 )}
               />
+              <div className="col-span-2 col-start-6  flex w-full flex-col justify-end ">
+                <button
+                  className="fontSize-small fontSize-medium flex h-[2.4rem] w-full items-center justify-end rounded-lg text-center text-main"
+                  onClick={() => {
+                    signOut();
+                  }}
+                  type="button"
+                >
+                  <span className="fontSize-regular text-grey">로그아웃</span>
+                </button>
+              </div>
               <div className="col-span-2 col-start-8  flex w-full flex-col justify-end">
                 <button
                   className="fontSize-small fontSize-medium flex w-full items-center justify-end rounded-lg text-right text-main"

@@ -51,12 +51,32 @@ export const KakaoMap = ({ focus }: KakaoMapProps) => {
     kakaoMap.relayout();
   }, [kakaoMap, mapRef.current?.clientWidth, location]);
   useEffect(() => {
+    console.log(requests);
     if (!kakaoMap) return;
     if (!requests) return;
-    if (requests.length === 0) return;
     if (!location) return;
-    if (requests.length === 1 && requests[0].request_status === "ACCEPTED") {
+    if (requests.length === 0) {
+      const [lat, lng] = location;
+      const center = new kakao.maps.LatLng(lat, lng);
+
+      const marker = new kakao.maps.Marker({
+        position: center,
+      });
+      marker.setMap(null);
+
+      kakaoMap.setCenter(center);
+      kakaoMap.relayout();
+
+      return;
+    }
+    if (
+      requests.length === 1 &&
+      (requests[0].request_status === "ACCEPTED" ||
+        requests[0].request_status === "TRANSFER" ||
+        requests[0].request_status === "TRANSFER_COMPLETED")
+    ) {
       const reuqest = requests[0];
+
       const {
         emergency_center_name,
         emergency_center_latitude,
@@ -97,6 +117,7 @@ export const KakaoMap = ({ focus }: KakaoMapProps) => {
       kakaoMap.relayout();
     }
   }, [requests, kakaoMap, location]);
+
   return (
     <div className={cn("h-full w-full")}>
       <div className={cn("h-full w-full rounded-lg ")} ref={mapRef}></div>

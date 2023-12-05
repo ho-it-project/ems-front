@@ -8,12 +8,11 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
-import { useEvaluationStep } from "@/hooks/useEvaluationStep";
 import { useGeoLocation } from "@/hooks/useGeoLocation";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/AuthProvider";
-import { useEveluationStepStore } from "@/store/evaluationStep.store";
 import { usePatientStore } from "@/store/patient.store";
+import { useRapidEvaluationStore } from "@/store/rapidEvaluation.store.";
 import {
   CreatePatientErrorResponse,
   CreatePatientResponse,
@@ -54,10 +53,9 @@ interface PatientInfoFormProps {
 export const PatientInfoForm = ({ changeForm }: PatientInfoFormProps) => {
   const { toast } = useToast();
   const location = useGeoLocation();
-  const { rapidEvaluation, check } = useEveluationStepStore();
+  const { rapidEvaluation, check,guardian } = useRapidEvaluationStore();
   const [patient_latitude, patient_longitude] = location ?? [0, 0];
-  const { guardian } = useEveluationStepStore();
-  const { nextPage } = useEvaluationStep();
+  // const { guardian } = useEveluationStepStore();
   const { setPatient } = usePatientStore();
   const form = useForm<z.infer<typeof patientInfoSchema>>({
     resolver: zodResolver(patientInfoSchema),
@@ -187,7 +185,6 @@ export const PatientInfoForm = ({ changeForm }: PatientInfoFormProps) => {
             patient_emergency_cause: patient_emergency_cause,
           });
           toast({ description: "환자 정보가 등록되었습니다." });
-          nextPage();
           return;
         }
         toast({ description: "환자 정보 등록에 실패하였습니다." });
