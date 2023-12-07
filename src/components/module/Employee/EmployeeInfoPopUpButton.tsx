@@ -11,28 +11,26 @@ type EmployeeEdit = Pick<
   "employee_id" | "id_card" | "employee_name" | "role"
 >;
 
-type PickType<T extends "add" | "edit"> = T extends "add"
-  ? EmployeeAdd
-  : EmployeeEdit;
-
+type Foo = { add: EmployeeAdd; edit: EmployeeEdit };
 function getDefaultEmployee<T extends "add" | "edit">(
   type: T,
   _employee: undefined | (T extends "edit" ? EmployeeEdit : undefined)
-): T extends "add" ? EmployeeAdd : EmployeeEdit {
-  if (type === "add") {
-    return {
-      employee_name: "",
-      id_card: "",
-      role: "ADMIN",
-      password: "",
-    } as PickType<T>;
-  }
-  return {
+): Foo[T] {
+  const emadd = {
+    employee_name: "",
+    id_card: "",
+    role: "ADMIN" as const,
+    password: "",
+  };
+
+  const addd = {
     employee_id: _employee?.employee_id ?? "",
     employee_name: _employee?.employee_name ?? "",
     id_card: _employee?.id_card ?? "",
     role: _employee?.role ?? "ADMIN",
-  } as PickType<T>;
+  };
+  const res: Foo[T] = { add: emadd, edit: addd }[type];
+  return res;
 }
 
 interface EmployeeInfoPopUpButtonProps<T extends "add" | "edit"> {
@@ -42,9 +40,7 @@ interface EmployeeInfoPopUpButtonProps<T extends "add" | "edit"> {
    * @param props Employee Data
    * @returns Promise<whether to close PopUp>
    */
-  onSubmit: (
-    props: T extends "add" ? EmployeeAdd : EmployeeEdit
-  ) => Promise<boolean>;
+  onSubmit: (props: Foo[T]) => Promise<boolean>;
   submitButtonName: string;
   employee?: T extends "edit" ? EmployeeEdit : undefined;
   type: T;
@@ -57,19 +53,21 @@ export const EmployeeInfoPopUpButton = <T extends "add" | "edit">({
   submitButtonName,
   type,
 }: EmployeeInfoPopUpButtonProps<T>) => {
-  const employee: T extends "add" ? EmployeeAdd : EmployeeEdit =
-    getDefaultEmployee(type, _employee);
+  const employee: Foo[T] = getDefaultEmployee(type, _employee);
 
   const [open, setOpen] = useState(false);
   const onClickAdd = () => {
     setOpen(true);
   };
   const onClickClose = () => {
-    setEmployeeInfo(getDefaultEmployee(type, _employee));
+    setEmployeeInfo(
+      type === "edit"
+        ? getDefaultEmployee(type, _employee)
+        : getDefaultEmployee(type, undefined)
+    );
     setOpen(false);
   };
-  const [employeeInfo, setEmployeeInfo] =
-    useState<T extends "add" ? EmployeeAdd : EmployeeEdit>(employee);
+  const [employeeInfo, setEmployeeInfo] = useState<Foo[T]>(employee);
 
   const onChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>

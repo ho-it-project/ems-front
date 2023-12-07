@@ -42,25 +42,25 @@ interface IAuthContext {
 
 export const AuthContext = createContext<IAuthContext | null>(null);
 
-type IAuthContextWithUser = Omit<IAuthContext, "user"> & {
-  user: NonNullable<IAuthContext["user"]>;
-};
+// type IAuthContextWithUser = Omit<IAuthContext, "user"> & {
+//   user: NonNullable<IAuthContext["user"]>;
+// };
 
-export function useAuth(options?: { isLogin?: true }): IAuthContextWithUser;
-export function useAuth(options?: { isLogin?: false }): IAuthContext;
-export function useAuth(options?: {
-  isLogin?: boolean;
-}): IAuthContext | IAuthContextWithUser {
+// export function useAuth(options?: { isLogin?: true }): IAuthContextWithUser;
+// export function useAuth(options?: { isLogin?: false }): IAuthContext;
+export function useAuth(options?: { isLogin?: boolean }): IAuthContext {
   const result = useContext(AuthContext);
   const router = useRouter();
   const pathname = usePathname();
   if (!result?.initialized) {
     throw new Error("Auth context must be used within a AuthProvider!");
   }
-  if (options?.isLogin) {
-    if (result.user === null) router.push(`/login?callbackURL=${pathname}`);
-    return result;
-  }
+  useEffect(() => {
+    if (options?.isLogin) {
+      if (result.user === null) router.push(`/login?callbackURL=${pathname}`);
+    }
+  }, [result, options, pathname, router]);
+
   return result;
 }
 
@@ -145,6 +145,7 @@ const AuthProvider = ({ children }: PropsWithChildren<IAuthProviderProps>) => {
     status ? status === "loading" : true
   );
   useEffect(() => {
+    console.log("iam effect");
     setIsLoading(true);
     if (status === "loading") return;
     if (isDevPage(pathname)) {
@@ -181,7 +182,7 @@ const AuthProvider = ({ children }: PropsWithChildren<IAuthProviderProps>) => {
       </AuthContext.Provider>
     );
 
-  if (!user) router.push(`/login?callbackURL=${pathname}`);
+  // if (!user) router.push(`/login?callbackURL=${pathname}`);
 
   return (
     <AuthContext.Provider

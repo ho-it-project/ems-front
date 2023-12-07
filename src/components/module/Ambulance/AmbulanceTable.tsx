@@ -1,61 +1,34 @@
-import { Tag } from "@/components/elements/Tag";
-import { useAmbulanceDetail } from "@/hooks/api/useAmbulance";
-import { AmbulanceEmployee, Ambulance as AmbulanceModel } from "@/types/model";
-import { Employee } from "@/types/model/employee";
-import { COmit } from "@/types/util";
+import { Badge } from "@/components/ui/badge";
+import { useAmbulanceDetail } from "@/hooks/api/useAmbulanceDetail";
+import { Ambulance, AmbulanceEmployee } from "@/types/model";
 import { useRouter } from "next/navigation";
 import { AmbulanceInfoPopUpButton } from "./AmbulanceInfoPopUpButton";
 
-// interface Ambulance {
-//   id: string;
-//   car_num: "78구1500";
-//   car_type: "스톼뤡수";
-//   type: "일반" | "응급";
-//   driver: string;
-//   team: string[];
-// }
-
-// const mock = new Array(20).fill(0).map((_, i) => {
-//   return {
-//     id: i.toString(),
-//     car_num: "78구1500",
-//     car_type: "스톼뤡수",
-//     type: "일반",
-//     driver: "김세종",
-//     team: i % 2 == 0 ? ["김세종", "김세종", "김기사"] : ["김세종", "김기사"],
-//   };
-// });
-
-type AmbulanceDataFromCompanyApi = COmit<
-  AmbulanceModel,
-  "employees" | "ambulance_company"
->;
-
-type AmbulanceFromApi = COmit<AmbulanceModel, "employees"> & {
-  employees: (COmit<AmbulanceEmployee, "ambulance" | "employee"> & {
-    employee: COmit<Employee, "ambulance_company_id">;
-  })[];
+type AmbulanceDetail = Ambulance & {
+  employees: AmbulanceEmployee[];
 };
 
 const matchSearch = (
   search: string,
   searchType: (typeof searchTypes)[keyof typeof searchTypes],
-  ambulanceDetail: AmbulanceFromApi
+  ambulanceDetail: AmbulanceDetail
 ) => {
   switch (searchType) {
     case "ambulance_number":
     case "ambulance_type":
       return ambulanceDetail[searchType].includes(search);
     case "driver":
-      return ambulanceDetail.employees
-        .filter(({ employee }) => employee.role === "DRIVER")[0]
-        .employee.employee_name.includes(search);
+      return search === ""
+        ? true
+        : ambulanceDetail.employees
+            .filter(({ team_role }) => team_role === "DRIVER")[0]
+            ?.employee.employee_name.includes(search);
     case "employees":
-      return (
-        ambulanceDetail.employees.filter(({ employee }) =>
-          employee.employee_name.includes(search)
-        ).length > 0
-      );
+      return search === ""
+        ? true
+        : ambulanceDetail.employees.filter(({ employee }) =>
+            employee.employee_name.includes(search)
+          ).length > 0;
   }
 };
 
@@ -67,22 +40,34 @@ export const searchTypes = {
   팀원: "employees",
 } as const;
 
-export const Ambulance = ({
+export const AmbulanceDetail = ({
   ambulance,
   search,
   searchType,
 }: {
-  ambulance: AmbulanceDataFromCompanyApi;
+  ambulance: Ambulance;
   search: string;
   searchType: keyof typeof searchTypes;
 }) => {
-  const { detail, errorOnDetail } = useAmbulanceDetail(ambulance.ambulance_id);
+  const { ambulanceDetail, errorOnAmbulanceDetail } = useAmbulanceDetail(
+    ambulance.ambulance_id
+  );
+  const drivers = ambulanceDetail?.employees.filter(
+    (v) => v.team_role === "DRIVER"
+  );
+
+  const employees = ambulanceDetail?.employees.filter(
+    (employee) => employee.team_role !== "DRIVER"
+  );
+
   const router = useRouter();
-  errorOnDetail;
-  const drivers = detail?.employees.filter((v) => v.employee.role === "DRIVER");
+  errorOnAmbulanceDetail;
+  const flag =
+    ambulanceDetail &&
+    matchSearch(search, searchTypes[searchType], ambulanceDetail);
   return (
     <>
-      {detail && matchSearch(search, searchTypes[searchType], detail) && (
+      {ambulanceDetail && flag && (
         <div
           key={ambulance.ambulance_id}
           className="fontSize-regular flex border-b border-lgrey py-[1.8rem] pl-[3.2rem] text-black"
@@ -92,24 +77,21 @@ export const Ambulance = ({
           <div className="flex-[2]">{ambulance.ambulance_type}</div>
           <div className="flex-[2]">
             <button
-              className="fontSize-small-l flex items-center gap-[0.5rem]"
+              className="fontSize-small-l flex h-full w-full items-center gap-[0.5rem] overflow-hidden overflow-ellipsis whitespace-nowrap"
               onClick={() =>
                 router.push(`/ambulance/${ambulance.ambulance_id}/driver`)
               }
             >
-              {drivers?.length === 0 ? (
-                <div className=" text-main">설정하기</div>
+              {drivers && drivers.length > 0 ? (
+                <Badge className="h-[2.4rem] w-[6rem] rounded-[3rem] border-[0.2rem] bg-bg text-black">
+                  <div className=" overflow-hidden overflow-ellipsis whitespace-nowrap text-[1.2rem] font-medium">
+                    {drivers[0].employee.employee_name ?? ""}
+                  </div>
+                </Badge>
               ) : (
-                <Tag
-                  text={
-                    detail?.employees.filter(
-                      (employee) => employee.employee.role === "DRIVER"
-                    )[0]?.employee.employee_name ?? "설정하기"
-                  }
-                  border="none"
-                  bgColor="bg"
-                  color="black"
-                />
+                <div className="flex h-full items-center justify-center text-main">
+                  <div>설정하기</div>
+                </div>
               )}
             </button>
           </div>
@@ -121,23 +103,24 @@ export const Ambulance = ({
                 router.push(`/ambulance/${ambulance.ambulance_id}/employee`)
               }
             >
-              {detail?.employees.length > 0 ? (
-                detail.employees.slice(0, 2).map((employee) => {
+              {employees && employees.length > 0 ? (
+                employees.slice(0, 2).map((employee) => {
                   return (
-                    <Tag
+                    <Badge
                       key={employee.employee.employee_name}
-                      text={employee.employee.employee_name}
-                      border="none"
-                      bgColor="bg"
-                      color="black"
-                    />
+                      className=" h-[2.4rem] w-[6rem] rounded-[3rem] border-[0.2rem] bg-bg text-black"
+                    >
+                      <div className=" overflow-hidden overflow-ellipsis whitespace-nowrap text-[1.2rem] font-medium">
+                        {employee.employee.employee_name ?? ""}
+                      </div>
+                    </Badge>
                   );
                 })
               ) : (
-                <div className=" text-main">설정하기</div>
+                <div className=" flex items-center text-main">설정하기</div>
               )}
-              {(detail?.employees.length ?? 0) > 2 &&
-                `외 ${(detail?.employees.length ?? 0) - 2}명`}
+              {(employees?.length ?? 0) > 2 &&
+                `외 ${(ambulanceDetail?.employees.length ?? 0) - 2}명`}
             </button>
             <div className="flex gap-[2rem]">
               {/* <AmbulanceDeletePopUpButton /> */}
@@ -146,8 +129,8 @@ export const Ambulance = ({
                 title="수정"
                 type="edit"
                 Ambulance={{
-                  ambulance_number: detail.ambulance_number,
-                  ambulance_type: detail.ambulance_type,
+                  ambulance_number: ambulanceDetail.ambulance_number,
+                  ambulance_type: ambulanceDetail.ambulance_type,
                 }}
               />
             </div>
@@ -163,7 +146,7 @@ export const AmbulanceTable = ({
   search,
   searchType,
 }: {
-  ambulanceList: AmbulanceDataFromCompanyApi[];
+  ambulanceList: Ambulance[];
   search: string;
   searchType: keyof typeof searchTypes;
 }) => {
@@ -180,7 +163,7 @@ export const AmbulanceTable = ({
       <div className="h-full overflow-scroll">
         {ambulanceList.map((ambulance) => {
           return (
-            <Ambulance
+            <AmbulanceDetail
               key={ambulance.ambulance_id}
               ambulance={ambulance}
               search={search}

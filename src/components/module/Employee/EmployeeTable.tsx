@@ -6,15 +6,6 @@ import { EmployeeDeletedPopUp } from "./EmployDeletedPopUp";
 import { EmployeeDeletePopUpButton } from "./EmployeeDeletePopUpButton";
 import { EmployeeInfoPopUpButton } from "./EmployeeInfoPopUpButton";
 
-// const mock = new Array(20).fill(0).map((_, i) => {
-//   return {
-//     id: i.toString(),
-//     name: "김코딩",
-//     role: "개발자",
-//     password: "123456",
-//   };
-// });
-
 export const EmployeeTable = ({
   data,
   refetch,

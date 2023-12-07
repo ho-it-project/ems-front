@@ -9,7 +9,7 @@ export const useProfile = () => {
 
   const { data, error } = useGetApi(
     "/ems/ambulance-companies/{ems_ambulance_company_id}",
-    { useLoader: true },
+    { useLoader: true, enabled: !!user },
     {
       params: {
         path: {
