@@ -1,8 +1,9 @@
 import { cn } from "@/lib/utils";
-import { Department, HospitalDepartment } from "@/types/emergencyCenter.type";
+import { Department } from "@/types/department/client";
 
 interface EmergencyCenterIllnessStatusCardProps {
-  departemnts: (HospitalDepartment & { department: Department })[];
+  // departemnts: (HospitalDepartment & { department: Department })[];
+  departemnts: Department[];
 }
 
 export const EmergencyCenterIllnessStatusCard = ({
@@ -18,10 +19,10 @@ export const EmergencyCenterIllnessStatusCard = ({
               key={department.department_id}
               className={cn(
                 "fontSize-regular-l",
-                department.status === "ACITVE" ? "text-black" : "text-lgrey"
+                department.status === "ACTIVE" ? "text-black" : "text-lgrey"
               )}
             >
-              {department.department.department_name}
+              {department.department_name}
             </span>
           );
         })}

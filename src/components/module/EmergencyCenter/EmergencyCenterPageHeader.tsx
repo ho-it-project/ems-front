@@ -2,10 +2,8 @@
 import { Input } from "@/components/elements/Input";
 import { useWindowSize } from "@/hooks";
 import { cn } from "@/lib/utils";
-import {
-  EmergencyCenterType,
-  useEmergencyCenterListStore,
-} from "@/store/emergencyCenter.store";
+import { useEmergencyCenterListStore } from "@/store/emergencyCenter.store";
+import { EmergencyCenterType } from "@/types/model/emergencyCenter";
 import { useEffect, useState } from "react";
 
 export const EmergencyCenterPageHeader = () => {
@@ -19,7 +17,6 @@ export const EmergencyCenterPageHeader = () => {
   };
   const searchHandler = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      console.log("enter");
       setQeurySearch(search);
     }
   };

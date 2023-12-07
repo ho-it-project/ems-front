@@ -152,7 +152,6 @@ export const OpqrstEvaluationForm = ({ formId }: OpqrstEvaluationFormProps) => {
         }-${date.getDate()} ${hour}:${minute}`
       ).toISOString(),
     });
-    console.log(body);
     if (!patient) return;
     fetch(`/api/ems/patients/${patient.patient_id}/opqrst`, {
       method: "POST",

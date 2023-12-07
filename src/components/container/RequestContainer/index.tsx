@@ -62,7 +62,6 @@ export const RequestContainer = () => {
           toast({ description: "요청이 완료되었습니다." });
           return;
         }
-        console.log(res.message);
         if (res.message === "REQUEST_ALREADY_PROCESSED") {
           toast({ description: "이미 요청을 진행중인 환자입니다." });
           return;

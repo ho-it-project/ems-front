@@ -79,7 +79,6 @@ export const EmployeeInfoPopUpButton = <T extends "add" | "edit">({
       ...employeeInfo,
       [name]: value,
     });
-    // console.log(employeeInfo);
   };
 
   const trigger =

@@ -1,20 +1,10 @@
 import { arr_diff } from "@/lib/utils";
+import {
+  EmergencyCenterType,
+  EmergencyCenterWithDistance,
+  EmergencyRoom,
+} from "@/types/model/emergencyCenter";
 import { create } from "zustand";
-
-export type EmergencyCenterType =
-  | "NON_EMERGENCY_MEDICAL_INSTITUTION"
-  | "LOCAL_EMERGENCY_MEDICAL_INSTITUTION"
-  | "LOCAL_EMERGENCY_MEDICAL_CENTER"
-  | "REGIONAL_EMERGENCY_MEDICAL_CENTER";
-
-export const EMERGENCY_CENTER_TYPE: {
-  [key in EmergencyCenterType]: string;
-} = {
-  NON_EMERGENCY_MEDICAL_INSTITUTION: "일반의료기관",
-  LOCAL_EMERGENCY_MEDICAL_INSTITUTION: "지역응급의료기관",
-  LOCAL_EMERGENCY_MEDICAL_CENTER: "지역응급의료센터",
-  REGIONAL_EMERGENCY_MEDICAL_CENTER: "권역응급의료센터",
-};
 
 export interface EmergencyCeterQuery {
   emergency_center_type: EmergencyCenterType[];
@@ -23,18 +13,16 @@ export interface EmergencyCeterQuery {
   limit: number;
 }
 
-export interface EmergencyCenter {
-  emergency_center_id: string;
-  emergency_center_name: string;
-  emergency_center_type: EmergencyCenterType;
-  distance: string;
-  emergency_center_primary_phone: string;
-  emergency_center_address: string;
+export interface GetEmergencyCenterResponseDTO
+  extends EmergencyCenterWithDistance {
+  emergency_rooms: (EmergencyRoom & {
+    _count: { emergency_room_beds: number };
+  })[];
 }
 
 interface EmergencyCenterListStore {
   query: EmergencyCeterQuery;
-  emergencyCenters: EmergencyCenter[];
+  emergencyCenters: GetEmergencyCenterResponseDTO[];
   pageLimit: {
     total_count: number;
     total_page: number;
@@ -45,8 +33,10 @@ interface EmergencyCenterListStore {
   setQueryLimit: (limit: number) => void;
   setEmergencyCenters: (
     emmergencyCenters:
-      | EmergencyCenter[]
-      | ((prevState: EmergencyCenter[]) => EmergencyCenter[])
+      | GetEmergencyCenterResponseDTO[]
+      | ((
+          prevState: GetEmergencyCenterResponseDTO[]
+        ) => GetEmergencyCenterResponseDTO[])
   ) => void;
   setPageLimit: (pageLimit: {
     total_count: number;
@@ -96,8 +86,10 @@ export const useEmergencyCenterListStore = create<EmergencyCenterListStore>(
 
     setEmergencyCenters: (
       emergencyCenters:
-        | EmergencyCenter[]
-        | ((prevState: EmergencyCenter[]) => EmergencyCenter[])
+        | GetEmergencyCenterResponseDTO[]
+        | ((
+            prevState: GetEmergencyCenterResponseDTO[]
+          ) => GetEmergencyCenterResponseDTO[])
     ) =>
       set((state) => {
         // Check if emergencyCenters is a function and call it with the current state if it is

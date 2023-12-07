@@ -2,14 +2,16 @@
 
 import { Tag } from "@/components/elements/Tag";
 import { cn } from "@/lib/utils";
-import { EMERGENCY_CENTER_TYPE } from "@/store/emergencyCenter.store";
 import { useRequestStore } from "@/store/request.store";
-import { EmergencyCenter_ } from "@/types/emergencyCenter.type";
+import {
+  EMERGENCY_CENTER_TYPE,
+  EmergencyCenter,
+} from "@/types/model/emergencyCenter";
 import { ReqeustStatueKor, reqeustStatueKorMap } from "@/types/model/request";
 import { useEffect, useState } from "react";
 
 interface EmergencyInfoCardProps {
-  emergencyCenter: EmergencyCenter_;
+  emergencyCenter: EmergencyCenter;
 }
 
 export const EmergencyCenterInfoCard = ({

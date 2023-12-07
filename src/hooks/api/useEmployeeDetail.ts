@@ -27,7 +27,6 @@ export const useEmployeeDetail = (id?: string) => {
     const { is_success } = data;
     if (!is_success) return;
     const { result } = data;
-    console.log(result);
     setEmployeeDetail(result);
   }, [data, setEmployeeDetail]);
 

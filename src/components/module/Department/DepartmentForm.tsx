@@ -37,8 +37,6 @@ export const DepartmentForm = ({ formId }: DepartmentFormProps) => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //로직 추가
-    console.log("submit");
-    console.log(selectDepartment);
   };
 
   return (

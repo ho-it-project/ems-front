@@ -5,15 +5,12 @@ import { ChangePasswordForm } from "@/components/module/My/ChangePasswordForm";
 import { MyProfileForm } from "@/components/module/My/MyProfileForm";
 import { useProfile } from "@/hooks/api/useProfile";
 import { ChevronLeft } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const MyContainer = () => {
   const FORM_ID = "my-profile-form";
   const { profile } = useProfile();
   const [editMode, setEditMode] = useState<boolean>(false);
-  useEffect(() => {
-    console.log(profile);
-  }, [profile]);
 
   if (!profile.user || !profile.company) return <div>loading...</div>;
   const onSubmit = () => {
