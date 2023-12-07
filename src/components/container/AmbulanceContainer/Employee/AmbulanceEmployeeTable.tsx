@@ -1,6 +1,7 @@
 import { usePostApi } from "@/hooks/api";
 import { env } from "@/lib/utils/envValidation";
 import { useAmbulanceEmployeeStore } from "@/store/ambulanceEmployee.store";
+import { AmbulanceEmployee } from "@/types/model";
 import { Employee } from "@/types/model/employee";
 import { Plus } from "lucide-react";
 
@@ -18,27 +19,19 @@ export const AmbulanceEmployeeTableContainer = ({
 }: {
   data: Employee[];
 }) => {
-  const drivers = useAmbulanceEmployeeStore((store) => store.employees)?.map(
-    (driver) => driver.employee_id
+  const { _employees, type } = useAmbulanceEmployeeStore((store) => ({
+    _employees: store.employees,
+    type: store.type,
+  }));
+  const employees = _employees?.map(
+    (employee) => employee.employee.employee_id
   );
-  data = data.filter((driver) => !drivers?.includes(driver.employee_id));
-  // const { mutate } = usePostApi("/ems/ambulances/{ambulance_id}", {
-  //   useLoader: true,
-  // });
+  data = data.filter((driver) => !employees?.includes(driver.employee_id));
   const { appendEmployee } = useAmbulanceEmployeeStore((store) => ({
-    // ambulance_id: store.ambulance_id,
-    // refetchEmployee: store.refetch,
     appendEmployee: store.appendEmployee,
   }));
-  const onPlus = async (item: Employee) => {
+  const onPlus = async (item: AmbulanceEmployee) => {
     appendEmployee(item);
-    // await mutate({
-    //   params: { path: { ambulance_id: ambulance_id ?? "" } },
-    //   body: {
-    //     employee_list: [{ action: "ADD", employee_id: item.employee_id }],
-    //   },
-    // });
-    // refetchEmployee?.();
   };
 
   //for dev mode
@@ -111,6 +104,7 @@ export const AmbulanceEmployeeTableContainer = ({
 
       <div className="h-full ">
         {data &&
+          type &&
           data.map((item) => {
             return (
               <div
@@ -122,7 +116,12 @@ export const AmbulanceEmployeeTableContainer = ({
                 <div className="flex-[2]">{item.id_card}</div>
                 <div className="flex flex-1 items-center justify-end gap-[2rem]">
                   <button
-                    onClick={() => onPlus(item)}
+                    onClick={() =>
+                      onPlus({
+                        employee: item,
+                        team_role: type === "DRIVER" ? type : "OTHER",
+                      })
+                    }
                     className="flex h-[2.8rem] w-[9.2rem] items-center justify-center gap-1 rounded-[2rem] bg-main text-[1.2rem] text-white"
                   >
                     <Plus width={"1.2rem"} height={"1.2rem"} /> 추가하기

@@ -1,81 +1,77 @@
-import { Ambulance } from "@/types/model";
-import { Employee } from "@/types/model/employee";
-import {
-  COmit,
-  Expand,
-  ExpandRecursively,
-  Option,
-  WithUndefined,
-} from "@/types/util";
+import { Ambulance, AmbulanceEmployee, TeamRole } from "@/types/model";
+import { Expand } from "@/types/util";
 import { create } from "zustand";
+import { ExpandRecursively } from "./../types/util";
 
-//model과 실제 api에서 오는 데이터가 달라, omit을 다소 사용.
+type AmbulanceEmployeeState = {
+  ambulance?: Ambulance;
+  employees?: AmbulanceEmployee[];
+};
+
+type ModifyQueueState = {
+  employee_modify_queue: {
+    action: "ADD" | "REMOVE";
+    employee_id: string;
+    team_role: TeamRole;
+  }[];
+};
+
+type Type = { type?: "DRIVER" | "OTHER" };
+
 type State = ExpandRecursively<
-  WithUndefined<
-    {
-      employee_type: undefined | "DRIVER" | "OTHER_EMPLOYEE";
-    } & COmit<Ambulance, "employees"> & {
-        employees: (COmit<
-          Ambulance["employees"][number],
-          "employee" | "ambulance"
-        > & {
-          employee: COmit<
-            Ambulance["employees"][number]["employee"],
-            "ambulance_company_id"
-          >;
-        })[];
-      }
-  > & {
-    employee_modify_queue: Array<{
-      action: "ADD" | "REMOVE";
-      employee_id: string;
-    }>;
-  }
+  AmbulanceEmployeeState & ModifyQueueState & Type
 >;
 
 type Action = {
-  setAmbulance: (values: Expand<Option<State>>) => void;
-  removeEmployee: (employee_id: string) => void;
-  appendEmployee: (employee: Employee) => void;
+  setEmployee: (values: Expand<Partial<AmbulanceEmployeeState>>) => void;
+  setType: (type: Type["type"]) => void;
+  removeEmployee: (employee_id: string, team_role: TeamRole) => void;
+  appendEmployee: (employee: AmbulanceEmployee) => void;
   resetQueue: () => void;
 };
 
 export const useAmbulanceEmployeeStore = create<State & Action>((set) => ({
-  employee_type: undefined,
-  ambulance_id: undefined,
-  ambulance_company: undefined,
-  ambulance_company_id: undefined,
-  ambulance_number: undefined,
-  ambulance_type: undefined,
+  ambulance: undefined,
   employees: undefined,
-  setAmbulance: (values) => set({ ...values }),
   employee_modify_queue: [],
-  appendEmployee: (employee: Employee) =>
+  setEmployee: (values) => set({ ...values }),
+  type: undefined,
+  setType: (type) => set({ type }),
+  appendEmployee: ({ employee, team_role }) =>
     set(({ employee_modify_queue: q, employees }) => {
+      //중복 방지: 이미 있다면, 필터를 통해서 해당 내용을 없는 것으로 취급.
       const queue = q.filter((v) => v.employee_id !== employee.employee_id);
-      queue.push({ action: "ADD", employee_id: employee.employee_id });
-      const _employees = employees ?? [];
+      if (q.findIndex((v) => v.employee_id === employee.employee_id) == -1)
+        queue.push({
+          action: "ADD",
+          employee_id: employee.employee_id,
+          team_role: team_role,
+        });
 
+      //추가된 결과.
+      const _employees = employees ?? [];
       _employees.push({
-        ambulance_id: employee.employee_id,
-        employee_id: employee.employee_id,
         employee: {
           employee_id: employee.employee_id,
           employee_name: employee.employee_name,
           id_card: employee.id_card,
           role: employee.role,
         },
+        team_role: team_role,
       });
 
       return { employee_modify_queue: queue, employees: [..._employees] };
     }),
-  removeEmployee: (employee_id: string) =>
+  removeEmployee: (employee_id, team_role) =>
     set(({ employee_modify_queue: q, employees }) => {
+      //중복 방지: 이미 있다면, 필터를 통해서 해당 내용을 없는 것으로 취급.
       const queue = q.filter((v) => v.employee_id !== employee_id);
-      queue.push({ action: "REMOVE", employee_id });
+      if (q.findIndex((v) => v.employee_id === employee_id) == -1)
+        queue.push({ action: "REMOVE", employee_id, team_role });
 
+      //삭제된 결과.
       const _employees = employees?.filter(
-        (v) => v.employee_id !== employee_id
+        (v) => v.employee.employee_id !== employee_id
       );
 
       return { employee_modify_queue: queue, employees: _employees };

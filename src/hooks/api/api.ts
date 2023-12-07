@@ -62,7 +62,8 @@ export function useGetApi<P extends MethodPaths<"get">>(
   {
     useLoader = true,
     enabled = true,
-  }: { useLoader?: boolean; enabled?: boolean },
+    swrOptions,
+  }: { useLoader?: boolean; enabled?: boolean; swrOptions?: object },
   ...init: Init<"get", P>
 ) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -84,7 +85,8 @@ export function useGetApi<P extends MethodPaths<"get">>(
       }).GET(obj.url, ...init);
       if (error) throw error;
       return data;
-    }
+    },
+    swrOptions
   );
   const _data = getData as SuccessResponse<P, "get">;
   // console.log("getApi", url, loader.id, _data, _error, isLoadingSWR);

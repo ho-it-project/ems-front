@@ -6,11 +6,12 @@ import {
   NotFoundPopUpContainer,
   SearchContainer,
 } from "@/components/container/AmbulanceContainer/Employee";
-import { useAmbulanceDetail } from "@/hooks/api/useAmbulance";
+import { useAmbulanceDetail } from "@/hooks/api/useAmbulanceDetail";
 import { useEmployeeTableQuery } from "@/hooks/api/useEmployee";
 import { useAmbulanceEmployeeStore } from "@/store/ambulanceEmployee.store";
 import { PathQuery } from "@/types/api";
-import { useEffect, useState } from "react";
+import { Ambulance, AmbulanceEmployee } from "@/types/model";
+import { useEffect, useMemo, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 
 export const AmbulanceEmployeePrototype = ({
@@ -18,24 +19,47 @@ export const AmbulanceEmployeePrototype = ({
 }: {
   ambulance_id: string;
 }) => {
-  const { detail, errorOnDetail } = useAmbulanceDetail(ambulance_id);
-  const { setAmbulance } = useAmbulanceEmployeeStore(
+  const { ambulanceDetail, errorOnAmbulanceDetail } =
+    useAmbulanceDetail(ambulance_id);
+  const { setAmbulance, setType } = useAmbulanceEmployeeStore(
     useShallow((state) => ({
-      setAmbulance: state.setAmbulance,
+      setAmbulance: state.setEmployee,
+      setType: state.setType,
     }))
   );
 
   const [query, setQuery] = useState<PathQuery<"/ems/employees", "get">>({});
-  const { data: employees } = useEmployeeTableQuery(query);
-  // const employees = _employees?.filter(
-  //   (employee) => employee.role !== "DRIVER"
-  // );
+  const { data } = useEmployeeTableQuery(query);
+
+  const ambulance: Ambulance | undefined = useMemo(
+    () =>
+      ambulanceDetail && {
+        ambulance_company: ambulanceDetail.ambulance_company,
+        ambulance_company_id: ambulanceDetail.ambulance_company_id,
+        ambulance_id: ambulanceDetail.ambulance_id,
+        ambulance_number: ambulanceDetail.ambulance_number,
+        ambulance_type: ambulanceDetail.ambulance_type,
+        employees: ambulanceDetail.employees,
+      },
+    [ambulanceDetail]
+  );
+
+  const employees: AmbulanceEmployee[] | undefined = useMemo(
+    () =>
+      ambulanceDetail &&
+      ambulanceDetail.employees.map((v) => ({
+        employee: v.employee,
+        team_role: v.team_role,
+      })),
+    [ambulanceDetail]
+  );
 
   useEffect(() => {
-    if (detail) setAmbulance({ ...detail, employee_type: "OTHER_EMPLOYEE" });
-  }, [detail, errorOnDetail, setAmbulance]);
+    if (ambulanceDetail) setAmbulance({ ambulance, employees });
+    setType("OTHER");
+  }, [ambulanceDetail, setAmbulance, ambulance, employees, setType]);
 
-  if (errorOnDetail?.http_status_code === 404)
+  if (errorOnAmbulanceDetail?.http_status_code === 404)
     return <NotFoundPopUpContainer />;
 
   return (
@@ -48,7 +72,7 @@ export const AmbulanceEmployeePrototype = ({
         <SearchContainer setQuery={setQuery} />
       </div>
       <div className="mt-[2.5rem] h-full">
-        {employees && <AmbulanceEmployeeTableContainer data={employees} />}
+        {data && <AmbulanceEmployeeTableContainer data={data ?? []} />}
       </div>
     </div>
   );

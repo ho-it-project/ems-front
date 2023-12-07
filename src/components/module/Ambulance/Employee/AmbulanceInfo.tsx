@@ -3,8 +3,8 @@ import { useAmbulanceEmployeeStore } from "@/store/ambulanceEmployee.store";
 export const AmbulanceInfo = () => {
   const { ambulance_number, ambulance_type } = useAmbulanceEmployeeStore(
     (store) => ({
-      ambulance_number: store.ambulance_number,
-      ambulance_type: store.ambulance_type,
+      ambulance_number: store.ambulance?.ambulance_number,
+      ambulance_type: store.ambulance?.ambulance_type,
     })
   );
   return (

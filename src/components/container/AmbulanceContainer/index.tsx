@@ -4,11 +4,11 @@ import {
   AmbulanceTable,
   searchTypes,
 } from "@/components/module/Ambulance/AmbulanceTable";
-import { useAbmulance } from "@/hooks/api/useAmbulance";
+import { useAbmulanceList } from "@/hooks/api/useAmbulanceList";
 import { useState } from "react";
 
 export const AmbulanceContainer = () => {
-  const { ambulanceInfo } = useAbmulance();
+  const { ambulanceList } = useAbmulanceList();
   const [search, setSearch] = useState<string>("");
   const [searchType, setSearchType] =
     useState<keyof typeof searchTypes>("차량번호");
@@ -20,9 +20,9 @@ export const AmbulanceContainer = () => {
         setSearchType={setSearchType}
       />
       <div className="mt-[2.5rem] h-full">
-        {ambulanceInfo && (
+        {ambulanceList && (
           <AmbulanceTable
-            ambulanceList={ambulanceInfo}
+            ambulanceList={ambulanceList}
             search={search}
             searchType={searchType}
           />
