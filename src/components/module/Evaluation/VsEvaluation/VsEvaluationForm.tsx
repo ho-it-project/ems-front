@@ -77,7 +77,6 @@ export const VsEvalutaionForm = ({ formId }: VsEvalutaionFormProps) => {
       });
 
     //로직 추가
-    console.log("submit");
   };
 
   // input change handler

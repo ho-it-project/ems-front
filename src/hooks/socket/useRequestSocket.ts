@@ -61,7 +61,6 @@ export const useRequestSocket = () => {
         setRequestList((prev) => {
           return prev.map((prevReq) => {
             if (prevReq.emergency_center_id === newReq.emergency_center_id) {
-              console.log("새로운 응답");
               toast({
                 title: `${prevReq.emergency_center_name}`,
                 description: `${

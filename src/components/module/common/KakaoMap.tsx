@@ -51,7 +51,6 @@ export const KakaoMap = ({ focus }: KakaoMapProps) => {
     kakaoMap.relayout();
   }, [kakaoMap, mapRef.current?.clientWidth, location]);
   useEffect(() => {
-    console.log(requests);
     if (!kakaoMap) return;
     if (!requests) return;
     if (!location) return;

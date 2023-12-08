@@ -47,7 +47,6 @@ export const PatientInfoContainer = () => {
           path: { patient_id: patientInfo?.patient_id || "" },
         },
       }).then((res) => {
-        console.log(res);
         const { error } = res;
         if (error) {
           toast({
@@ -71,7 +70,6 @@ export const PatientInfoContainer = () => {
           path: { patient_id: patientInfo?.patient_id || "" },
         },
       }).then((res) => {
-        console.log("requests.length > 0", res);
         const { error } = res;
         if (error) {
           toast({

@@ -1,20 +1,28 @@
 "use client";
 import { Tag } from "@/components/elements/Tag";
 import { cn } from "@/lib/utils";
+
+import { useRequestStore } from "@/store/request.store";
 import {
   EMERGENCY_CENTER_TYPE,
-  EmergencyCenter,
-} from "@/store/emergencyCenter.store";
-import { useRequestStore } from "@/store/request.store";
+  EMERGENCY_ROOM_TYPE_KOR,
+  EmergencyCenterWithDistance,
+  EmergencyRoom,
+} from "@/types/model/emergencyCenter";
 import { ReqeustStatueKor, reqeustStatueKorMap } from "@/types/model/request";
 import { useEffect, useState } from "react";
 
 interface EmergencyCenterCardProps {
-  emergencyCenter: EmergencyCenter;
+  emergencyCenter: EmergencyCenterWithDistance;
+  emergecyRooms: (EmergencyRoom & {
+    valiableCount: number;
+    totalCount: number;
+  })[];
 }
 
 export const EmergencyCenterCard = ({
   emergencyCenter,
+  emergecyRooms,
 }: EmergencyCenterCardProps) => {
   const {
     emergency_center_name,
@@ -76,41 +84,22 @@ export const EmergencyCenterCard = ({
             //TODO: 수용가능한 병실 표시
           }
           <div>
-            <Tag
-              text="일반"
-              width="w-fit"
-              className="mr-[1rem] inline-block px-[1rem] py-[0.4rem]"
-            />
-            <Tag
-              text="코호트"
-              width="w-fit"
-              className="mr-[1rem] inline-block px-[1rem] py-[0.4rem]"
-            />
-            <Tag
-              text="음압"
-              width="w-fit"
-              className="mr-[1rem] inline-block px-[1rem] py-[0.4rem]"
-            />
-            <Tag
-              text="일반격리"
-              width="w-fit"
-              className="mr-[1rem] inline-block px-[1rem] py-[0.4rem]"
-            />
-            <Tag
-              text="소아음압격리"
-              width="w-fit"
-              className="mr-[1rem] inline-block px-[1rem] py-[0.4rem]"
-            />
-            <Tag
-              text="소아일반격리"
-              width="w-fit"
-              className="mr-[1rem] inline-block px-[1rem] py-[0.4rem]"
-            />
-            <Tag
-              text="소아"
-              width="w-fit"
-              className="mr-[1rem] inline-block px-[1rem] py-[0.4rem]"
-            />
+            {emergecyRooms.map((room) => {
+              const { valiableCount, totalCount, emergency_room_type } = room;
+              const ratio = valiableCount / totalCount;
+              const color =
+                ratio > 0.5 ? "main" : ratio > 0.3 ? "yellow" : "red";
+              return (
+                <Tag
+                  key={room.emergency_room_id}
+                  text={EMERGENCY_ROOM_TYPE_KOR[emergency_room_type]}
+                  width="w-fit"
+                  className="mr-[1rem] inline-block px-[1rem] py-[0.4rem]"
+                  color={color}
+                  borderColor={color}
+                />
+              );
+            })}
           </div>
         </div>
       </div>

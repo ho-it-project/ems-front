@@ -119,7 +119,6 @@ export const DcapBtlsEvaluaionContainer = () => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(dcapBtlsEvaluations);
     const filtered = dcapBtlsEvaluations.filter(
       (item) => item.affected_area !== "NONE"
     );
@@ -168,7 +167,6 @@ export const DcapBtlsEvaluaionContainer = () => {
         })
           .then((res) => res.json())
           .then((res: { is_success: boolean }) => {
-            console.log(res);
             return res.is_success;
           });
       })

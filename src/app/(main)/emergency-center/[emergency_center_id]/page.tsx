@@ -1,7 +1,10 @@
 import { TabWrapper } from "@/components/layout/TabWrapper";
 import { EmergencyCenterDetailPrototype } from "@/components/prototypes/EmergencyCenter/Detail";
 import { API_SERVER } from "@/constant";
-import { GetEmergencyCenterDetailResponse } from "@/types/emergencyCenter.type";
+import {
+  GetEmergencyCenterDetailFailureResponse,
+  GetEmergencyCenterDetailSuccessResponse,
+} from "@/types/model/emergencyCenter";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -9,21 +12,11 @@ interface Params {
   emergency_center_id: string;
 }
 
-interface GetEmergencyCenterDetailResponseSuccessDto {
-  result: GetEmergencyCenterDetailResponse;
-  is_success: true;
-  http_status_code: number;
-}
-interface GetEmergencyCenterDetailResponseFailDto {
-  is_success: false;
-  http_status_code: number;
-}
-
 export default async function Page({ params }: { params: Params }) {
   const { emergency_center_id } = params;
   const data:
-    | GetEmergencyCenterDetailResponseSuccessDto
-    | GetEmergencyCenterDetailResponseFailDto = await fetch(
+    | GetEmergencyCenterDetailSuccessResponse
+    | GetEmergencyCenterDetailFailureResponse = await fetch(
     `${API_SERVER}/er/emergency-centers/${emergency_center_id}`,
     {
       headers: {
@@ -37,14 +30,21 @@ export default async function Page({ params }: { params: Params }) {
   )
     .then((res) => res.json())
     .then((res) => res);
-
+  if (!data.is_success) return <></>;
+  const { result: emergencyCenter } = data;
   return (
     <TabWrapper
       contents={[
         {
           title: "주변 응급실 찾기",
           content: data.is_success ? (
-            <EmergencyCenterDetailPrototype emergency_center={data.result} />
+            <EmergencyCenterDetailPrototype
+              emergencyCenter={emergencyCenter}
+              emergencyRooms={emergencyCenter.emergency_rooms}
+              departments={emergencyCenter.hospital.hospital_departments.map(
+                (hospitalDepartment) => hospitalDepartment.department
+              )}
+            />
           ) : (
             <div className=" w-full p-[2.4rem]">
               <Link

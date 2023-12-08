@@ -99,7 +99,6 @@ function useProvideAuth() {
       setStatus("success");
     }
     if (error) {
-      console.log("Unexpected Error", error);
       setStatus("error");
     }
   }, [data, status, error]);

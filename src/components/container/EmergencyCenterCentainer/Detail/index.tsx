@@ -2,15 +2,23 @@ import { PageHeader } from "@/components/elements/PageHeader";
 import { EmergencyCenterIllnessStatusCard } from "@/components/module/EmergencyCenter/Detail/EmergencyCenterIllnessStatusCard";
 import { EmergencyCenterInfoCard } from "@/components/module/EmergencyCenter/Detail/EmergencyCenterInfoCard";
 import { EmergencyRoomStatusCard } from "@/components/module/EmergencyCenter/Detail/EmergencyRoomStatusCard";
-import { GetEmergencyCenterDetailResponse } from "@/types/emergencyCenter.type";
+import { Department } from "@/types/department/client";
+import {
+  EmergencyCenter,
+  EmergencyRoomWithBeds,
+} from "@/types/model/emergencyCenter";
 import { ChevronLeftIcon } from "lucide-react";
 import Link from "next/link";
 
 interface EmergencyCenterDetailProps {
-  emergency_center: GetEmergencyCenterDetailResponse; // ssr 응답값을 직접 사용
+  emergencyCenter: EmergencyCenter; // ssr 응답값을 직접 사용
+  emergencyRooms: EmergencyRoomWithBeds[];
+  departments: Department[];
 }
 export const EmergencyCenterDetailContainer = ({
-  emergency_center,
+  emergencyCenter,
+  emergencyRooms,
+  departments,
 }: EmergencyCenterDetailProps) => {
   return (
     <div className="h-full w-full">
@@ -34,13 +42,11 @@ export const EmergencyCenterDetailContainer = ({
             {
               // 병원정보
             }
-            <EmergencyCenterInfoCard emergencyCenter={emergency_center} />
+            <EmergencyCenterInfoCard emergencyCenter={emergencyCenter} />
             {
               // 병상
             }
-            <EmergencyRoomStatusCard
-              emergencyRooms={emergency_center.emergency_rooms}
-            />
+            <EmergencyRoomStatusCard emergencyRooms={emergencyRooms} />
 
             <div className="flex">
               <div className="flex-1">
@@ -56,9 +62,7 @@ export const EmergencyCenterDetailContainer = ({
               </div>
               <div className="flex-1">
                 <EmergencyCenterIllnessStatusCard
-                  departemnts={
-                    emergency_center.hospital.hospital_departments || []
-                  }
+                  departemnts={departments || []}
                 />
               </div>
             </div>

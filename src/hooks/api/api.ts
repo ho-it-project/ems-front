@@ -89,7 +89,6 @@ export function useGetApi<P extends MethodPaths<"get">>(
     swrOptions
   );
   const _data = getData as SuccessResponse<P, "get">;
-  // console.log("getApi", url, loader.id, _data, _error, isLoadingSWR);
 
   useEffect(() => {
     if (!isLoadingSWR && (_data || _error))

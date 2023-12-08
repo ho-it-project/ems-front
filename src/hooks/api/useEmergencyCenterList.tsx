@@ -1,21 +1,14 @@
 import { useAuth } from "@/providers/AuthProvider";
-import {
-  EmergencyCenter,
-  useEmergencyCenterListStore,
-} from "@/store/emergencyCenter.store";
+import { useEmergencyCenterListStore } from "@/store/emergencyCenter.store";
+import { SuccessResponse } from "@/types/api";
 import { useEffect } from "react";
 import useSWR from "swr";
 import { useGeoLocation } from "../useGeoLocation";
 
-interface GetEmergencyCenterListResponse {
-  result: {
-    emergency_center_list: EmergencyCenter[];
-    count: number;
-  };
-  is_success: boolean;
-  message: string;
-}
-
+type GetEmergencyCenterListResponse = SuccessResponse<
+  "/er/emergency-centers",
+  "get"
+>;
 const fetcherWithToken = ({
   url,
   accessToken,

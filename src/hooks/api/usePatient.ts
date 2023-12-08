@@ -29,7 +29,6 @@ export const usePatient = () => {
     if (isLoading) return;
     if (!data) return;
     const { result } = data;
-    console.log("result", result);
     const patient_list = result.patient_list;
     if (patient_list.length > 0)
       setPatient({ ...patient_list[0], patient_identity_number: "********" });
